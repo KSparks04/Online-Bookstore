@@ -1,7 +1,7 @@
 package org.project.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -18,35 +18,47 @@ public class BookStore {
     private Long id;
 
     @OneToMany(mappedBy = "bookStore", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.EAGER)
-    private Map<String, BookInventory> inventoryMap = new HashMap<>();
+    private List<BookInventory> inventories = new ArrayList<>();
     
     public BookStore(){}
 
     public void addBook(Book book, Integer inventory){
         if(book == null || book.getISBN() == null) return;
+
+        //ignore if book already exists
+        for(BookInventory bi : inventories){
+            if(bi.getBook().getISBN().equals(book.getISBN())){
+                bi.setInventory(inventory);
+                return;
+            }
+        }
+
+        //create new inventory
         BookInventory bi = new BookInventory(this, book, inventory);
-        inventoryMap.put(book.getISBN(), bi);
+        inventories.add(bi);
     }
 
     public void removeBook(String ISBN){
-        inventoryMap.remove(ISBN);
+        inventories.removeIf(bi -> bi.getBook().getISBN().equals(ISBN));
     }
 
     public Integer getInventory(String ISBN){
-        BookInventory bi = inventoryMap.get(ISBN);
-        return(bi != null) ? bi.getInventory() : null;
+        return inventories.stream()
+            .filter(bi -> bi.getBook().getISBN().equals(ISBN))
+            .map(BookInventory :: getInventory)
+            .findFirst()
+            .orElse(null);
     }
 
     public void changeInventory(String ISBN, Integer inventory){
-        BookInventory bi = inventoryMap.get(ISBN);
-        if(bi!= null){
-            bi.setInventory(inventory);
+        for(BookInventory bi: inventories){
+            if(bi.getBook().getISBN().equals(ISBN)){
+                bi.setInventory(inventory);
+                return;
+            }
         }
     }
 
     public Long getId(){return id;}
-
-    public Map<String, BookInventory> getInventoryMap(){return inventoryMap;}
-    public void setInventoryMap(Map<String, BookInventory> inventoryMap){this.inventoryMap = inventoryMap;}
 }
 
