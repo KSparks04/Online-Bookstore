@@ -1,64 +1,42 @@
 package org.project.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import org.project.repositories.BookRepo;
+import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
 
 
-@Entity
+@Service
+@Transactional
 public class BookStore {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @OneToMany(mappedBy = "bookStore", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.EAGER)
-    private List<BookInventory> inventories = new ArrayList<>();
+    private final BookRepo bookRepo;
     
-    public BookStore(){}
+    public BookStore(BookRepo bookRepo){this.bookRepo = bookRepo;}
 
-    public void addBook(Book book, Integer inventory){
+    public Book getBook(String ISBN){
+        Optional<Book> existing = bookRepo.findByISBN(ISBN);
+        if(existing.isPresent()){
+            return existing.get();
+        }else{
+            return null;
+        }
+    }
+
+    public void addBook(Book book){
         if(book == null || book.getISBN() == null) return;
 
-        //ignore if book already exists
-        for(BookInventory bi : inventories){
-            if(bi.getBook().getISBN().equals(book.getISBN())){
-                bi.setInventory(inventory);
-                return;
-            }
-        }
+        //skip if book is already in database
+        if(getBook(book.getISBN())!=null) return;
 
-        //create new inventory
-        BookInventory bi = new BookInventory(this, book, inventory);
-        inventories.add(bi);
+        bookRepo.save(book);
     }
 
     public void removeBook(String ISBN){
-        inventories.removeIf(bi -> bi.getBook().getISBN().equals(ISBN));
+        bookRepo.deleteByISBN(ISBN);
     }
 
-    public Integer getInventory(String ISBN){
-        return inventories.stream()
-            .filter(bi -> bi.getBook().getISBN().equals(ISBN))
-            .map(BookInventory :: getInventory)
-            .findFirst()
-            .orElse(null);
-    }
-
-    public void changeInventory(String ISBN, Integer inventory){
-        for(BookInventory bi: inventories){
-            if(bi.getBook().getISBN().equals(ISBN)){
-                bi.setInventory(inventory);
-                return;
-            }
-        }
-    }
-
-    public Long getId(){return id;}
+    
 }
 

@@ -9,17 +9,20 @@ public class Book {
     //ISBN, picture, description, author, publisher,.
     @GeneratedValue
     @Id
-    private int id;
+    private Long id;
     private String ISBN;
     private String title;
     private String author;
     private String publisher;
     private String description;
-    //Eventually picture
-    public  Book() {
-    }
-    public int getId() {return id;    }
-    public void setId(int id) {this.id = id;   }
+    private int inventory;
+
+    //Default Constructor
+    public  Book() {}
+
+    //Getters/Setters
+    public Long getId() {return id;    }
+    public void setId(Long id) {this.id = id;   }
 
     public String getISBN() {return  ISBN;}
     public void setISBN(String ISBN) {this.ISBN = ISBN;}
@@ -35,4 +38,7 @@ public class Book {
 
     public String getDescription() {return description;}
     public void setDescription(String description) {this.description = description;}
+
+    public int getInventory(){return inventory;}
+    public void setInventory(int inventory){this.inventory = inventory;}
 }
