@@ -16,33 +16,7 @@
     <button type="submit">Add Book</button>
 </form>
 
-
-<h3 th:text="|Book List|"/>
-<table>
-    <tr>
-        <th>ISBN</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publisher</th>
-        <th>Description</th>
-    </tr>
-    <tr th:each="book: ${bookList}">
-        <td th:text="${book.ISBN}"></td>
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.publisher}"></td>
-        <td th:text="${book.description}"></td>
-        <td>
-            <!-- Edit Book Form -->
-            <form th:action="@{edit-book/{id}(id=${book.id})}" method="get">
-                <button type="submit">Edit</button>
-            </form>
-            <!-- Delete Book Form -->
-            <form th:action="@{/delete-book/{id}(id=${book.id})}" method="post">
-                <button type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-</table>
+<div id="bookTableContainer" th:replace="~{\fragments\bookTable :: bookTable}">
+</div>
 </body>
 </html>
