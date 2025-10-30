@@ -30,11 +30,11 @@
         <td th:text="${book.description}"></td>
         <td>
             <!-- Edit Book Form -->
-            <form th:action="@{edit-book/{id}(id=${book.id})}" method="get">
+            <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
                 <button type="submit">Edit</button>
             </form>
             <!-- Delete Book Form -->
-            <form th:action="@{/delete-book/{id}(id=${book.id})}" method="post">
+            <form th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
                 <button type="submit">Delete</button>
             </form>
         </td>
