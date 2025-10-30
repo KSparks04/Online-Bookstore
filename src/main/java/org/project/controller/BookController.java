@@ -2,7 +2,7 @@ package org.project.controller;
 
 
 import org.project.model.Book;
-import org.project.repository.BookRepo;
+import org.project.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class BookController {
 
     @Autowired
-    private BookRepo bookRepo;
+    private BookRepository bookRepo;
 
     @GetMapping("/get-book-list")
     public String getBookList(Model model){
@@ -30,15 +30,15 @@ public class BookController {
         return "redirect:/get-book-list";
     }
 
-    @PostMapping("/delete-book/{id}")
-    public String deleteBook(@PathVariable int id){
-        bookRepo.deleteById(id);
+    @PostMapping("/delete-book/{ISBN}")
+    public String deleteBook(@PathVariable int ISBN){
+        bookRepo.deleteById(ISBN);
         return "redirect:/get-book-list";
     }
 
-    @GetMapping("/edit-book/{id}")
-    public String editBook(@PathVariable int id, Model model){
-        Book book = bookRepo.findBookById(id);
+    @GetMapping("/edit-book/{ISBN}")
+    public String editBook(@PathVariable int ISBN, Model model){
+        Book book = bookRepo.findBookByISBN(ISBN);
         model.addAttribute("book", book);
         return "edit-book";
     }

@@ -6,10 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-//TODO kinda wanna rename this to BookRepository
 @Repository
-public interface BookRepo extends CrudRepository<Book,Integer> {
-    public Book findBookById(int id);
+public interface BookRepository extends CrudRepository<Book,Integer> {
+    public Book findBookByISBN(int ISBN);
     public List<Book> findBooksByTitle(String title);
     public List<Book> findBooksByAuthor(String author);
 }
