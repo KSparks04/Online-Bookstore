@@ -37,7 +37,6 @@ public class BookController {
     @GetMapping("/sortFragment/{attribute}")
     public String sortByAttribute(@PathVariable String attribute, Model model){
         model.addAttribute("bookList", bookRepo.findAll(Sort.by(attribute).ascending()));
-        System.out.println("pulling list sorted by " + attribute);
         return "/fragments/bookTable";
     }
 
