@@ -21,6 +21,8 @@
         <th>Author</th>
         <th>Publisher</th>
         <th>Description</th>
+        <th>Inventory</th>
+        <th>Price</th>
     </tr>
     <tr th:each="book: ${bookList}">
         <td th:text="${book.ISBN}"></td>
@@ -28,6 +30,8 @@
         <td th:text="${book.author}"></td>
         <td th:text="${book.publisher}"></td>
         <td th:text="${book.description}"></td>
+        <td th:text="${book.inventory}"></td>
+        <td th:text="${book.price}"></td>
         <td>
             <!-- Edit Book Form -->
             <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
@@ -49,6 +53,8 @@
     <label>Author: <input type="text" th:field="*{author}" /><br/></label>
     <label>Publisher: <input type="text" th:field="*{publisher}" /><br/></label>
     <label>Description: <input type="text" th:field="*{description}" /><br/></label>
+    <label>Inventory: <input type="text" th:field="*{inventory}" /><br/></label>
+    <label>Price: <input type="text" th:field="*{price}" /><br/></label>
     <button type="submit">Add Book</button>
 </form>
 
