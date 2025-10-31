@@ -2,25 +2,34 @@ package org.project.controller;
 
 
 import org.project.model.Book;
-import org.project.repository.BookRepo;
+import org.project.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class BookController {
 
     @Autowired
-    private BookRepo bookRepo;
+    private BookRepository bookRepo;
 
     @GetMapping("/get-book-list")
-    public String getBookList(Model model){
-        model.addAttribute("bookList", bookRepo.findAll());
+    public String getBookList(@RequestParam(required=false, defaultValue="") String function, @RequestParam(required=false) String variable, Model model){
+        //Decide the contents of the book list to display
+        Iterable<Book> bookList = null;
+        switch (function){
+            case "search":
+                bookList = bookRepo.findByAllColumns(variable.toLowerCase());
+                break;
+            default:
+                bookList = bookRepo.findAll();
+                break;
+        }
+        model.addAttribute("bookList", bookList);
         model.addAttribute("book", new Book());
         return "book-list";
     }
@@ -38,15 +47,15 @@ public class BookController {
         return "redirect:/get-book-list";
     }
 
-    @PostMapping("/delete-book/{id}")
-    public String deleteBook(@PathVariable int id){
-        bookRepo.deleteById(id);
+    @PostMapping("/delete-book/{ISBN}")
+    public String deleteBook(@PathVariable int ISBN){
+        bookRepo.deleteById(ISBN);
         return "redirect:/get-book-list";
     }
 
-    @GetMapping("/edit-book/{id}")
-    public String editBook(@PathVariable int id, Model model){
-        Book book = bookRepo.findBookById(id);
+    @GetMapping("/edit-book/{ISBN}")
+    public String editBook(@PathVariable int ISBN, Model model){
+        Book book = bookRepo.findByISBN(ISBN);
         model.addAttribute("book", book);
         return "edit-book";
     }

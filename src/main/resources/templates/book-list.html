@@ -5,6 +5,44 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+
+<div id="bookTableContainer" th:replace="~{\fragments\bookTable :: bookTable}">
+</div>
+<!-- Book Search Bar -->
+<form th:action="@{/get-book-list}" method="get">
+    <input hidden name="function" value="search">
+    <input type="text" name="variable" >
+    <button type="submit">Search</button>
+</form>
+
+<h3 th:text="|Book List|"/>
+<table>
+    <tr>
+        <th>ISBN</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Publisher</th>
+        <th>Description</th>
+    </tr>
+    <tr th:each="book: ${bookList}">
+        <td th:text="${book.ISBN}"></td>
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.publisher}"></td>
+        <td th:text="${book.description}"></td>
+        <td>
+            <!-- Edit Book Form -->
+            <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
+                <button type="submit">Edit</button>
+            </form>
+            <!-- Delete Book Form -->
+            <form th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
 <!-- Add Book Form -->
 <h3 th:text="|Add a Book:|"/>
 <form th:action="@{/add-book}" th:object="${book}" method="post">
@@ -16,7 +54,5 @@
     <button type="submit">Add Book</button>
 </form>
 
-<div id="bookTableContainer" th:replace="~{\fragments\bookTable :: bookTable}">
-</div>
 </body>
 </html>
