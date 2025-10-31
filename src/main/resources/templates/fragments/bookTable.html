@@ -19,15 +19,17 @@
             <td th:text="${book.author}"></td>
             <td th:text="${book.publisher}"></td>
             <td th:text="${book.description}"></td>
+            <td th:text="${book.inventory}"></td>
+            <td th:text="${book.price}"></td>
             <td>
-            <!-- Edit Book Form -->
-            <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
-                <button type="submit">Edit</button>
-            </form>
-            <!-- Delete Book Form -->
-            <form th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                <button type="submit">Delete</button>
-            </form>
+                <!-- Edit Book Form -->
+                <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
+                    <button type="submit">Edit</button>
+                </form>
+                <!-- Delete Book Form -->
+                <form th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
             </td>
         </tr>
         </tbody>
