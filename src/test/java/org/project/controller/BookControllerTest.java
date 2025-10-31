@@ -49,7 +49,6 @@ class BookControllerTest {
      * Adds a sample book
      * Calls /book/{id}
      * Confirms all book info appears on the resulting page
-     * @throws Exception
      */
     @Test
     void getBookDetails() throws Exception {
@@ -67,6 +66,19 @@ class BookControllerTest {
                 .andExpect(content().string(containsString("1.0")));
         ;
 
+    }
+
+    /**
+     * Requests a non-existing book ID.
+     * Verifies that the response is the friendly “Book Not Found” page.
+     */
+    @Test
+    void getBookNotFound() throws Exception {
+        this.mockMvc.perform(get("/book/99999"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Book Not Found")))
+                .andExpect(content().string(containsString("Return to Book List")));
     }
 
 

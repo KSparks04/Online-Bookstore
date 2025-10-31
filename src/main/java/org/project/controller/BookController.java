@@ -68,6 +68,10 @@ public class BookController {
     @GetMapping("/book/{id}")
     public String getBook(@PathVariable("id") int id, Model model) {
         Book book = bookRepo.findByISBN(id);
+        if (book == null) {
+            // Book not found, show a dedicated error page
+            return "error/book-not-found";
+        }
         model.addAttribute("book", book);
         return "book";
     }
