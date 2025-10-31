@@ -37,10 +37,10 @@ class BookControllerTest {
 	 */
 	@Test
 	void getBookListSearch() throws Exception {
-		Book book = new Book("0000000000001", "Title 1", "Author 1", "Publisher 1", "Description 1");
+		Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1");
 		this.mockMvc.perform(post("/add-book").flashAttr("book", book));
 		this.mockMvc.perform(get("/get-book-list?function=search&variable=1")).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(containsString("0000000000001"))).andExpect(content().string(containsString("Title 1")))
+				.andExpect(content().string(containsString("1"))).andExpect(content().string(containsString("Title 1")))
 				.andExpect(content().string(containsString("Author 1"))).andExpect(content().string(containsString("Publisher 1")))
 				.andExpect(content().string(containsString("Description 1")));
 	}
