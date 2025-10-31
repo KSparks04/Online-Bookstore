@@ -58,4 +58,11 @@ public class BookController {
         return "redirect:/get-book-list";
     }
 
+    @GetMapping("/book/{id}")
+    public String getBook(@PathVariable("id") int id, Model model) {
+        Book book = bookRepo.findByISBN(id);
+        model.addAttribute("book", book);
+        return "book";
+    }
+
 }
