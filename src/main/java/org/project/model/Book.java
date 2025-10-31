@@ -7,10 +7,9 @@ import jakarta.persistence.Id;
 @Entity
 public class Book {
     //ISBN, picture, description, author, publisher,.
-    @GeneratedValue
+
     @Id
-    private int id;
-    private String ISBN;
+    private int ISBN;
     private String title;
     private String author;
     private String publisher;
@@ -19,7 +18,7 @@ public class Book {
     public  Book() {
     }
 
-    public Book(String ISBN, String title, String author, String publisher, String description) {
+    public Book(int ISBN, String title, String author, String publisher, String description) {
 
         this.ISBN = ISBN;
         this.title = title;
@@ -28,11 +27,8 @@ public class Book {
         this.description = description;
     }
 
-    public int getId() {return id;    }
-    public void setId(int id) {this.id = id;   }
-
-    public String getISBN() {return  ISBN;}
-    public void setISBN(String ISBN) {this.ISBN = ISBN;}
+    public int getISBN() {return  ISBN;}
+    public void setISBN(int ISBN) {this.ISBN = ISBN;}
 
     public String getTitle() {return title;}
     public void setTitle(String title) {this.title = title;}
