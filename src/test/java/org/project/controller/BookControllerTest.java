@@ -44,5 +44,25 @@ class BookControllerTest {
 				.andExpect(content().string(containsString("Author 1"))).andExpect(content().string(containsString("Publisher 1")))
 				.andExpect(content().string(containsString("Description 1")));
 	}
+    /**
+     * Adds a sample book
+     * Calls /book/{id}
+     * Confirms all book info appears on the resulting page
+     * @throws Exception
+     */
+    @Test
+    void getBookDetails() throws Exception {
+        Book book = new Book(123, "Sample Title", "Author Name", "Publisher Co", "Sample description");
+        this.mockMvc.perform(post("/add-book").flashAttr("book", book));
+
+        this.mockMvc.perform(get("/book/123"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Sample Title")))
+                .andExpect(content().string(containsString("Author Name")))
+                .andExpect(content().string(containsString("Publisher Co")))
+                .andExpect(content().string(containsString("Sample description")));
+    }
+
 
 }
