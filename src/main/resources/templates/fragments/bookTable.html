@@ -1,14 +1,6 @@
 <!DOCTYPE HTML>
 <html xlmns:th="http://www.thymeleaf.org">
 <div id="bookTableContainer" th:fragment="bookTable">
-    <script>
-        async function sortBy(attribute){
-            console.log("Called sortBy with attribute " + attribute);
-            const response = await fetch(`/sortFragment/${attribute}`);
-            const html = await response.text();
-            document.getElementById("bookTableContainer").innerHTML = html;
-        }
-        </script>
     <h3 th:text="|Book List|"></h3>
     <table>
         <thead>
@@ -28,14 +20,14 @@
             <td th:text="${book.publisher}"></td>
             <td th:text="${book.description}"></td>
             <td>
-                <!-- Edit Book Form -->
-                <form th:action="@{edit-book/{id}(id=${book.id})}" method="get">
-                    <button type="submit">Edit</button>
-                </form>
-                <!-- Delete Book Form -->
-                <form th:action="@{/delete-book/{id}(id=${book.id})}" method="post">
-                    <button type="submit">Delete</button>
-                </form>
+            <!-- Edit Book Form -->
+            <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
+                <button type="submit">Edit</button>
+            </form>
+            <!-- Delete Book Form -->
+            <form th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                <button type="submit">Delete</button>
+            </form>
             </td>
         </tr>
         </tbody>
