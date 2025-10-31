@@ -1,18 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<div id="bookTableContainer" th:fragment="bookTable">
-    <h3 th:text="|Book List|"></h3>
+<div th:fragment="bookTable">
     <table>
         <thead>
             <tr>
-            <button onclick="sortBy('ISBN')">ISBN</button>
-            <button onclick="sortBy('title')">Title</button>
-            <button onclick="sortBy('author')">Author</button>
-            <button onclick="sortBy('publisher')">Publisher</button>
-            <button onclick="sortBy('description')">Description</button>
+            <th onclick="sortBy('ISBN')" data-sort="ISBN">ISBN</th>
+            <th onclick="sortBy('title')" data-sort="title">Title</th>
+            <th onclick="sortBy('author')" data-sort="author">Author</th>
+            <th onclick="sortBy('publisher')" data-sort="publisher">Publisher</th>
+            <th onclick="sortBy('description')" data-sort="description">Description</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody th:fragment="tableBody">
             <tr th:each="book: ${bookList}">
             <td th:text="${book.ISBN}"></td>
             <td th:text="${book.title}"></td>
