@@ -13,7 +13,7 @@
     <button type="submit">Search</button>
 </form>
 
-<div id="bookTableContainer" th:replace="~{\fragments\bookTable :: bookTable}"></div>
+<div id="bookTableContainer" th:replace="~{/fragments/bookTable :: bookTable}"></div>
 
 
 <!-- Add Book Form -->
@@ -28,6 +28,6 @@
     <label>Price: <input type="text" th:field="*{price}" /><br/></label>
     <button type="submit">Add Book</button>
 </form>
-<script th:src="@{/js/bookTable.js}"></script>
+<script th:src="@{/js/bookTable}"></script>
 </body>
 </html>
