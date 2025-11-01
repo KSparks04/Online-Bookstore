@@ -15,25 +15,6 @@
 
 <div id="bookTableContainer" th:replace="~{\fragments\bookTable :: bookTable}"></div>
 
-<h3 th:text="|Book List|"/>
-<table>
-    <tr>
-        <th>ISBN</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publisher</th>
-        <th>Description</th>
-    </tr>
-    <tr th:each="book: ${bookList}">
-        <td th:text="${book.ISBN}"></td>
-        <!--Title now links to /book/{ISBN}-->
-        <td>
-            <a th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
-        </td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.publisher}"></td>
-        <td th:text="${book.description}"></td>
-        <td>
             <!-- Edit Book Form -->
             <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
                 <button type="submit">Edit</button>
