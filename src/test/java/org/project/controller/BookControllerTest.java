@@ -96,7 +96,7 @@ class BookControllerTest {
     @Test
     void updateBook() throws Exception {
         // Has to be changed to 5 (anything not 1) as to not conflict with deleteBook test.
-        Book book = new Book(5, "Title 1", "Author 1", "Publisher 1", "Description 1", 15, 29.99);
+        Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1", 15, 29.99);
         this.mockMvc.perform(post("/add-book").flashAttr("book", book));
         this.mockMvc.perform(post("/update-book")
                 .param("title", "New Title 1")
