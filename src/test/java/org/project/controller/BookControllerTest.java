@@ -67,13 +67,13 @@ class BookControllerTest {
      */
     @Test
     void deleteBook() throws Exception {
-        Book book = new Book(4, "Title 4", "Author 4", "Publisher 4", "Description 4", 13, 26.99);
+        Book book = new Book(7, "Title 7", "Author 7", "Publisher 7", "Description 7", 13, 26.99);
         this.mockMvc.perform(post("/add-book").flashAttr("book", book));
-        this.mockMvc.perform(post("/delete-book/4")).andDo(print()).andExpect(status().is3xxRedirection());
+        this.mockMvc.perform(post("/delete-book/7")).andDo(print()).andExpect(status().is3xxRedirection());
         this.mockMvc.perform(get("/get-book-list")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(not(containsString("4")))).andExpect(content().string(not(containsString("Title 4"))))
-                .andExpect(content().string(not(containsString("Author 4")))).andExpect(content().string(not(containsString("Publisher 4"))))
-                .andExpect(content().string(not(containsString("Description 4")))).andExpect(content().string(not(containsString("13")))).andExpect(content().string(not(containsString("26.99"))));
+                .andExpect(content().string(not(containsString("7")))).andExpect(content().string(not(containsString("Title 7"))))
+                .andExpect(content().string(not(containsString("Author 7")))).andExpect(content().string(not(containsString("Publisher 7"))))
+                .andExpect(content().string(not(containsString("Description 7")))).andExpect(content().string(not(containsString("13")))).andExpect(content().string(not(containsString("26.99"))));
 
     }
 
