@@ -14,17 +14,21 @@ public class Book {
     private String author;
     private String publisher;
     private String description;
+    private int inventory;
+    private double price;
     //Eventually picture
     public  Book() {
     }
 
-    public Book(int ISBN, String title, String author, String publisher, String description) {
+    public Book(int ISBN, String title, String author, String publisher, String description,int  inventory,double price) {
 
         this.ISBN = ISBN;
         this.title = title;
         this.author = author;
         this.publisher = publisher;
         this.description = description;
+        this.inventory = inventory;
+        this.price = price;
     }
 
     public int getISBN() {return  ISBN;}
@@ -41,4 +45,10 @@ public class Book {
 
     public String getDescription() {return description;}
     public void setDescription(String description) {this.description = description;}
+
+    public int getInventory() {return inventory;}
+    public void setInventory(int inventory) {this.inventory = inventory;}
+
+    public double getPrice() {return price;}
+    public void setPrice(double price) {this.price = price;}
 }

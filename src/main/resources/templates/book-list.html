@@ -13,33 +13,8 @@
     <button type="submit">Search</button>
 </form>
 
-<h3 th:text="|Book List|"/>
-<table>
-    <tr>
-        <th>ISBN</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publisher</th>
-        <th>Description</th>
-    </tr>
-    <tr th:each="book: ${bookList}">
-        <td th:text="${book.ISBN}"></td>
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.publisher}"></td>
-        <td th:text="${book.description}"></td>
-        <td>
-            <!-- Edit Book Form -->
-            <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
-                <button type="submit">Edit</button>
-            </form>
-            <!-- Delete Book Form -->
-            <form th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                <button type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-</table>
+<div id="bookTableContainer" th:replace="~{\fragments\bookTable :: bookTable}"></div>
+
 
 <!-- Add Book Form -->
 <h3 th:text="|Add a Book:|"/>
@@ -49,8 +24,10 @@
     <label>Author: <input type="text" th:field="*{author}" /><br/></label>
     <label>Publisher: <input type="text" th:field="*{publisher}" /><br/></label>
     <label>Description: <input type="text" th:field="*{description}" /><br/></label>
+    <label>Inventory: <input type="text" th:field="*{inventory}" /><br/></label>
+    <label>Price: <input type="text" th:field="*{price}" /><br/></label>
     <button type="submit">Add Book</button>
 </form>
-
+<script th:src="@{/js/bookTable.js}"></script>
 </body>
 </html>
