@@ -1,4 +1,4 @@
-# Not Just Any Bookstore
+# Not Just Any Bookstore 📖🌐
 Contributors: John Guo, Emmanuel Adokoya, Amar Saini, Kaitlyn Conron, and Kaiya Sparks
 ## Overall Objective:
 - To create a functional bookstore where a owner is able to add a new book to a store with a specified inventory.
