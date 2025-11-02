@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<div id="Book List" th:fragment="bookTable">
+<div id="bookTableContainer" th:fragment="bookTable">
+    <h3 th:text="|Book List|"></h3>
     <table>
         <thead>
             <tr>
@@ -11,7 +12,7 @@
             <th onclick="sortBy('description')" data-sort="description">Description</th>
             </tr>
         </thead>
-        <tbody th:fragment="tableBody">
+        <tbody>
             <tr th:each="book: ${bookList}">
             <td th:text="${book.ISBN}"></td>
             <td th:text="${book.title}"></td>
