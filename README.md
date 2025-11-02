@@ -32,7 +32,7 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
   - Adding purchase functionality
     - Includes: providing a button on a books details page to add to cart/purchase
   - Research on using Jaccard to develop a recommendations feature
-  - Update the book model to feature new attributes such as page length and genre 
+  - Update the book model to feature new attributes such as page count and genre 
 
 # Planned Application
 ## Bookstore Web App
@@ -66,3 +66,4 @@ For this application, the simulated books is paperback or hardback.
   - Price
   - Reviews
   - Genre
+  - Page count
