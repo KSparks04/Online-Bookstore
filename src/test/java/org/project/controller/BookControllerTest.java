@@ -80,19 +80,17 @@ class BookControllerTest {
                 .andExpect(content().string(containsString("Book Not Found")))
                 .andExpect(content().string(containsString("Return to Book List")));
     }
-
-    /**
-     * Requests a non-existing book ID.
-     * Verifies that the response is the friendly “Book Not Found” page.
-     */
     @Test
-    void getBookNotFound() throws Exception {
-        this.mockMvc.perform(get("/book/99999"))
+    void searchBookNotFound() throws Exception {
+        this.mockMvc.perform(get("/get-book-list")
+                        .param("function", "search")
+                        .param("variable", "NonExistentBook"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Book Not Found")))
-                .andExpect(content().string(containsString("Return to Book List")));
+                .andExpect(content().string(containsString("NonExistentBook")));
     }
+
 
 
     /**
