@@ -18,17 +18,34 @@ public class BookController {
     private BookRepository bookRepo;
 
     @GetMapping("/get-book-list")
-    public String getBookList(@RequestParam(required=false, defaultValue="") String function, @RequestParam(required=false) String variable, Model model){
-        //Decide the contents of the book list to display
+    public String getBookList(
+            @RequestParam(required = false, defaultValue = "") String function,
+            @RequestParam(required = false) String variable,
+            Model model) {
+
         Iterable<Book> bookList = null;
-        switch (function){
+
+        switch (function) {
             case "search":
-                bookList = bookRepo.findByAllColumns(variable.toLowerCase());
+                if (variable != null && !variable.trim().isEmpty()) {
+                    bookList = bookRepo.findByAllColumns(variable.toLowerCase());
+
+                    // If search returns nothing, show the not-found page
+                    if (!bookList.iterator().hasNext()) {
+                        model.addAttribute("searchQuery", variable);
+                        return "error/book-not-found";
+                    }
+                } else {
+                    // If search query is empty, just show all books
+                    bookList = bookRepo.findAll();
+                }
                 break;
+
             default:
                 bookList = bookRepo.findAll();
                 break;
         }
+
         model.addAttribute("bookList", bookList);
         model.addAttribute("book", new Book());
         return "book-list";
@@ -63,6 +80,17 @@ public class BookController {
     public String updateBook(@ModelAttribute Book book){
         bookRepo.save(book);
         return "redirect:/get-book-list";
+    }
+
+    @GetMapping("/book/{id}")
+    public String getBook(@PathVariable("id") int id, Model model) {
+        Book book = bookRepo.findByISBN(id);
+        if (book == null) {
+            // Book not found, show a dedicated error page
+            return "error/book-not-found";
+        }
+        model.addAttribute("book", book);
+        return "book";
     }
 
 }

@@ -8,13 +8,28 @@
 
 <!-- Book Search Bar -->
 <form th:action="@{/get-book-list}" method="get">
-    <input hidden name="function" value="search">
-    <input type="text" name="variable" >
+    <label>
+        <input hidden name="function" value="search">
+    </label>
+    <label>
+        <input type="text" name="variable" >
+    </label>
     <button type="submit">Search</button>
 </form>
 
 <div id="bookTableContainer" th:replace="~{fragments/bookTable :: bookTable}"></div>
 
+            <!-- Edit Book Form -->
+            <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
+                <button type="submit">Edit</button>
+            </form>
+            <!-- Delete Book Form -->
+            <form th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
 
 <!-- Add Book Form -->
 <h3 th:text="|Add a Book:|"/>
@@ -28,6 +43,6 @@
     <label>Price: <input type="text" th:field="*{price}" /><br/></label>
     <button type="submit">Add Book</button>
 </form>
-<script th:src="@{/js/bookTable}"></script>
+<script th:src="@{/js/bookTable.js}"></script>
 </body>
 </html>

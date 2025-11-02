@@ -45,6 +45,53 @@ class BookControllerTest {
 				.andExpect(content().string(containsString("Author 1"))).andExpect(content().string(containsString("Publisher 1")))
 				.andExpect(content().string(containsString("Description 1"))).andExpect(content().string(containsString("15"))).andExpect(content().string(containsString("25.99")));
 	}
+    /**
+     * Adds a sample book
+     * Calls /book/{id}
+     * Confirms all book info appears on the resulting page
+     */
+    @Test
+    void getBookDetails() throws Exception {
+        Book book = new Book(123, "Sample Title", "Author Name", "Publisher Co", "Sample description", 1, 1.0);
+        this.mockMvc.perform(post("/add-book").flashAttr("book", book));
+
+        this.mockMvc.perform(get("/book/123"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Sample Title")))
+                .andExpect(content().string(containsString("Author Name")))
+                .andExpect(content().string(containsString("Publisher Co")))
+                .andExpect(content().string(containsString("Sample description")))
+                .andExpect(content().string(containsString("1")))
+                .andExpect(content().string(containsString("1.0")));
+        ;
+
+    }
+
+    /**
+     * Requests a non-existing book ID.
+     * Verifies that the response is the friendly “Book Not Found” page.
+     */
+    @Test
+    void getBookNotFound() throws Exception {
+        this.mockMvc.perform(get("/book/99999"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Book Not Found")))
+                .andExpect(content().string(containsString("Return to Book List")));
+    }
+    @Test
+    void searchBookNotFound() throws Exception {
+        this.mockMvc.perform(get("/get-book-list")
+                        .param("function", "search")
+                        .param("variable", "NonExistentBook"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Book Not Found")))
+                .andExpect(content().string(containsString("NonExistentBook")));
+    }
+
+
 
     /**
      * Tests the create book method
