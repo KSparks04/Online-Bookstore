@@ -51,11 +51,10 @@ public class BookController {
         return "book-list";
     }
 
-
-    @GetMapping("/sortFragment/{attribute}")
-    public String sortByAttribute(@PathVariable String attribute, Model model){
-        model.addAttribute("bookList", bookRepo.findAll(Sort.by(attribute).ascending()));
-        return "/fragments/bookTable";
+    @GetMapping("/sortFragment/{attribute}/{ascending}")
+    public String sortByAttribute(@PathVariable String attribute, @PathVariable Boolean ascending, Model model){
+        model.addAttribute("bookList", ascending ? bookRepo.findAll(Sort.by(attribute).ascending()) : bookRepo.findAll(Sort.by(attribute).descending()));
+        return "fragments/book-table";
     }
 
     @PostMapping("/add-book")

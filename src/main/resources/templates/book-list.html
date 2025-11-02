@@ -17,7 +17,25 @@
     <button type="submit">Search</button>
 </form>
 
-<div id="bookTableContainer" th:replace="~{fragments/bookTable :: bookTable}"></div>
+<br>
+<br>
+
+<table>
+    <thead>
+    <tr>
+        <th onclick="sortBy('ISBN')" data-sort="ISBN">ISBN</th>
+        <th onclick="sortBy('title')" data-sort="title">Title</th>
+        <th onclick="sortBy('author')" data-sort="author">Author</th>
+        <th onclick="sortBy('publisher')" data-sort="publisher">Publisher</th>
+        <th onclick="sortBy('description')" data-sort="description">Description</th>
+        <th onclick="sortBy('inventory')" data-sort="inventory">Inventory</th>
+        <th onclick="sortBy('price')" data-sort="price">Price</th>
+    </tr>
+    </thead>
+    <tbody id="bookTableContainer" th:replace="~{fragments/book-table}"></tbody>
+</table>
+
+<br>
 
 <!-- Add Book Form -->
 <h3 th:text="|Add a Book:|"/>
