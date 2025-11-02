@@ -9,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 public class BookController {
 
@@ -37,7 +35,7 @@ public class BookController {
     @GetMapping("/sortFragment/{attribute}/{ascending}")
     public String sortByAttribute(@PathVariable String attribute, @PathVariable Boolean ascending, Model model){
         model.addAttribute("bookList", ascending ? bookRepo.findAll(Sort.by(attribute).ascending()) : bookRepo.findAll(Sort.by(attribute).descending()));
-        return "/fragments/bookTable :: tableBody";
+        return "fragments/book-table";
     }
 
     @PostMapping("/add-book")
