@@ -35,17 +35,6 @@
     </thead>
     <tbody id="bookTableContainer" th:replace="~{fragments/book-table}"></tbody>
 </table>
-            <!-- Edit Book Form -->
-            <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
-                <button type="submit">Edit</button>
-            </form>
-            <!-- Delete Book Form -->
-            <form th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                <button type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-</table>
 
 
 <br>
