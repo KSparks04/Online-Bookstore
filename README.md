@@ -17,6 +17,12 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
       - Basic html pages to complement features such as editing book information and displaying list of books in the store
   - Developing comprehensive test cases for the controllers to test endpoints
   - Set up the azure deployment and CI
+**What Was Accomplished**
+- Book model and Book repository
+- Controllers for displaying, editing, adding, deleting and sorting books
+- HTML pages for displaying all books, individual book details and editing book information
+- Javascript functions to support functions like sorting
+- Test suites for the controllers
 ## Sprint 2 (November 3rd - November 17th)
 **Objectives**
   - Develop a user model and repository to store relevant information
