@@ -5,12 +5,12 @@ import org.project.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +39,9 @@ class BookControllerTest {
 	@Test
 	void getBookListSearch() throws Exception {
 		Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1",15,25.99);
-		this.mockMvc.perform(post("/add-book").flashAttr("book", book));
+        MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
+        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","1").param("title","Title 1").param("author","Author 1")
+                .param("publisher","Publisher 1").param("description","Description 1").param("inventory","15").param("price","25.99")).andExpect(status().is3xxRedirection());
 		this.mockMvc.perform(get("/get-book-list?function=search&variable=1")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string(containsString("1"))).andExpect(content().string(containsString("Title 1")))
 				.andExpect(content().string(containsString("Author 1"))).andExpect(content().string(containsString("Publisher 1")))
@@ -53,7 +55,9 @@ class BookControllerTest {
     @Test
     void getBookDetails() throws Exception {
         Book book = new Book(123, "Sample Title", "Author Name", "Publisher Co", "Sample description", 1, 1.0);
-        this.mockMvc.perform(post("/add-book").flashAttr("book", book));
+        MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
+        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","123").param("title","Sample Title").param("author","Author Name")
+                .param("publisher","Publisher Co").param("description","Sample description").param("inventory","1").param("price","1.0")).andExpect(status().is3xxRedirection());
 
         this.mockMvc.perform(get("/book/123"))
                 .andDo(print())
@@ -97,10 +101,13 @@ class BookControllerTest {
      * Tests the create book method
      * @throws Exception
      */
+    //Need test for no picture still
     @Test
     void addBook() throws Exception {
         Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1", 15, 33.95);
-        this.mockMvc.perform(post("/add-book").flashAttr("book", book));
+        MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
+        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","1").param("title","Title 1").param("author","Author 1")
+                .param("publisher","Publisher 1").param("description","Description 1").param("inventory","15").param("price","33.95")).andExpect(status().is3xxRedirection());
         this.mockMvc.perform(get("/get-book-list")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("1"))).andExpect(content().string(containsString("Title 1")))
                 .andExpect(content().string(containsString("Author 1"))).andExpect(content().string(containsString("Publisher 1")))
@@ -115,7 +122,10 @@ class BookControllerTest {
     @Test
     void deleteBook() throws Exception {
         Book book = new Book(7, "Title 7", "Author 7", "Publisher 7", "Description 7", 13, 26.99);
-        this.mockMvc.perform(post("/add-book").flashAttr("book", book));
+        MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
+        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","7").param("title","Title 7").param("author","Author 7")
+                .param("publisher","Publisher 7").param("description","Description 7").param("inventory","13").param("price","26.99")).andExpect(status().is3xxRedirection());
+        //this.mockMvc.perform(post("/add-book").flashAttr("book", book));
         this.mockMvc.perform(post("/delete-book/7")).andDo(print()).andExpect(status().is3xxRedirection());
         this.mockMvc.perform(get("/get-book-list")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(not(containsString("7")))).andExpect(content().string(not(containsString("Title 7"))))
@@ -131,7 +141,10 @@ class BookControllerTest {
     @Test
     void editBook() throws Exception {
         Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1", 15, 33.95);
-        this.mockMvc.perform(post("/add-book").flashAttr("book", book));
+
+        MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
+        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","1").param("title","Title 1").param("author","Author 1")
+                .param("publisher","Publisher 1").param("description","Description 1").param("inventory","15").param("price","33.95")).andExpect(status().is3xxRedirection());
         this.mockMvc.perform(get("/edit-book/1?")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Edit Book"))).andExpect(content().string(containsString("15"))).andExpect(content().string(containsString("33.95")));
     }
@@ -144,7 +157,10 @@ class BookControllerTest {
     void updateBook() throws Exception {
         // Has to be changed to 5 (anything not 1) as to not conflict with deleteBook test.
         Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1", 15, 29.99);
-        this.mockMvc.perform(post("/add-book").flashAttr("book", book));
+        MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
+
+        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","1").param("title","Title 1").param("author","Author 1")
+                .param("publisher","Publisher 1").param("description","Description 1").param("inventory","15").param("price","29.99")).andExpect(status().is3xxRedirection());
         this.mockMvc.perform(post("/update-book")
                 .param("title", "New Title 1")
                 .param("author", "New Author 1")
