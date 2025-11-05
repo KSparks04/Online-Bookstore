@@ -38,7 +38,7 @@ class BookControllerTest {
 	 */
 	@Test
 	void getBookListSearch() throws Exception {
-		Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1",15,25.99);
+		//Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1",15,25.99);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
         this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","1").param("title","Title 1").param("author","Author 1")
                 .param("publisher","Publisher 1").param("description","Description 1").param("inventory","15").param("price","25.99")).andExpect(status().is3xxRedirection());
