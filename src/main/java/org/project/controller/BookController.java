@@ -93,7 +93,16 @@ public class BookController {
     }
 
     @PostMapping("/update-book")
-    public String updateBook(@ModelAttribute Book book){
+    public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file){
+        if(!file.isEmpty()){
+            try{
+                byte[] bytes = file.getBytes();
+                book.setPictureFile(bytes);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         bookRepo.save(book);
         return "redirect:/get-book-list";
     }

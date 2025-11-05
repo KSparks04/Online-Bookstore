@@ -161,7 +161,7 @@ class BookControllerTest {
 
         this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","1").param("title","Title 1").param("author","Author 1")
                 .param("publisher","Publisher 1").param("description","Description 1").param("inventory","15").param("price","29.99")).andExpect(status().is3xxRedirection());
-        this.mockMvc.perform(post("/update-book")
+        this.mockMvc.perform(multipart("/update-book").file(file)
                 .param("title", "New Title 1")
                 .param("author", "New Author 1")
                 .param("publisher", "New Publisher 1")
