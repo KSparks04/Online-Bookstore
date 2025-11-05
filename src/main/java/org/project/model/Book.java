@@ -1,8 +1,8 @@
 package org.project.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Book {
@@ -17,6 +17,8 @@ public class Book {
     private int inventory;
     private double price;
     //Eventually picture
+    @Lob
+    private byte[] pictureFile;
     public  Book() {
     }
 
@@ -51,4 +53,7 @@ public class Book {
 
     public double getPrice() {return price;}
     public void setPrice(double price) {this.price = price;}
+    //Add getter and setter for picture file?
+    public  byte[] getPictureFile() {return pictureFile;}
+    public void setPictureFile(byte[] pictureFile) {this.pictureFile = pictureFile;}
 }

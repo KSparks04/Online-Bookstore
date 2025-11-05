@@ -5,6 +5,7 @@
 </head>
 <body>
 <h1 th:text="${book.title}">Book Title</h1>
+<img th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}" style="max-width: 150px">
 
 <p><strong>ISBN:</strong> <span th:text="${book.ISBN}"></span></p>
 <p><strong>Author:</strong> <span th:text="${book.author}"></span></p>

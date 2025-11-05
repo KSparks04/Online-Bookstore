@@ -5,10 +5,17 @@ import org.project.model.Book;
 import org.project.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -58,7 +65,16 @@ public class BookController {
     }
 
     @PostMapping("/add-book")
-    public String createBook(@ModelAttribute Book book){
+    public String createBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file){
+        if(!file.isEmpty()){
+            try{
+                byte[] bytes = file.getBytes();
+                book.setPictureFile(bytes);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         bookRepo.save(book);
         return "redirect:/get-book-list";
     }
@@ -91,6 +107,17 @@ public class BookController {
         }
         model.addAttribute("book", book);
         return "book";
+    }
+    @GetMapping("/book-image/{ISBN}")
+    public ResponseEntity<byte[]> getBookImage(@PathVariable int ISBN){
+        Book book =bookRepo.findByISBN(ISBN);
+        byte[] imageBytes = book.getPictureFile();
+        if(imageBytes == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
 
 }
