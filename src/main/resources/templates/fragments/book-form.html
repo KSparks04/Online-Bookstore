@@ -1,0 +1,29 @@
+
+<div th:fragment="book-form">
+    <h3 th:text="|Add a Book:|"/>
+    <form th:action="@{/add-book}" th:object="${book}" method="post" enctype="multipart/form-data">
+        <label>ISBN: <input type="number" th:field="*{ISBN}"/><br/>
+            <div th:if="${#fields.hasErrors('ISBN')}" th:errors="*{ISBN}" style="color:red"></div>
+        </label>
+        <label>Title: <input type="text" th:field="*{title}" /><br/>
+            <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red"></div>
+        </label>
+        <label>Author: <input type="text" th:field="*{author}" /><br/>
+            <div th:if="${#fields.hasErrors('author')}" th:errors="*{author}" style="color:red"></div>
+        </label>
+        <label>Publisher: <input type="text" th:field="*{publisher}" /><br/>
+            <div th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}" style="color:red"></div>
+        </label>
+        <label>Description: <input type="text" th:field="*{description}" min="0" /><br/>
+            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color:red"></div>
+        </label>
+        <label>Inventory: <input type="number" th:field="*{inventory}" /><br/>
+            <div th:if="${#fields.hasErrors('inventory')}" th:errors="*{inventory}" style="color:red"></div>
+        </label>
+        <label>Price: <input type="number" th:field="*{price}" min="0"/><br/>
+            <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color:red"></div>
+        </label>
+        <label>Choose a Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
+        <button type="submit">Add Book</button>
+    </form>
+</div>
