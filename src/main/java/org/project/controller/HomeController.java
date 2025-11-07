@@ -32,6 +32,7 @@ public class HomeController {
             setup = false;
             setup();
         }
+
         return "home";
     }
 }

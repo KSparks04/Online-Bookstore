@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,7 +24,23 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepo;
-
+    @ModelAttribute("genres")
+    public List<String> genres() {
+        List<String> genres = new ArrayList<>();
+        genres.add("Fiction");
+        genres.add("Non-Fiction");
+        genres.add("Romance");
+        genres.add("YA");
+        genres.add("Science Fiction");
+        genres.add("Comedy");
+        genres.add("Action");
+        genres.add("Horror");
+        genres.add("Fantasy");
+        genres.add("Mystery");
+        genres.add("Dystopian");
+        genres.add("History");
+        return genres;
+    }
     @GetMapping("/get-book-list")
     public String getBookList(
             @RequestParam(required = false, defaultValue = "") String function,
@@ -55,6 +72,7 @@ public class BookController {
 
         model.addAttribute("bookList", bookList);
         model.addAttribute("book", new Book());
+        model.addAttribute("genres", genres());
         return "book-list";
     }
 
