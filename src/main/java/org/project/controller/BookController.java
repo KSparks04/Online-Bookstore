@@ -50,6 +50,12 @@ public class BookController {
                 }
                 break;
 
+            case "refresh":
+                bookList = bookRepo.findAll();
+                model.addAttribute("bookList", bookList);
+                model.addAttribute("book", new Book());
+                return "fragments/book-table";
+
             default:
                 bookList = bookRepo.findAll();
                 break;
@@ -57,10 +63,6 @@ public class BookController {
 
         model.addAttribute("bookList", bookList);
         model.addAttribute("book", new Book());
-
-        if("refresh".equals(function)){
-            return "fragments/book-table";
-        }
 
         return "book-list";
     }
