@@ -11,9 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jakarta.validation.Valid;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,6 +57,11 @@ public class BookController {
 
         model.addAttribute("bookList", bookList);
         model.addAttribute("book", new Book());
+
+        if("refresh".equals(function)){
+            return "fragments/book-table";
+        }
+
         return "book-list";
     }
 
@@ -65,7 +72,7 @@ public class BookController {
     }
 
     @PostMapping("/add-book")
-    public String createBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file){
+    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file){
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
@@ -75,8 +82,20 @@ public class BookController {
                 throw new RuntimeException(e);
             }
         }
+
+        if(bookRepo.existsById(book.getISBN())){
+            bindingResult.rejectValue("ISBN", "error.book", "ISBN already exists");
+        }
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("bookList", bookRepo.findAll());
+            return "fragments/book-form";
+        }
+
         bookRepo.save(book);
-        return "redirect:/get-book-list";
+        model.addAttribute("bookList", bookRepo.findAll());
+        model.addAttribute("book", new Book());
+        return "fragments/book-form";
     }
 
     @PostMapping("/delete-book/{ISBN}")
