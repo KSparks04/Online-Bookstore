@@ -127,8 +127,9 @@ class BookControllerTest {
                 .param("publisher","Publisher 7").param("description","Description 7").param("inventory","13").param("price","26.99")).andExpect(status().is3xxRedirection());
         //this.mockMvc.perform(post("/add-book").flashAttr("book", book));
         this.mockMvc.perform(post("/delete-book/7")).andDo(print()).andExpect(status().is3xxRedirection());
+        //Might have to change but a 7 can appear for something else in the html so .andExpect(content().string(not(containString("7"))) won't work for checking ISBN
         this.mockMvc.perform(get("/get-book-list")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(not(containsString("7")))).andExpect(content().string(not(containsString("Title 7"))))
+                .andExpect(content().string(not(containsString("Title 7"))))
                 .andExpect(content().string(not(containsString("Author 7")))).andExpect(content().string(not(containsString("Publisher 7"))))
                 .andExpect(content().string(not(containsString("Description 7")))).andExpect(content().string(not(containsString("13")))).andExpect(content().string(not(containsString("26.99"))));
 

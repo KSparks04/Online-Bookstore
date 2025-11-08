@@ -11,6 +11,8 @@
 <p><strong>Author:</strong> <span th:text="${book.author}"></span></p>
 <p><strong>Publisher:</strong> <span th:text="${book.publisher}"></span></p>
 <p><strong>Description:</strong> <span th:text="${book.description}"></span></p>
+<p><strong>Genre(s): <span th:each="g, iterStat : ${book.genres}" th:text="${iterStat.last} ? ${g} : ${g + ', '}"></span> </strong></p>
+<p><strong>Page Count: <span th:text="${book.pageCount}"></span></strong></p>
 <p><strong>Price:</strong> <span th:text="${book.price}"></span></p>
 <p><strong>Inventory:</strong> <span th:text="${book.inventory}"></span></p>
 

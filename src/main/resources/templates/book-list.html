@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Online Bookstore Home</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 <h1>Book List</h1>
@@ -13,7 +13,7 @@
         <input hidden name="function" value="search">
     </label>
     <label>
-        <input type="text" name="variable" >
+        <input type="text" name="variable">
     </label>
     <button type="submit">Search</button>
 </form>
@@ -41,14 +41,26 @@
 <!-- Add Book Form -->
 <h3 th:text="|Add a Book:|"/>
 <form th:action="@{/add-book}" th:object="${book}" method="post" enctype="multipart/form-data">
-    <label>ISBN: <input type="text" th:field="*{ISBN}" /><br/></label>
-    <label>Title: <input type="text" th:field="*{title}" /><br/></label>
-    <label>Author: <input type="text" th:field="*{author}" /><br/></label>
-    <label>Publisher: <input type="text" th:field="*{publisher}" /><br/></label>
-    <label>Description: <input type="text" th:field="*{description}" /><br/></label>
-    <label>Inventory: <input type="text" th:field="*{inventory}" /><br/></label>
-    <label>Price: <input type="text" th:field="*{price}" /><br/></label>
     <label>Choose a Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
+    <label>ISBN: <input type="text" th:field="*{ISBN}"/><br/></label>
+    <label>Title: <input type="text" th:field="*{title}"/><br/></label>
+    <label>Author: <input type="text" th:field="*{author}"/><br/></label>
+    <label>Publisher: <input type="text" th:field="*{publisher}"/><br/></label>
+    <label>Description: <input type="text" th:field="*{description}"/><br/></label>
+    <label>Genre(s):</label>
+    <div th:each="genre : ${genres}">
+        <label>
+            <input type="checkbox" th:field="*{genres}" th:value="${genre}">
+            <span th:text="${genre}"></span>
+        </label><br>
+    </div>
+    <label>Page Count: <input type="text" th:field="*{pageCount}"/><br/></label>
+    <label>Inventory: <input type="text" th:field="*{inventory}"/><br/></label>
+    <label>Price: <input type="text" th:field="*{price}"/><br/></label>
+    <label>Choose a Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
+    <!---Can use Bootstrap to make dropdown menu-->
+
+
     <button type="submit">Add Book</button>
 </form>
 <script th:src="@{/js/bookTable.js}"></script>

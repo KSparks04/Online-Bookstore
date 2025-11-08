@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 
+import java.util.List;
+
 @Entity
 public class Book {
     //ISBN, picture, description, author, publisher,.
@@ -16,9 +18,13 @@ public class Book {
     private String description;
     private int inventory;
     private double price;
-    //Eventually picture
+    private int pageCount;
+
     @Lob
     private byte[] pictureFile;
+
+    private List<String> genres;
+
     public  Book() {
     }
 
@@ -56,4 +62,10 @@ public class Book {
     //Add getter and setter for picture file?
     public  byte[] getPictureFile() {return pictureFile;}
     public void setPictureFile(byte[] pictureFile) {this.pictureFile = pictureFile;}
+
+    public List<String> getGenres() {return genres;}
+    public void setGenres(List<String> genres) {this.genres = genres;}
+
+    public int getPageCount() {return pageCount;}
+    public void setPageCount(int pageCount) {this.pageCount = pageCount;}
 }
