@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 
+import java.util.Objects;
+
 @Entity
 public class Book {
     //ISBN, picture, description, author, publisher,.
@@ -56,4 +58,13 @@ public class Book {
     //Add getter and setter for picture file?
     public  byte[] getPictureFile() {return pictureFile;}
     public void setPictureFile(byte[] pictureFile) {this.pictureFile = pictureFile;}
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+
+        Book book = (Book) o;
+        return this.ISBN == book.ISBN && Objects.equals(this.title, book.title) && Objects.equals(this.author, book.author)
+                && Objects.equals(this.publisher, book.publisher) && this.price == book.price;
+    }
 }

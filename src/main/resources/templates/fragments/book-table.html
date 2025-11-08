@@ -21,6 +21,7 @@
             <form th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
                 <button type="submit">Delete</button>
             </form>
+            <div th:include="fragments/purchase-button"></div>
         </td>
     </tr>
     </tbody>
