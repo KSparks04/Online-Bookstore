@@ -1,8 +1,10 @@
 package org.project.controller;
 
 
+import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
 import org.project.repository.BookRepository;
+import org.project.util.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +30,7 @@ public class BookController {
     public String getBookList(
             @RequestParam(required = false, defaultValue = "") String function,
             @RequestParam(required = false) String variable,
-            Model model) {
+            Model model, HttpSession session) {
 
         Iterable<Book> bookList = null;
 
@@ -55,6 +57,7 @@ public class BookController {
 
         model.addAttribute("bookList", bookList);
         model.addAttribute("book", new Book());
+        Common.addCommonAttributes(model, session);
         return "book-list";
     }
 
@@ -108,13 +111,14 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}")
-    public String getBook(@PathVariable("id") int id, Model model) {
+    public String getBook(@PathVariable("id") int id, Model model, HttpSession session) {
         Book book = bookRepo.findByISBN(id);
         if (book == null) {
             // Book not found, show a dedicated error page
             return "error/book-not-found";
         }
         model.addAttribute("book", book);
+        Common.addCommonAttributes(model, session);
         return "book";
     }
     @GetMapping("/book-image/{ISBN}")

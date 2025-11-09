@@ -1,7 +1,9 @@
 package org.project.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
 import org.project.repository.BookRepository;
+import org.project.util.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ public class HomeController {
 
     //TODO temp probably wanna have a DB with persistence
     private boolean setup = true;
+
     public void setup(){
         Book book1 = new Book(0000000000001, "Title1", "Author1", "Publisher1", "Description of book 1",5,23.99);
         Book book2 = new Book(0000000000002, "Title2", "Author2", "Publisher2", "Description of book 2",4,21.99);
@@ -27,11 +30,12 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(Model model){
+    public String home(Model model, HttpSession session) {
         if (setup){
             setup = false;
             setup();
         }
+        Common.addCommonAttributes(model, session);
         return "home";
     }
 }

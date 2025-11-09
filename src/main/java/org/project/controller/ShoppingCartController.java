@@ -24,7 +24,7 @@ public class ShoppingCartController {
             cart = new ShoppingCart();
         }
         model.addAttribute("shoppingCart", cart);
-        return "fragments/shopping-cart";
+        return "fragments/shopping-cart/shopping-cart-body";
     }
 
     //Edit
