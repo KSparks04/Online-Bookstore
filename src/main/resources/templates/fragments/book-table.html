@@ -12,6 +12,7 @@
         <td th:text="${book.description}"></td>
         <td th:text="${book.inventory}"></td>
         <td th:text="${book.price}"></td>
+        <td th:text="${book.pageCount}"></td>
         <td>
             <!-- Edit Book Form -->
             <form th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">

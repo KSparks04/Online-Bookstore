@@ -20,6 +20,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
             "WHERE LOWER(b.title) LIKE %:str% " +
             "OR LOWER(b.author) LIKE %:str% " +
             "OR LOWER(b.publisher) LIKE %:str% " +
-            "OR LOWER(b.description) LIKE %:str%")
+            "OR LOWER(b.description) LIKE %:str% " +
+            "OR CONCAT('', b.ISBN) LIKE %:str%")
     public Iterable<Book> findByAllColumns(@Param("str") String str);
 }

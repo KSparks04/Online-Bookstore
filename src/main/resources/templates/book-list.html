@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Online Bookstore Home</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 <h1>Book List</h1>
@@ -13,7 +13,7 @@
         <input hidden name="function" value="search">
     </label>
     <label>
-        <input type="text" name="variable" >
+        <input type="text" name="variable">
     </label>
     <button type="submit">Search</button>
 </form>
@@ -31,6 +31,7 @@
         <th onclick="sortBy('description')" data-sort="description">Description</th>
         <th onclick="sortBy('inventory')" data-sort="inventory">Inventory</th>
         <th onclick="sortBy('price')" data-sort="price">Price</th>
+        <th onclick="sortBy('pageCount')" data-sort="pageCount">Page Count</th>
     </tr>
     </thead>
     <tbody id="bookTableContainer" th:replace="~{fragments/book-table}"></tbody>

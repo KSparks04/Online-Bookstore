@@ -4,7 +4,9 @@ import jakarta.persistence.Entity;
     import jakarta.persistence.Id;
     import jakarta.persistence.Lob;
 
-    import jakarta.validation.constraints.*;;
+    import jakarta.validation.constraints.*;
+
+    import java.util.List;
 
     @Entity
     public class Book {
@@ -26,13 +28,19 @@ import jakarta.persistence.Entity;
         @NotNull(message = "Price is required")
         @Min(value = 0,  message = "Price must be non-negative")
         private double price;
+        @NotNull(message="Page count is required")
+        @Min(value = 1, message = "Page count must be equal to or greater than 1")
+        private int pageCount;
         //Eventually picture
         @Lob
         private byte[] pictureFile;
+
+        private List<String> genres;
+
         public  Book() {
         }
 
-        public Book(int ISBN, String title, String author, String publisher, String description,int  inventory,double price) {
+        public Book(int ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
 
             this.ISBN = ISBN;
             this.title = title;
@@ -41,6 +49,7 @@ import jakarta.persistence.Entity;
             this.description = description;
             this.inventory = inventory;
             this.price = price;
+            this.pageCount = pageCount;
         }
 
         public int getISBN() {return  ISBN;}
@@ -66,4 +75,10 @@ import jakarta.persistence.Entity;
         //Add getter and setter for picture file?
         public  byte[] getPictureFile() {return pictureFile;}
         public void setPictureFile(byte[] pictureFile) {this.pictureFile = pictureFile;}
+
+        public List<String> getGenres() {return genres;}
+        public void setGenres(List<String> genres) {this.genres = genres;}
+
+        public int getPageCount() {return pageCount;}
+        public void setPageCount(int pageCount) {this.pageCount = pageCount;}
     }
