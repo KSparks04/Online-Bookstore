@@ -8,7 +8,7 @@ $(document).ready(function () {
 function removeBook (element){
     $.ajax({
         type: "POST",
-        url: "shopping-cart/edit/remove/" + $(element).data("isbn"),
+        url: "/shopping-cart/edit/remove/" + $(element).data("isbn"),
         timeout: 5000,
         success: getShoppingCart
     });

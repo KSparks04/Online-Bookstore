@@ -22,7 +22,7 @@ function updateShoppingCart(data){
 function getShoppingCart(){
     $.ajax({
         type: "GET",
-        url: "shopping-cart",
+        url: "/shopping-cart",
         timeout: 5000,
         success: updateShoppingCart
     });
@@ -31,7 +31,7 @@ function getShoppingCart(){
 function purchaseBook (element){
     $.ajax({
         type: "POST",
-        url: "shopping-cart/edit/add/" + $(element).data("isbn"),
+        url: "/shopping-cart/edit/add/" + $(element).data("isbn"),
         timeout: 5000,
         success: getShoppingCart
     });

@@ -3,7 +3,6 @@ package org.project.controller;
 import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
 import org.project.repository.BookRepository;
-import org.project.util.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +34,7 @@ public class HomeController {
             setup = false;
             setup();
         }
-        Common.addCommonAttributes(model, session);
+        ShoppingCartController.addShoppingCartAttributes(model, session);
         return "home";
     }
 }
