@@ -10,7 +10,7 @@ public class BookTest {
 
     @Before
     public void setUp() throws Exception {
-        book = new Book(128791,"Coding 101","John Smith","Ravens","Learn",15,29.99);
+        book = new Book(128791,"Coding 101","John Smith","Ravens","Learn",15,29.99, 111);
     }
 
     @Test
@@ -77,5 +77,14 @@ public class BookTest {
     public void setInventory() {
         book.setInventory(25);
         assertEquals(25,book.getInventory());
+    }
+    @Test
+    public void getPageCount(){
+        assertEquals(111, book.getPageCount());
+    }
+    @Test
+    public void setPageCount(){
+        book.setPageCount(123);
+        assertEquals(123, book.getPageCount());
     }
 }

@@ -31,6 +31,7 @@
         <th onclick="sortBy('description')" data-sort="description">Description</th>
         <th onclick="sortBy('inventory')" data-sort="inventory">Inventory</th>
         <th onclick="sortBy('price')" data-sort="price">Price</th>
+        <th onclick="sortBy('pageCount')" data-sort="pageCount">Page Count</th>
     </tr>
     </thead>
     <tbody id="bookTableContainer" th:replace="~{fragments/book-table}"></tbody>
@@ -38,31 +39,9 @@
 
 <br>
 
-<!-- Add Book Form -->
-<h3 th:text="|Add a Book:|"/>
-<form th:action="@{/add-book}" th:object="${book}" method="post" enctype="multipart/form-data">
-    <label>Choose a Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
-    <label>ISBN: <input type="text" th:field="*{ISBN}"/><br/></label>
-    <label>Title: <input type="text" th:field="*{title}"/><br/></label>
-    <label>Author: <input type="text" th:field="*{author}"/><br/></label>
-    <label>Publisher: <input type="text" th:field="*{publisher}"/><br/></label>
-    <label>Description: <input type="text" th:field="*{description}"/><br/></label>
-    <label>Genre(s):</label>
-    <div th:each="genre : ${genres}">
-        <label>
-            <input type="checkbox" th:field="*{genres}" th:value="${genre}">
-            <span th:text="${genre}"></span>
-        </label><br>
-    </div>
-    <label>Page Count: <input type="text" th:field="*{pageCount}"/><br/></label>
-    <label>Inventory: <input type="text" th:field="*{inventory}"/><br/></label>
-    <label>Price: <input type="text" th:field="*{price}"/><br/></label>
-    <label>Choose a Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
-    <!---Can use Bootstrap to make dropdown menu-->
+<div id="addBookForm" th:insert="~{fragments/book-form}"></div>
 
-
-    <button type="submit">Add Book</button>
-</form>
 <script th:src="@{/js/bookTable.js}"></script>
+<script th:src="@{/js/bookForm.js}"></script>
 </body>
 </html>
