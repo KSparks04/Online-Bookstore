@@ -41,11 +41,14 @@ class BookControllerTest {
 		//Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1",15,25.99);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
         this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","101").param("title","Title 1").param("author","Author 1")
-                .param("publisher","Publisher 1").param("description","Description 1").param("inventory","15").param("price","25.99")).andExpect(status().is2xxSuccessful());
+                .param("publisher","Publisher 1").param("description","Description 1").param("inventory","15").param("price","25.99").param("pageCount", "101")).andExpect(status().is2xxSuccessful());
 		this.mockMvc.perform(get("/get-book-list?function=search&variable=101")).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(containsString("101"))).andExpect(content().string(containsString("Title 1")))
-				.andExpect(content().string(containsString("Author 1"))).andExpect(content().string(containsString("Publisher 1")))
-				.andExpect(content().string(containsString("Description 1"))).andExpect(content().string(containsString("15")))
+				.andExpect(content().string(containsString("101")))
+                                .andExpect(content().string(containsString("Title 1")))
+				.andExpect(content().string(containsString("Author 1")))
+                                .andExpect(content().string(containsString("Publisher 1")))
+				.andExpect(content().string(containsString("Description 1")))
+                                .andExpect(content().string(containsString("15")))
                                 .andExpect(content().string(containsString("25.99")));
 	}
     /**
