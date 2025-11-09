@@ -1,6 +1,3 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-    <tbody>
         <tr th:each="book: ${bookList}">
         <td th:text="${book.ISBN}"></td>
 
@@ -25,5 +22,4 @@
             <div class="purchase-button" th:data-isbn="${book.ISBN}" th:insert="~{fragments/shopping-cart/purchase-button}"></div>
         </td>
     </tr>
-    </tbody>
-</html>
+        <script th:src="@{/js/purchase-button.js}"></script>
