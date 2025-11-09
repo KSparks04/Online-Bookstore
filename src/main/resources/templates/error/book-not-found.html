@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book Not Found</title>
+</head>
+<body>
+<h2>Book Not Found</h2>
+
+<p th:if="${searchQuery == null}">
+    Sorry, the book you are looking for does not exist in our catalog.
+</p>
+
+<p><a th:href="@{/get-book-list}">Return to Book List</a></p>
+</body>
+</html>
