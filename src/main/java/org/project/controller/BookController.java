@@ -54,7 +54,7 @@ public class BookController {
         switch (function) {
             case "search":
                 model.addAttribute("searchQuery", variable);
-                bookList = bookRepo.findAll();
+                bookList = bookRepo.findByAllColumns(variable);
                 break;
 
             case "refresh":
