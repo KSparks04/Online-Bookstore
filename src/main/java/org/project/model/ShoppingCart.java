@@ -26,7 +26,9 @@ public class ShoppingCart {
     }
 
     public void addBook (Book book) {
-        this.bookList.add(book);
+        if (book != null) {
+            this.bookList.add(book);
+        }
     }
 
     public void removeBook (Book book) {
