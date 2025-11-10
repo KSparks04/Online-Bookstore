@@ -1,0 +1,15 @@
+.list-header{
+    background-color: lightgray;
+
+}
+.book-table{
+    border-collapse: collapse;
+    table-layout: auto;
+    text-align: center;
+}
+.book-table td{
+    padding: 5px 10px;
+}
+.book-update-button{
+    text-align: left;
+}
