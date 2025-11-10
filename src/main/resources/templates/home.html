@@ -10,6 +10,21 @@
 <h1 th:text="|Online Bookstore|" />
 <a th:href="@{/get-book-list}" th:text="|Book list|"/>
 <br>
+<div>
+    <!-- If user is logged in -->
+    <div th:if="${session.currentUser != null}">
+                <span class="me-3">
+                    Logged in as: <strong th:text="${session.currentUser.username}"></strong>
+                </span>
+        <a class="btn btn-outline-danger btn-sm" th:href="@{/logout}">Logout</a>
+    </div>
+
+    <!-- If no user is logged in -->
+    <div th:unless="${session.currentUser != null}">
+        <a class="btn btn-outline-primary btn-sm me-2" th:href="@{/login}">Login</a>
+        <a class="btn btn-outline-success btn-sm" th:href="@{/register}">Register</a>
+    </div>
+</div>
 <div th:insert="~{fragments/common}"></div>
 </body>
 </html>

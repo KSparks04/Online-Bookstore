@@ -9,6 +9,8 @@
 <body>
 <h1>Book List</h1>
 
+<div th:insert="~{fragments/user-status :: userStatus}"></div>
+
 <!-- Book Search Bar -->
 <form th:action="@{/get-book-list}" method="get">
     <label>
