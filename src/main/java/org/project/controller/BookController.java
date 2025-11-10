@@ -54,18 +54,8 @@ public class BookController {
 
         switch (function) {
             case "search":
-                if (variable != null && !variable.trim().isEmpty()) {
-                    bookList = bookRepo.findByAllColumns(variable.toLowerCase());
-
-                    // If search returns nothing, show the not-found page
-                    if (!bookList.iterator().hasNext()) {
-                        model.addAttribute("searchQuery", variable);
-                        return "error/book-not-found";
-                    }
-                } else {
-                    // If search query is empty, just show all books
-                    bookList = bookRepo.findAll();
-                }
+                model.addAttribute("searchQuery", variable);
+                bookList = bookRepo.findByAllColumns(variable);
                 break;
 
             case "refresh":
