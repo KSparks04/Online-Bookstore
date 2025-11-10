@@ -47,4 +47,31 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Invalid username or password")));
     }
+    @Test
+    void registerPageLoads() throws Exception {
+        mockMvc.perform(get("/register"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Create")));
+    }
+
+    @Test
+    void registerNewUserRedirectsToLogin() throws Exception {
+        mockMvc.perform(post("/register")
+                        .param("username", "newuser")
+                        .param("password", "newpass"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+    }
+
+    @Test
+    void registerDuplicateUsernameShowsError() throws Exception {
+        userRepository.save(new User("dupeuser", "pass123"));
+
+        mockMvc.perform(post("/register")
+                        .param("username", "dupeuser")
+                        .param("password", "anotherpass"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Username already taken")));
+    }
+
 }

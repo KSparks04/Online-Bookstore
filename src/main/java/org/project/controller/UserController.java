@@ -47,4 +47,32 @@ public class UserController {
         session.invalidate();
         return "redirect:/login";
     }
+    /**
+     * Display registration page
+     */
+    @GetMapping("/register")
+    public String showRegistrationPage(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
+    }
+
+    /**
+     * Handle registration form submission
+     */
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute User user, Model model) {
+        // Check if username already exists
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            model.addAttribute("registrationError", "Username already taken");
+            return "register";
+        }
+
+        // Save new user
+        userRepository.save(user);
+
+        // Redirect to login after successful registration
+        model.addAttribute("registrationSuccess", "Account created successfully! Please log in.");
+        return "redirect:/login";
+    }
+
 }
