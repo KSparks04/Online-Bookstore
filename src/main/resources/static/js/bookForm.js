@@ -41,7 +41,12 @@ document.addEventListener("DOMContentLoaded", () => initBookForm());
 
 
 async function refreshBookTable(){
-    const response = await fetch("/get-book-list?function=refresh");
-    const html = await response.text();
-    document.querySelector("table tbody").innerHTML = html;
+    $.ajax({
+        type: "GET",
+        url: "/get-book-list?function=refresh",
+        timeout: 5000,
+        success: function (data){
+            $("#book-table").html(data);
+        }
+    });
 }
