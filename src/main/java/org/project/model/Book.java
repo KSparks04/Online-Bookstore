@@ -1,21 +1,22 @@
-    package org.project.model;
+package org.project.model;
+
+import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Entity;
-    import jakarta.persistence.Id;
-    import jakarta.persistence.Lob;
-
-    import jakarta.validation.constraints.*;
-
-    import java.util.Objects;
-    import java.util.List;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
     @Entity
     public class Book {
         //ISBN, picture, description, author, publisher,.
 
         @Id
-        @Min(value = 1, message = "ISBN must be a non-negative number")
-        private int ISBN;
+        @NotNull
+        private String ISBN;
         @NotBlank(message = "Title is required")
         private String title;
         @NotBlank(message = "Author is required")
@@ -41,7 +42,7 @@ import jakarta.persistence.Entity;
         public  Book() {
         }
 
-        public Book(int ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
+        public Book(String ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
 
             this.ISBN = ISBN;
             this.title = title;
@@ -53,8 +54,8 @@ import jakarta.persistence.Entity;
             this.pageCount = pageCount;
         }
 
-        public int getISBN() {return  ISBN;}
-        public void setISBN(int ISBN) {this.ISBN = ISBN;}
+        public String getISBN() {return  ISBN;}
+        public void setISBN(String ISBN) {this.ISBN = ISBN;}
 
         public String getTitle() {return title;}
         public void setTitle(String title) {this.title = title;}

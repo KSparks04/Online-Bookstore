@@ -1,7 +1,5 @@
 package org.project.controller;
 
-import jakarta.servlet.http.HttpSession;
-import org.project.model.Book;
 import org.project.model.ShoppingCart;
 import org.project.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.HashMap;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ShoppingCartController {
@@ -39,7 +37,7 @@ public class ShoppingCartController {
 
     //Edit
     @PostMapping("/shopping-cart/edit/{function}/{ISBN}")
-    public String editShoppingCart(@PathVariable("function") String function, @PathVariable("ISBN") int ISBN, Model model, HttpSession session) {
+    public String editShoppingCart(@PathVariable("function") String function, @PathVariable("ISBN") String ISBN, Model model, HttpSession session) {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         if (cart == null) {
             cart = new ShoppingCart();

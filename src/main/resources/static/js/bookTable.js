@@ -16,7 +16,7 @@ async function sortBy(attribute){
     const html = await response.text();
     const tbody = document.querySelector("table tbody").innerHTML = html;
 
-    updateSortArrows(attribute, currentSort.ascending);
+    //updateSortArrows(attribute, currentSort.ascending); to be re-added when css spacing is implemented
 }
 
 function updateSortArrows(attribute, ascending){

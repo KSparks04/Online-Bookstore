@@ -1,7 +1,10 @@
 package org.project.controller;
 
 
-import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.project.model.Book;
 import org.project.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +16,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import jakarta.validation.Valid;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @Controller
 public class BookController {
@@ -94,7 +99,7 @@ public class BookController {
             }
         }
 
-        if(bookRepo.existsById(book.getISBN())){
+        if(bookRepo.existsByISBN(book.getISBN())){
             bindingResult.rejectValue("ISBN", "error.book", "ISBN already exists");
         }
 
@@ -109,14 +114,15 @@ public class BookController {
         return "fragments/book-form";
     }
 
+    @Transactional
     @PostMapping("/delete-book/{ISBN}")
-    public String deleteBook(@PathVariable int ISBN){
-        bookRepo.deleteById(ISBN);
+    public String deleteBook(@PathVariable String ISBN){
+        bookRepo.deleteByISBN(ISBN);
         return "redirect:/get-book-list";
     }
 
     @GetMapping("/edit-book/{ISBN}")
-    public String editBook(@PathVariable int ISBN, Model model){
+    public String editBook(@PathVariable String ISBN, Model model){
         Book book = bookRepo.findByISBN(ISBN);
         model.addAttribute("book", book);
         return "edit-book";
@@ -137,9 +143,9 @@ public class BookController {
         return "redirect:/get-book-list";
     }
 
-    @GetMapping("/book/{id}")
-    public String getBook(@PathVariable("id") int id, Model model, HttpSession session) {
-        Book book = bookRepo.findByISBN(id);
+    @GetMapping("/book/{ISBN}")
+    public String getBook(@PathVariable("ISBN") String ISBN, Model model, HttpSession session) {
+        Book book = bookRepo.findByISBN(ISBN);
         if (book == null) {
             // Book not found, show a dedicated error page
             return "error/book-not-found";
@@ -149,7 +155,7 @@ public class BookController {
         return "book";
     }
     @GetMapping("/book-image/{ISBN}")
-    public ResponseEntity<byte[]> getBookImage(@PathVariable int ISBN){
+    public ResponseEntity<byte[]> getBookImage(@PathVariable String ISBN){
         Book book =bookRepo.findByISBN(ISBN);
         byte[] imageBytes = book.getPictureFile();
         if(imageBytes == null){

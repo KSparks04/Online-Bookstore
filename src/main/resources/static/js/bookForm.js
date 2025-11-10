@@ -13,6 +13,25 @@ function initBookForm(retries = 10, delay = 100) {
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        const isbnInput = form.querySelector("#ISBN");
+        const isbnErrorDiv = form.querySelector("#isbn-error"); // select once
+        const isbn = isbnInput.value.trim();
+
+        if (!isValidISBN13(isbn)) {
+            // Show unobtrusive inline error
+            isbnErrorDiv.textContent = "Invalid ISBN-13";
+            isbnErrorDiv.style.display = "block";
+            isbnInput.classList.add("invalid"); // optional: highlight input
+            return;
+        } else {
+            // Clear error if valid
+            isbnErrorDiv.textContent = "";
+            isbnErrorDiv.style.display = "none";
+            isbnInput.classList.remove("invalid");
+        }
+        
+
         const formData = new FormData(form);
 
         try {
@@ -39,7 +58,6 @@ function initBookForm(retries = 10, delay = 100) {
 document.addEventListener("DOMContentLoaded", () => initBookForm());
 
 
-
 async function refreshBookTable(){
     $.ajax({
         type: "GET",
@@ -49,4 +67,18 @@ async function refreshBookTable(){
             $("#book-table").html(data);
         }
     });
+}
+
+function isValidISBN13(isbn) {
+    // Compute checksum
+    let sum = 0;
+    for (let i = 0; i < 12; i++) {
+        const digit = parseInt(isbn[i]);
+        sum += (i % 2 === 0) ? digit : digit * 3;
+    }
+
+    const checkDigit = (10 - (sum % 10)) % 10;
+
+    // Valid if last digit matches checksum
+    return checkDigit === Number(isbn[12]);
 }

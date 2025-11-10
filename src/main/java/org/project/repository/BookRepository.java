@@ -1,16 +1,16 @@
 package org.project.repository;
 
+import java.util.List;
+
 import org.project.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
-    public Book findByISBN(int ISBN);
+    public Book findByISBN(String ISBN);
     public List<Book> findByTitle(String title);
     public List<Book> findByAuthor(String author);
     public List<Book> findByPublisher(String publisher);
@@ -23,4 +23,9 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
             "OR LOWER(b.description) LIKE %:str% " +
             "OR CONCAT('', b.ISBN) LIKE %:str%")
     public Iterable<Book> findByAllColumns(@Param("str") String str);
+
+     @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN true ELSE false END FROM book WHERE ISBN = :ISBN", nativeQuery = true)
+     public boolean existsByISBN(@Param("ISBN") String ISBN);
+
+     public void deleteByISBN(String ISBN);
 }

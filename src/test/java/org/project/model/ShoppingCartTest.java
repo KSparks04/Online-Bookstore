@@ -1,10 +1,9 @@
 package org.project.model;
 
-import org.junit.Before;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ShoppingCartTest {
     ShoppingCart cart;
@@ -13,7 +12,7 @@ class ShoppingCartTest {
     @BeforeEach
     public void setUp() throws Exception {
         cart = new ShoppingCart();
-        book = new Book(128791,"Coding 101","John Smith","Ravens","Learn",15,29.99, 111);
+        book = new Book("128791","Coding 101","John Smith","Ravens","Learn",15,29.99, 111);
     }
     @Test
     void getBookList() {

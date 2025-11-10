@@ -1,27 +1,26 @@
 package org.project.model;
 
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class BookTest {
     Book  book;
 
     @Before
     public void setUp() throws Exception {
-        book = new Book(128791,"Coding 101","John Smith","Ravens","Learn",15,29.99, 111);
+        book = new Book("128791","Coding 101","John Smith","Ravens","Learn",15,29.99, 111);
     }
 
     @Test
     public void getISBN() {
-        assertEquals(128791,book.getISBN());
+        assertEquals("128791",book.getISBN());
 
     }
 
     @Test
     public void setISBN() {
-        book.setISBN(128712);
+        book.setISBN("128712");
         assertEquals(128712,book.getISBN());
     }
     @Test
