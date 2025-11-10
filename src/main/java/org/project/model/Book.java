@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 
     import jakarta.validation.constraints.*;
 
+    import java.util.Objects;
     import java.util.List;
 
     @Entity
@@ -81,4 +82,13 @@ import jakarta.persistence.Entity;
 
         public int getPageCount() {return pageCount;}
         public void setPageCount(int pageCount) {this.pageCount = pageCount;}
+
+        @Override
+        public boolean equals(Object o){
+            if(this == o) return true;
+
+            Book book = (Book) o;
+            return this.ISBN == book.ISBN && Objects.equals(this.title, book.title) && Objects.equals(this.author, book.author)
+                    && Objects.equals(this.publisher, book.publisher) && this.price == book.price;
+        }
     }
