@@ -17,14 +17,14 @@
         <label>Description: <input type="text" th:field="*{description}" min="0" /><br/>
             <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color:red"></div>
         </label>
-        <label>Genre(s)</label>
-        <div th:each="genre : ${genres}">
+        <label>Genre(s): </label>
+        <div th:each="genre : ${genres}" id="genre-box">
             <label>
                 <input type="checkbox" th:field="*{genres}" th:value="${genre}">
                 <span th:text="${genre}"></span>
             </label>
         </div>
-        <label>Page Count:<input type="number" th:field="*{pageCount}"/><br/>
+        <label>Page Count: <input type="number" th:field="*{pageCount}"/><br/>
             <div th:if="${#fields.hasErrors('pageCount')}" th:errors="*{pageCount}" style="color:red"></div>
         </label>
         <label>Inventory: <input type="number" th:field="*{inventory}" /><br/>
@@ -34,6 +34,14 @@
             <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color:red"></div>
         </label>
         <label>Choose a Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
-        <button type="submit">Add Book</button>
+        <label class="form-label">Book Series: <select id="seriesSelector" class="form-control" name="seriesName">
+            <option value = "">Not Applicable</option>
+            <option th:each="s : ${series}" th:value="${s.seriesCode}" th:text="${s.seriesName}" ></option>
+        </select></label>
+
+
+        <button type="submit" id="form-submit">Add Book</button>
     </form>
+
 </div>
+

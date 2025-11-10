@@ -13,12 +13,14 @@
 <p><strong>Author:</strong> <span th:text="${book.author}"></span></p>
 <p><strong>Publisher:</strong> <span th:text="${book.publisher}"></span></p>
 <p><strong>Description:</strong> <span th:text="${book.description}"></span></p>
-<p><strong>Genre(s): <span th:each="g, iterStat : ${book.genres}" th:text="${iterStat.last} ? ${g} : ${g + ', '}"></span> </strong></p>
+<p><strong>Genre(s): </strong><span th:each="g, iterStat : ${book.genres}" th:text="${iterStat.last} ? ${g} : ${g + ', '}"></span> </p>
+<p><strong>Series: </strong><span th:text="${book.series != null ? book.series.seriesName : 'Not in a Series'}" ></span></p>
 <p><strong>Page Count: <span th:text="${book.pageCount}"></span></strong></p>
 <p><strong>Price:</strong> <span th:text="${book.price}"></span></p>
 <p><strong>Inventory:</strong> <span th:text="${book.inventory}"></span></p>
 
 <div class="purchase-button" th:data-isbn="${book.ISBN}" th:insert="~{fragments/shopping-cart/purchase-button}"></div>
+
 
 <p><a th:href="@{/get-book-list}">Back to Book List</a></p>
 <br>

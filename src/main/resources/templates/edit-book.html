@@ -19,6 +19,9 @@
     <label>Inventory: <input type="text" th:field="*{inventory}" id="amount"/><button type="button" onclick="changeAmt(1)">+</button><button type="button" onclick="changeAmt(-1)">-</button><br/></label>
     <label>Price: <input type="text" th:field="*{price}" /><br/></label>
     <label>Change the Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
+    <label class="form-label">Book Series: <select id="seriesSelector" class="form-control" multiple="multiple" th:field="*{series}">
+        <option th:each="s : ${series}" th:value="${s.seriesCode}" th:text="${s.seriesName}" ></option>
+    </select></label>
     <button type="submit">Save Changes</button>
 </form>
 <a th:href="@{/get-book-list}">Back to Book List</a>

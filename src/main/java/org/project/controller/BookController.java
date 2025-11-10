@@ -3,7 +3,9 @@ package org.project.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
+import org.project.model.Series;
 import org.project.repository.BookRepository;
+import org.project.repository.SeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +29,8 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepo;
+    @Autowired
+    private SeriesRepository seriesRepo;
     @ModelAttribute("genres")
     public List<String> genres() {
         List<String> genres = new ArrayList<>();
@@ -62,6 +66,8 @@ public class BookController {
                 bookList = bookRepo.findAll();
                 model.addAttribute("bookList", bookList);
                 model.addAttribute("book", new Book());
+                model.addAttribute("genres", genres());
+                model.addAttribute("series",seriesRepo.findAll());
                 return "fragments/book-table";
 
             default:
@@ -72,10 +78,23 @@ public class BookController {
         model.addAttribute("bookList", bookList);
         model.addAttribute("book", new Book());
         model.addAttribute("genres", genres());
+        model.addAttribute("series",seriesRepo.findAll());
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book-list";
     }
-
+    //Potentially shrink getBookList
+    /**@GetMapping("/book-table")
+    public String getBookTable(Model model){
+        model.addAttribute("bookList", bookRepo.findAll());
+        return "fragments/book-table";
+    }
+    @GetMapping("/book-form")
+    public String getBookForm(Model model){
+        model.addAttribute("book", new Book());
+        model.addAttribute("genres", genres());
+        model.addAttribute("series",seriesRepo.findAll());
+        return "fragments/book-form";
+    }*/
     @GetMapping("/sortFragment/{attribute}/{ascending}")
     public String sortByAttribute(@PathVariable String attribute, @PathVariable Boolean ascending, Model model){
         model.addAttribute("bookList", ascending ? bookRepo.findAll(Sort.by(attribute).ascending()) : bookRepo.findAll(Sort.by(attribute).descending()));
@@ -83,7 +102,7 @@ public class BookController {
     }
 
     @PostMapping("/add-book")
-    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file){
+    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
@@ -93,7 +112,15 @@ public class BookController {
                 throw new RuntimeException(e);
             }
         }
-
+        Series series = seriesRepo.findBySeriesName(seriesName);
+        if(series != null){
+            book.setSeries(series);
+            seriesRepo.save(series);
+        }else{
+            Series newSeries = new Series(seriesName);
+            book.setSeries(newSeries);
+            seriesRepo.save(newSeries);
+        }
         if(bookRepo.existsById(book.getISBN())){
             bindingResult.rejectValue("ISBN", "error.book", "ISBN already exists");
         }
@@ -106,7 +133,9 @@ public class BookController {
         bookRepo.save(book);
         model.addAttribute("bookList", bookRepo.findAll());
         model.addAttribute("book", new Book());
-        return "fragments/book-form";
+        model.addAttribute("genres", genres());
+        model.addAttribute("series",seriesRepo.findAll());
+        return "redirect:/get-book-list";
     }
 
     @PostMapping("/delete-book/{ISBN}")
@@ -159,5 +188,6 @@ public class BookController {
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
+
 
 }
