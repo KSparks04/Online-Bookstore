@@ -1,12 +1,21 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-    <tbody>
-        <tr th:each="book: ${bookList}">
-        <td th:text="${book.ISBN}"></td>
+<tbody>
+    <tr th:if="${bookList.isEmpty()}">
+        <!-- Case 1: user searched -->
+        <td colspan="100%" th:if="${searchQuery != null}">
+            Sorry, no books were found matching "<span th:text="${searchQuery}"></span>".
+        </td>
 
-            <td>
-                <a th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
-            </td>
+        <!-- Case 2:no books found-->
+        <td colspan="100%" th:if="${searchQuery == null}">
+            Sorry, no books found.
+        </td>
+    </tr>
+
+    <tr th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}">
+        <td th:text="${book.ISBN}"></td>
+        <td>
+            <a th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
+        </td>
         <td th:text="${book.author}"></td>
         <td th:text="${book.publisher}"></td>
         <td th:text="${book.description}"></td>
@@ -24,5 +33,4 @@
             </form>
         </td>
     </tr>
-    </tbody>
-</html>
+</tbody>

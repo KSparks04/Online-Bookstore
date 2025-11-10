@@ -95,7 +95,6 @@ class BookControllerTest {
                         .param("variable", "NonExistentBook"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Book Not Found")))
                 .andExpect(content().string(containsString("NonExistentBook")));
     }
 
