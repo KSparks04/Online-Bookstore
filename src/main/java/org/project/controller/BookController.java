@@ -115,7 +115,6 @@ public class BookController {
         Series series = seriesRepo.findBySeriesName(seriesName);
         if(series != null){
             book.setSeries(series);
-            seriesRepo.save(series);
         }else{
             Series newSeries = new Series(seriesName);
             book.setSeries(newSeries);
@@ -147,12 +146,13 @@ public class BookController {
     @GetMapping("/edit-book/{ISBN}")
     public String editBook(@PathVariable int ISBN, Model model){
         Book book = bookRepo.findByISBN(ISBN);
+        model.addAttribute("series", seriesRepo.findAll());
         model.addAttribute("book", book);
         return "edit-book";
     }
 
     @PostMapping("/update-book")
-    public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file){
+    public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
@@ -162,6 +162,12 @@ public class BookController {
                 throw new RuntimeException(e);
             }
         }
+        Series series = seriesRepo.findBySeriesName(seriesName);
+        if( series == null){
+            series = new Series(seriesName);
+            seriesRepo.save(series);
+        }
+        book.setSeries(series);
         bookRepo.save(book);
         return "redirect:/get-book-list";
     }
