@@ -8,6 +8,11 @@
 .star-rating .star {
     font-size: 50px;
     color: white;
+    text-shadow:
+            -1px -1px 0 black,
+            1px -1px 0 black,
+            -1px 1px 0 black,
+            1px 1px 0 black;
     transition: color 0.2s ease-in-out;
 }
 

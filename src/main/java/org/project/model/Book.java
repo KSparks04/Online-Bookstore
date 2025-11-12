@@ -37,11 +37,11 @@ import java.util.*;
         @ManyToOne
         private Series series;
         @OneToMany( cascade = CascadeType.ALL)
-        private List<Rating> ratings = populateRatings();
+        private List<Rating> ratings = new ArrayList<>();
 
 
         public  Book() {
-
+            populateRatings();
         }
 
         public Book(int ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
@@ -54,6 +54,7 @@ import java.util.*;
             this.inventory = inventory;
             this.price = price;
             this.pageCount = pageCount;
+            populateRatings();
 
         }
 
@@ -90,14 +91,14 @@ import java.util.*;
         public void setSeries(Series series) {this.series = series;}
         public List<Rating> getRatings() {return ratings;}
         public void setRatings(List<Rating> ratings) {this.ratings = ratings;}
-        private List<Rating> populateRatings(){
+        private void  populateRatings(){
             this.ratings = new ArrayList<>();
             ratings.add(new Rating(Rating.Level.ONE));
             ratings.add(new Rating(Rating.Level.TWO));
             ratings.add(new Rating(Rating.Level.THREE));
             ratings.add(new Rating(Rating.Level.FOUR));
             ratings.add(new Rating(Rating.Level.FIVE));
-            return ratings;
+
 
         }
         @Override

@@ -3,16 +3,13 @@
 <div th:fragment = "review">
     <form th:action="@{'/book/' + ${book.ISBN} + '/review'}"  method="post">
         <div class="star-rating">
-            <span class="star" data-value = "1">&#9734;</span>
-            <span class="star" data-value = "2">&#9734;</span>
-            <span class="star" data-value="3">&#9734;</span>
-            <span class="star" data-value="4">&#9734;</span>
-            <span class="star" data-value="5">&#9734;</span>
+            <span class="star" data-value = "1">&#9733;</span>
+            <span class="star" data-value = "2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
         </div>
-        <style>
-            body { background: lightyellow; }
-            .star-rating { color: gold; font-size: 30px; }
-        </style>
+
 
         <input type="hidden" id="ratingValue" value="" name="reviewLevel">
         <textarea id="reviewArea" name="review" placeholder="Write Your Review Here"></textarea>

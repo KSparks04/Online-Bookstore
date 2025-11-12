@@ -20,7 +20,7 @@ public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private ArrayList<String> reviews;
+    private ArrayList<String> reviews = new ArrayList<>();
     private long ratingNumber = 0;
     public  Rating() {}
     public Rating(Level ratingLevel){

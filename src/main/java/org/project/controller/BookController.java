@@ -198,7 +198,7 @@ public class BookController {
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
     @PostMapping("/book/{ISBN}/review")
-    public String reviewBook(@PathVariable int ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model){
+    public String reviewBook(@PathVariable int ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
         Book book = bookRepo.findByISBN(ISBN);
         List<Rating> ratings = book.getRatings();
         Rating rating = null;
@@ -210,6 +210,7 @@ public class BookController {
         if(rating != null){
             rating.addReview(review);
             model.addAttribute("book", book);
+            ShoppingCartController.addShoppingCartAttributes(model, session);
             return "book";
         }
         return  "error/book-not-found";
