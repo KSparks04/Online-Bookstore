@@ -50,3 +50,9 @@ async function refreshBookTable(){
         }
     });
 }
+$(document).ready(function(){
+    $('#seriesSelector').select2({
+        tags:true,
+        placeholder:'Select a series or Add a new series'
+    });
+});

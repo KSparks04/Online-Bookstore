@@ -5,9 +5,15 @@
 <head>
     <title>Online Bookstore Home</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link th:href="@{css/bookForm.css}" rel="stylesheet" />
+    <link th:href="@{css/bookList.css}" rel="stylesheet" />
+
 </head>
 <body>
 <h1>Book List</h1>
+
+<div th:insert="~{fragments/user-status :: userStatus}"></div>
 
 <!-- Book Search Bar -->
 <form th:action="@{/get-book-list}" method="get">
@@ -19,13 +25,13 @@
     </label>
     <button type="submit">Search</button>
 </form>
-
+<div th:insert="~{fragments/common}"></div>
 <br>
 <br>
 
-<table>
+<table class="book-table">
     <thead>
-    <tr>
+    <tr class="list-header">
         <th onclick="sortBy('ISBN')" data-sort="ISBN">ISBN</th>
         <th onclick="sortBy('title')" data-sort="title">Title</th>
         <th onclick="sortBy('author')" data-sort="author">Author</th>
@@ -33,6 +39,7 @@
         <th onclick="sortBy('description')" data-sort="description">Description</th>
         <th onclick="sortBy('inventory')" data-sort="inventory">Inventory</th>
         <th onclick="sortBy('price')" data-sort="price">Price</th>
+        <!-- Doesn't need to be on the list view, only needs to be in individual book view-->
         <th onclick="sortBy('pageCount')" data-sort="pageCount">Page Count</th>
     </tr>
     </thead>
@@ -41,10 +48,13 @@
 
 <br>
 
-<div id="addBookForm" th:insert="~{fragments/book-form}"></div>
+<div id="addBookForm" th:replace="~{fragments/book-form}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <br>
-<div th:insert="~{fragments/common}"></div>
+
 
 <script th:src="@{/js/bookTable.js}"></script>
 <script th:src="@{/js/bookForm.js}"></script>

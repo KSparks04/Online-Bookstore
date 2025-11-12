@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
     import jakarta.persistence.Id;
     import jakarta.persistence.Lob;
 
-    import jakarta.validation.constraints.*;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.*;
 
     import java.util.Objects;
     import java.util.List;
@@ -37,6 +38,8 @@ import jakarta.persistence.Entity;
         private byte[] pictureFile;
 
         private List<String> genres;
+        @ManyToOne
+        private Series series;
 
         public  Book() {
         }
@@ -82,6 +85,8 @@ import jakarta.persistence.Entity;
 
         public int getPageCount() {return pageCount;}
         public void setPageCount(int pageCount) {this.pageCount = pageCount;}
+        public  Series getSeries() {return series;}
+        public void setSeries(Series series) {this.series = series;}
 
         @Override
         public boolean equals(Object o){

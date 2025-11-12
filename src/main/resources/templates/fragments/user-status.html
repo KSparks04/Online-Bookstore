@@ -1,0 +1,14 @@
+<th:block th:fragment="userStatus">
+    <div class="mt-3 mb-3">
+        <div th:if="${session.currentUser != null}">
+            <span class="me-3">
+                Logged in as: <strong th:text="${session.currentUser.username}"></strong>
+            </span>
+            <a class="btn btn-outline-danger btn-sm" th:href="@{/logout}">Logout</a>
+        </div>
+        <div th:unless="${session.currentUser != null}">
+            <a class="btn btn-outline-primary btn-sm me-2" th:href="@{/login}">Login</a>
+            <a class="btn btn-outline-success btn-sm" th:href="@{/register}">Register</a>
+        </div>
+    </div>
+</th:block>
