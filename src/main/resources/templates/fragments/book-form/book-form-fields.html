@@ -38,7 +38,7 @@
                                                               type="file"/></label></div>
 <div class="book-form-row"><label>Book Series: <select id="seriesSelector" name="seriesName">
     <option value="">Not Applicable</option>
-    <option th:each="s : ${series}" th:text="${s.seriesName}" th:value="${s.seriesCode}"></option>
+    <option th:each="s : ${series}" th:text="${s.seriesName}" th:value="${s.seriesName}"></option>
 </select></label></div>
 
 <script src="/js/inventory.js"></script>
