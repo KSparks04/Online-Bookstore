@@ -5,6 +5,7 @@ import org.project.model.Book;
 import org.project.model.Purchase;
 import org.project.model.User;
 import org.project.repository.PurchaseRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,9 @@ class PurchaseControllerTest {
     @Autowired
     private PurchaseRepository purchaseRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     void redirectsToLoginIfNotLoggedIn() throws Exception {
         mockMvc.perform(get("/purchase-history"))
@@ -36,7 +40,7 @@ class PurchaseControllerTest {
 
     @Test
     void showsPurchaseHistoryWhenLoggedIn() throws Exception {
-        User user = new User("buyer", "pass");
+        User user = userRepository.save(new User("buyer", "password"));
         Book book = new Book(1234, "Test Title", "Test Author", "Pub", "Desc",1, 1.0,12);
         purchaseRepository.save(new Purchase(user, book));
 

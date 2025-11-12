@@ -6,6 +6,7 @@ import org.project.model.ShoppingCart;
 import org.project.model.User;
 import org.project.repository.BookRepository;
 import org.project.repository.PurchaseRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,8 +18,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,6 +32,9 @@ class ShoppingCartControllerTest {
 
     @Autowired
     private PurchaseRepository purchaseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Tests the get shopping cart method
@@ -77,8 +80,8 @@ class ShoppingCartControllerTest {
         session.setAttribute("shoppingCart", cart);
 
         mockMvc.perform(post("/shopping-cart/checkout").session(session))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("You must be logged in")));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/register"));
     }
 
     @Test
@@ -86,7 +89,7 @@ class ShoppingCartControllerTest {
         Book book = bookRepository.save(new Book(1234, "Checkout Test", "Author", "Pub", "Desc", 1, 1.0, 23));
 
         MockHttpSession session = new MockHttpSession();
-        User user = new User("buyer", "pass");
+        User user = userRepository.save(new User("buyer", "pass"));
         session.setAttribute("currentUser", user);
 
         ShoppingCart cart = new ShoppingCart();
@@ -95,6 +98,6 @@ class ShoppingCartControllerTest {
 
         mockMvc.perform(post("/shopping-cart/checkout").session(session))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Purchase completed successfully")));
+                .andExpect(content().string(containsString("Thank you for your purchase!")));
     }
 }

@@ -60,7 +60,7 @@ class UserControllerTest {
                         .param("username", "newuser")
                         .param("password", "newpass"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/"));
     }
 
     @Test
