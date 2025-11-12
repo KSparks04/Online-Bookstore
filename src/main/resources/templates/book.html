@@ -4,6 +4,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <head>
     <title th:text="'Book Details - ' + ${book.title}">Book Details</title>
+    <link  th:href="@{css/starRating.css}" rel="stylesheet">
 </head>
 <body>
 
@@ -19,13 +20,14 @@
 <p><strong>Publisher:</strong> <span th:text="${book.publisher}"></span></p>
 <p><strong>Description:</strong> <span th:text="${book.description}"></span></p>
 <p><strong>Genre(s): </strong><span th:each="g, iterStat : ${book.genres}" th:text="${iterStat.last} ? ${g} : ${g + ', '}"></span> </p>
-<p>Debug: [[${book.series}]]</p>
-<p>Debug name: [[${book.series.seriesName}]]</p>
+
 
 <p><strong>Series: </strong><span th:text="${book.series != null ? book.series.seriesName : 'Not in a Series'}" ></span></p>
 <p><strong>Page Count: <span th:text="${book.pageCount}"></span></strong></p>
 <p><strong>Price:</strong> <span th:text="${book.price}"></span></p>
 <p><strong>Inventory:</strong> <span th:text="${book.inventory}"></span></p>
+
+<div class="review-button" th:data-isbn="${book.ISBN}" th:replace="~{fragments/review}"></div>
 
 <div class="purchase-button" th:data-isbn="${book.ISBN}" th:insert="~{fragments/shopping-cart/purchase-button}"></div>
 
@@ -34,5 +36,6 @@
 <br>
 <div th:insert="~{fragments/common}"></div>
 <script th:src="@{/js/purchase-button.js}"></script>
+<script th:src="@{/js/star-rating.js}"></script>
 </body>
 </html>

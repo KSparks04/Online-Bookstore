@@ -1,14 +1,10 @@
     package org.project.model;
 
-import jakarta.persistence.Entity;
-    import jakarta.persistence.Id;
-    import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.*;
 
-    import java.util.Objects;
-    import java.util.List;
+import java.util.*;
 
     @Entity
     public class Book {
@@ -40,9 +36,12 @@ import jakarta.validation.constraints.*;
         private List<String> genres;
         @ManyToOne
         private Series series;
+        @OneToMany( cascade = CascadeType.ALL)
+        private List<Rating> ratings = populateRatings();
 
 
         public  Book() {
+
         }
 
         public Book(int ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
@@ -55,6 +54,7 @@ import jakarta.validation.constraints.*;
             this.inventory = inventory;
             this.price = price;
             this.pageCount = pageCount;
+
         }
 
         public int getISBN() {return  ISBN;}
@@ -88,7 +88,18 @@ import jakarta.validation.constraints.*;
         public void setPageCount(int pageCount) {this.pageCount = pageCount;}
         public  Series getSeries() {return series;}
         public void setSeries(Series series) {this.series = series;}
+        public List<Rating> getRatings() {return ratings;}
+        public void setRatings(List<Rating> ratings) {this.ratings = ratings;}
+        private List<Rating> populateRatings(){
+            this.ratings = new ArrayList<>();
+            ratings.add(new Rating(Rating.Level.ONE));
+            ratings.add(new Rating(Rating.Level.TWO));
+            ratings.add(new Rating(Rating.Level.THREE));
+            ratings.add(new Rating(Rating.Level.FOUR));
+            ratings.add(new Rating(Rating.Level.FIVE));
+            return ratings;
 
+        }
         @Override
         public boolean equals(Object o){
             if(this == o) return true;
