@@ -19,6 +19,9 @@
 <p><strong>Publisher:</strong> <span th:text="${book.publisher}"></span></p>
 <p><strong>Description:</strong> <span th:text="${book.description}"></span></p>
 <p><strong>Genre(s): </strong><span th:each="g, iterStat : ${book.genres}" th:text="${iterStat.last} ? ${g} : ${g + ', '}"></span> </p>
+<p>Debug: [[${book.series}]]</p>
+<p>Debug name: [[${book.series.seriesName}]]</p>
+
 <p><strong>Series: </strong><span th:text="${book.series != null ? book.series.seriesName : 'Not in a Series'}" ></span></p>
 <p><strong>Page Count: <span th:text="${book.pageCount}"></span></strong></p>
 <p><strong>Price:</strong> <span th:text="${book.price}"></span></p>

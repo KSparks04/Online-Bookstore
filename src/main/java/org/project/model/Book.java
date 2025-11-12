@@ -41,6 +41,7 @@ import jakarta.validation.constraints.*;
         @ManyToOne
         private Series series;
 
+
         public  Book() {
         }
 

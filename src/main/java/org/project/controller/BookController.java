@@ -164,11 +164,13 @@ public class BookController {
             }
         }
         Series series = seriesRepo.findBySeriesName(seriesName);
-        if( series == null){
-            series = new Series(seriesName);
-            seriesRepo.save(series);
+        if(series != null){
+            book.setSeries(series);
+        }else{
+            Series newSeries = new Series(seriesName);
+            book.setSeries(newSeries);
+            seriesRepo.save(newSeries);
         }
-        book.setSeries(series);
         bookRepo.save(book);
         return "redirect:/get-book-list";
     }
