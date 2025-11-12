@@ -19,6 +19,7 @@ public class PurchaseController {
         User currentUser = (User) session.getAttribute("currentUser");
 
         if (currentUser == null) {
+            model.addAttribute("user", new User()); // prevents Thymeleaf binding error
             model.addAttribute("error", "You must be logged in to view your purchase history.");
             return "login";
         }

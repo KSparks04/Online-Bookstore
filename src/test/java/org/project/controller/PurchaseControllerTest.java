@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.project.model.Book;
 import org.project.model.Purchase;
 import org.project.model.User;
+import org.project.repository.BookRepository;
 import org.project.repository.PurchaseRepository;
 import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ class PurchaseControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BookRepository bookRepository;
 
     @Test
     void redirectsToLoginIfNotLoggedIn() throws Exception {
@@ -40,8 +43,8 @@ class PurchaseControllerTest {
 
     @Test
     void showsPurchaseHistoryWhenLoggedIn() throws Exception {
-        User user = userRepository.save(new User("buyer", "password"));
-        Book book = new Book(1234, "Test Title", "Test Author", "Pub", "Desc",1, 1.0,12);
+        User user = userRepository.save(new User("buyer_" + System.currentTimeMillis(), "password"));
+        Book book = bookRepository.save(new Book(1234, "Test Title", "Test Author", "Pub", "Desc",1, 1.0,12));
         purchaseRepository.save(new Purchase(user, book));
 
         MockHttpSession session = new MockHttpSession();

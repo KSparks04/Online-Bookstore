@@ -21,7 +21,9 @@ public class UserController {
      */
     @GetMapping("/login")
     public String loginPage(Model model) {
-        model.addAttribute("user", new User());
+        if (!model.containsAttribute("user")) {
+            model.addAttribute("user", new User()); // ensures Thymeleaf has something to bind to
+        }
         return "login";
     }
 
@@ -37,6 +39,7 @@ public class UserController {
         User user = userRepository.findByUsername(username);
         if (user == null || !user.getPassword().equals(password)) {
             model.addAttribute("error", "Invalid username or password");
+            model.addAttribute("user", new User());
             return "login";
         }
 
@@ -73,6 +76,7 @@ public class UserController {
         // Check if username already exists
         if (userRepository.findByUsername(username) != null) {
             model.addAttribute("error", "Username already exists. Please choose another one.");
+            model.addAttribute("user", new User());
             return "register";
         }
 

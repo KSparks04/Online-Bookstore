@@ -19,7 +19,7 @@
         <input id="password" type="password" class="form-control" th:field="*{password}" required>
     </div>
 
-    <div th:if="${registrationError}" class="alert alert-danger" th:text="${registrationError}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
     <div th:if="${registrationSuccess}" class="alert alert-success" th:text="${registrationSuccess}"></div>
 
     <button type="submit" class="btn btn-success">Register</button>
