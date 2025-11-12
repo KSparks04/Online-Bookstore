@@ -2,6 +2,10 @@ package org.project.controller;
 
 import org.junit.jupiter.api.Test;
 import org.project.model.Book;
+import org.project.model.ShoppingCart;
+import org.project.model.User;
+import org.project.repository.BookRepository;
+import org.project.repository.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +26,12 @@ class ShoppingCartControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private PurchaseRepository purchaseRepository;
 
     /**
      * Tests the get shopping cart method
@@ -57,5 +67,33 @@ class ShoppingCartControllerTest {
         session = (MockHttpSession) this.mockMvc.perform(post("/shopping-cart/edit/remove/123")).andDo(print()).andReturn().getRequest().getSession();
         this.mockMvc.perform(get("/shopping-cart").session(session)).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("No Books in Shopping Cart")));
+    }
+    @Test
+    void checkoutWithoutLoginShowsError() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        ShoppingCart cart = new ShoppingCart();
+        cart.addBook(new Book(1, "Sample Book", "Author", "Publisher", "Desc"));
+        session.setAttribute("shoppingCart", cart);
+
+        mockMvc.perform(post("/shopping-cart/checkout").session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("You must be logged in")));
+    }
+
+    @Test
+    void checkoutWithUserCreatesPurchases() throws Exception {
+        Book book = bookRepository.save(new Book(1234, "Checkout Test", "Author", "Pub", "Desc"));
+
+        MockHttpSession session = new MockHttpSession();
+        User user = new User("buyer", "pass");
+        session.setAttribute("currentUser", user);
+
+        ShoppingCart cart = new ShoppingCart();
+        cart.addBook(book);
+        session.setAttribute("shoppingCart", cart);
+
+        mockMvc.perform(post("/shopping-cart/checkout").session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Purchase completed successfully")));
     }
 }
