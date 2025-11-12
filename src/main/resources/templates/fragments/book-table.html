@@ -16,10 +16,13 @@
     </td>
     <td th:text="${book.author}"></td>
     <td th:text="${book.publisher}"></td>
-    <td  th:text="${book.description}"></td>
-    <td th:text="${book.inventory}"></td>
-    <td  th:text="${book.price}"></td>
-    <td  th:text="${book.pageCount}"></td>
+    <td th:text="${book.description}"></td>
+    <td>
+        <span th:if="${book.inventory > 0}" th:text="${book.inventory}"></span>
+        <span th:if="${book.inventory == 0}" style="color:red; font-weight:bold;">Out of Stock</span>
+    </td>
+    <td th:text="${book.price}"></td>
+    <td th:text="${book.pageCount}"></td>
     <td>
         <!-- Edit Book Form -->
         <form class="book-update-button" th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">

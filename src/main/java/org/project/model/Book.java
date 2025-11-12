@@ -25,7 +25,7 @@ import jakarta.validation.constraints.*;
         private String publisher;
         @NotBlank(message = "Description is required")
         private String description;
-        @Min(value = 1, message = "Inventory must be equal to or greater than 1")
+        @Min(value = 0, message = "Inventory must be equal to or greater than 0")
         private int inventory;
         @NotNull(message = "Price is required")
         @Min(value = 0,  message = "Price must be non-negative")
