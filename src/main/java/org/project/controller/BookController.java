@@ -147,6 +147,7 @@ public class BookController {
         Book book = bookRepo.findByISBN(ISBN);
         model.addAttribute("series", seriesRepo.findAll());
         model.addAttribute("book", book);
+        model.addAttribute("genres", genres());
         return "edit-book";
     }
 
