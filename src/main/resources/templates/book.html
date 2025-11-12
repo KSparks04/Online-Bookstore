@@ -6,7 +6,12 @@
     <title th:text="'Book Details - ' + ${book.title}">Book Details</title>
 </head>
 <body>
+
 <h1 th:text="${book.title}">Book Title</h1>
+
+<!--  Add login status -->
+<div th:insert="~{fragments/user-status :: userStatus}"></div>
+
 <img th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}" style="max-width: 150px">
 
 <p><strong>ISBN:</strong> <span th:text="${book.ISBN}"></span></p>
