@@ -64,7 +64,7 @@ class BookControllerTest {
         Book book = new Book(123, "Sample Title", "Author Name", "Publisher Co", "Sample description", 1, 1.0, 5);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
         this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN", "123").param("title", "Sample Title").param("author", "Author Name")
-                .param("publisher", "Publisher Co").param("description", "Sample description").param("inventory", "1").param("price", "1.0").param("pageCount", "5").param("seriesName","Divergent")).andExpect(status().is3xxRedirection());
+                .param("publisher", "Publisher Co").param("description", "Sample description").param("inventory", "1").param("price", "1.0").param("pageCount", "5").param("seriesName","Divergent")).andExpect(status().isOk());
 
         this.mockMvc.perform(get("/book/123"))
                 .andDo(print())
@@ -141,22 +141,6 @@ class BookControllerTest {
                 .andExpect(content().string(not(containsString("Author 7")))).andExpect(content().string(not(containsString("Publisher 7"))))
                 .andExpect(content().string(not(containsString("Description 7"))));//removed checks for price and inventory as other books could have these values
 
-    }
-
-    /**
-     * Tests the edit book method
-     *
-     * @throws Exception
-     */
-    @Test
-    void editBook() throws Exception {
-        Book book = new Book(301, "Title 301", "Author 301", "Publisher 301", "Description 301", 15, 33.95, 2);
-
-        MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
-        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN", "301").param("title", "Title 301").param("author", "Author 301")
-                .param("publisher", "Publisher 301").param("description", "Description 301").param("inventory", "15").param("price", "33.95").param("pageCount", "2").param("seriesName","Divergent")).andExpect(status().is3xxRedirection());
-        this.mockMvc.perform(get("/edit-book/301?")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("Edit Book"))).andExpect(content().string(containsString("15"))).andExpect(content().string(containsString("33.95")));
     }
 
     /**

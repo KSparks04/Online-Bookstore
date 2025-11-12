@@ -142,15 +142,6 @@ public class BookController {
         return "redirect:/get-book-list";
     }
 
-    @GetMapping("/edit-book/{ISBN}")
-    public String editBook(@PathVariable int ISBN, Model model){
-        Book book = bookRepo.findByISBN(ISBN);
-        model.addAttribute("series", seriesRepo.findAll());
-        model.addAttribute("book", book);
-        model.addAttribute("genres", genres());
-        return "edit-book";
-    }
-
     @PostMapping("/update-book")
     public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
         if(!file.isEmpty()){
