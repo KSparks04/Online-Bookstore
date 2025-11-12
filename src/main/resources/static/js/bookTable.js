@@ -31,3 +31,21 @@ function updateSortArrows(attribute, ascending){
 
     header.appendChild(arrow);
 }
+
+$(document).ready(function () {
+    $("#open-add-book-modal").click(function() {
+        $("#add-book-modal").show();
+    })
+});
+
+//Get book table data and update book table
+function getBookTable(){
+    $.ajax({
+        type: "GET",
+        url: "/get-book-list?function=refresh",
+        timeout: 5000,
+        success: function (data){
+            $("#book-table").html(data);
+        }
+    });
+}

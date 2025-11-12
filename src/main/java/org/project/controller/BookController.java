@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 
 import java.io.IOException;
@@ -126,7 +125,7 @@ public class BookController {
 
         if(bindingResult.hasErrors()){
             model.addAttribute("bookList", bookRepo.findAll());
-            return "fragments/book-form";
+            return "fragments/book-form/add-book-form";
         }
 
         bookRepo.save(book);

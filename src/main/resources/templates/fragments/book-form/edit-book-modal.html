@@ -1,0 +1,21 @@
+<div class="modal" tabindex="-1" th:id="edit-book-modal + ${book.ISBN}" th:data-isbn="${book.ISBN}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" th:text="|Edit | + ${book.title}"></h3>
+            </div>
+            <div th:insert="~{fragments/book-form/edit-book-form}"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="edit-book-success-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Book Successfully Edited</p>
+                <button id="close-edit-book-success-modal" class="btn btn-success" data-bs-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>

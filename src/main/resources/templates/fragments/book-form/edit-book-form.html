@@ -1,0 +1,9 @@
+<form class="edit-book-form" th:action="@{/update-book}" th:object="${book}" method="post" enctype="multipart/form-data" th:data-isbn="${book.ISBN}">
+    <div class="modal-body">
+        <div th:insert="~{fragments/book-form/book-form-fields}"></div>
+    </div>
+    <div class="modal-footer">
+        <button class="save-edit-book-modal" id="submit" type="submit">Save Changes</button>
+        <button type="button" class="close-edit-book-modal btn btn-secondary" th:data-isbn="${book.ISBN}">Cancel</button>
+    </div>
+</form>

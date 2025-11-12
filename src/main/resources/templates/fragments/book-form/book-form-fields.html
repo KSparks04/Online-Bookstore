@@ -1,0 +1,44 @@
+<div class="book-form-row">
+    <label>ISBN: <input th:field="*{ISBN}" type="number"/><br/>
+        <div class="field-error" style="color:red" th:errors="*{ISBN}" th:if="${#fields.hasErrors('ISBN')}"></div>
+    </label>
+</div>
+<div class="book-form-row">
+    <label>Title: <input th:field="*{title}" type="text"/><br/>
+        <div class="field-error" style="color:red" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></div>
+    </label>
+</div>
+<div class="book-form-row"><label>Author: <input th:field="*{author}" type="text"/><br/>
+    <div class="field-error" style="color:red" th:errors="*{author}" th:if="${#fields.hasErrors('author')}"></div>
+</label></div>
+<div class="book-form-row"><label>Publisher: <input th:field="*{publisher}" type="text"/><br/>
+    <div class="field-error" style="color:red" th:errors="*{publisher}" th:if="${#fields.hasErrors('publisher')}"></div>
+</label></div>
+<div class="book-form-row"><label>Description: <input min="0" th:field="*{description}" type="text"/><br/>
+    <div class="field-error" style="color:red" th:errors="*{description}" th:if="${#fields.hasErrors('description')}"></div>
+</label></div>
+<div class="book-form-row"><label>Genre(s):
+    <div id="genre-box" th:each="genre : ${genres}">
+        <label>
+            <input th:field="*{genres}" th:value="${genre}" type="checkbox">
+            <span th:text="${genre}"></span>
+        </label>
+    </div>
+</label></div>
+<div class="book-form-row"><label>Page Count: <input th:field="*{pageCount}" type="number"/><br/>
+    <div class="field-error" style="color:red" th:errors="*{pageCount}" th:if="${#fields.hasErrors('pageCount')}"></div>
+</label></div>
+<div class="book-form-row"><label>Inventory: <input th:field="*{inventory}" type="number"/><br/>
+    <div class="field-error" style="color:red" th:errors="*{inventory}" th:if="${#fields.hasErrors('inventory')}"></div>
+</label></div>
+<div class="book-form-row"><label>Price: <input min="0" th:field="*{price}" type="number"/><br/>
+    <div class="field-error" style="color:red" th:errors="*{price}" th:if="${#fields.hasErrors('price')}"></div>
+</label></div>
+<div class="book-form-row"><label>Choose a Book Cover: <input accept="image/jpeg" name="pictureUpload"
+                                                              type="file"/></label></div>
+<div class="book-form-row"><label>Book Series: <select id="seriesSelector" name="seriesName">
+    <option value="">Not Applicable</option>
+    <option th:each="s : ${series}" th:text="${s.seriesName}" th:value="${s.seriesCode}"></option>
+</select></label></div>
+
+<script src="/js/inventory.js"></script>
