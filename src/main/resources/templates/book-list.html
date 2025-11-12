@@ -10,8 +10,12 @@
 <h1>Book List</h1>
 
 <div th:insert="~{fragments/user-status :: userStatus}"></div>
+<div th:if="${session.currentUser != null}">
+    <a class="btn btn-outline-secondary btn-sm me-2" th:href="@{/purchase-history}">My Purchases</a>
+</div>
 
 <!-- Book Search Bar -->
+
 <form th:action="@{/get-book-list}" method="get">
     <label>
         <input hidden name="function" value="search">

@@ -76,14 +76,16 @@ public class ShoppingCartController {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         User currentUser = (User) session.getAttribute("currentUser");
 
+        // If cart is empty
         if (cart == null || cart.getBookList().isEmpty()) {
             model.addAttribute("error", "Your shopping cart is empty.");
             return "fragments/shopping-cart/shopping-cart-body";
         }
 
+        // If user is not logged in → redirect to register
         if (currentUser == null) {
-            model.addAttribute("error", "You must be logged in to complete a purchase.");
-            return "login";
+            session.setAttribute("redirectAfterRegister", "/shopping-cart");
+            return "redirect:/register";
         }
 
         // Save each purchased book

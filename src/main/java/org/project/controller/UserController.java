@@ -6,7 +6,9 @@ import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
@@ -18,8 +20,7 @@ public class UserController {
      * Display login page
      */
     @GetMapping("/login")
-    public String showLoginPage(Model model) {
-        model.addAttribute("user", new User());
+    public String loginPage() {
         return "login";
     }
 
@@ -27,31 +28,34 @@ public class UserController {
      * Handle login form submission
      */
     @PostMapping("/login")
-    public String loginUser(@ModelAttribute User user, HttpSession session, Model model) {
-        User existingUser = userRepository.findByUsername(user.getUsername());
+    public String login(@RequestParam String username,
+                        @RequestParam String password,
+                        HttpSession session,
+                        Model model) {
 
-        if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
-            session.setAttribute("currentUser", existingUser);
-            return "redirect:/";  // redirect to home page or book list
+        User user = userRepository.findByUsername(username);
+        if (user == null || !user.getPassword().equals(password)) {
+            model.addAttribute("error", "Invalid username or password");
+            return "login";
         }
 
-        model.addAttribute("loginError", "Invalid username or password");
-        return "login";
+        session.setAttribute("currentUser", user);
+
+        // Optional: handle redirect if user tried to access checkout first
+        String redirectAfterRegister = (String) session.getAttribute("redirectAfterRegister");
+        if (redirectAfterRegister != null) {
+            session.removeAttribute("redirectAfterRegister");
+            return "redirect:" + redirectAfterRegister;
+        }
+
+        return "redirect:/";
     }
 
-    /**
-     * Handle logout
-     */
-    @GetMapping("/logout")
-    public String logoutUser(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
-    }
     /**
      * Display registration page
      */
     @GetMapping("/register")
-    public String showRegistrationPage(Model model) {
+    public String registerPage(Model model) {
         model.addAttribute("user", new User());
         return "register";
     }
@@ -60,19 +64,38 @@ public class UserController {
      * Handle registration form submission
      */
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, Model model) {
+    public String register(@RequestParam String username,
+                           @RequestParam String password,
+                           Model model,
+                           HttpSession session) {
+
         // Check if username already exists
-        if (userRepository.findByUsername(user.getUsername()) != null) {
-            model.addAttribute("registrationError", "Username already taken");
+        if (userRepository.findByUsername(username) != null) {
+            model.addAttribute("error", "Username already exists. Please choose another one.");
             return "register";
         }
 
-        // Save new user
+        // Create new user
+        User user = new User(username, password);
         userRepository.save(user);
+        session.setAttribute("currentUser", user);
 
-        // Redirect to login after successful registration
-        model.addAttribute("registrationSuccess", "Account created successfully! Please log in.");
-        return "redirect:/login";
+        // ✅ Redirect to cart if user came from checkout
+        String redirectAfterRegister = (String) session.getAttribute("redirectAfterRegister");
+        if (redirectAfterRegister != null) {
+            session.removeAttribute("redirectAfterRegister");
+            return "redirect:" + redirectAfterRegister;
+        }
+
+        return "redirect:/";
     }
 
+    /**
+     * Logout the current user
+     */
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
 }
