@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
     import jakarta.persistence.Id;
     import jakarta.persistence.Lob;
 
-    import jakarta.validation.constraints.*;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.*;
 
     import java.util.Objects;
     import java.util.List;
@@ -24,7 +25,7 @@ import jakarta.persistence.Entity;
         private String publisher;
         @NotBlank(message = "Description is required")
         private String description;
-        @Min(value = 1, message = "Inventory must be equal to or greater than 1")
+        @Min(value = 0, message = "Inventory must be equal to or greater than 0")
         private int inventory;
         @NotNull(message = "Price is required")
         @Min(value = 0,  message = "Price must be non-negative")
@@ -37,6 +38,8 @@ import jakarta.persistence.Entity;
         private byte[] pictureFile;
 
         private List<String> genres;
+        @ManyToOne
+        private Series series;
 
         public  Book() {
         }
@@ -82,6 +85,8 @@ import jakarta.persistence.Entity;
 
         public int getPageCount() {return pageCount;}
         public void setPageCount(int pageCount) {this.pageCount = pageCount;}
+        public  Series getSeries() {return series;}
+        public void setSeries(Series series) {this.series = series;}
 
         @Override
         public boolean equals(Object o){

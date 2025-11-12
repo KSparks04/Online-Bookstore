@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <form th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
-        <button type="submit">Purchase</button>
+        <button class = "purchase-btn" type="submit" th:disabled="${book.inventory == 0}"
+                th:text="${book.inventory == 0} ? 'Out of Stock' : 'Purchase'">Purchase</button>
     </form>
 </html>
