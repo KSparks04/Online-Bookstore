@@ -37,8 +37,8 @@ public class ShoppingCart {
         this.bookList.remove(book);
     }
 
-    public int getTotalPrice() {
-        int totalPrice = 0;
+    public double getTotalPrice() {
+        double totalPrice = 0;
         for (Book book : bookList) {
             totalPrice += book.getPrice();
         }
