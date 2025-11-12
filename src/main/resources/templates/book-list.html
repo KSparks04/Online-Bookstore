@@ -6,7 +6,9 @@
     <title>Online Bookstore Home</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="css/bookForm.css" rel="stylesheet" />
+    <link th:href="@{css/bookForm.css}" rel="stylesheet" />
+    <link th:href="@{css/bookList.css}" rel="stylesheet" />
+
 </head>
 <body>
 <h1>Book List</h1>
@@ -23,13 +25,13 @@
     </label>
     <button type="submit">Search</button>
 </form>
-
+<div th:insert="~{fragments/common}"></div>
 <br>
 <br>
 
-<table>
+<table class="book-table">
     <thead>
-    <tr>
+    <tr class="list-header">
         <th onclick="sortBy('ISBN')" data-sort="ISBN">ISBN</th>
         <th onclick="sortBy('title')" data-sort="title">Title</th>
         <th onclick="sortBy('author')" data-sort="author">Author</th>
@@ -52,7 +54,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <br>
-<div th:insert="~{fragments/common}"></div>
+
 
 <script th:src="@{/js/bookTable.js}"></script>
 <script th:src="@{/js/bookForm.js}"></script>
