@@ -9,6 +9,10 @@
 <body>
 <h3>Edit Book</h3>
 
+<!-- Add login status -->
+<div th:insert="~{fragments/user-status :: userStatus}"></div>
+
+
 <form th:action="@{/update-book}" th:object="${book}" method="post" enctype="multipart/form-data">
     <input type="hidden" th:field="*{ISBN}" />
     <label>ISBN: <input type="text" th:field="*{ISBN}" readonly/><br/></label>
@@ -19,7 +23,7 @@
     <label>Inventory: <input type="text" th:field="*{inventory}" id="amount"/><button type="button" onclick="changeAmt(1)">+</button><button type="button" onclick="changeAmt(-1)">-</button><br/></label>
     <label>Page Count: <input type="text" th:field="*{pageCount}" /><br/></label>
     <label>Price: <input type="text" th:field="*{price}" /><br/></label>
-    <label>Change the Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
+    <label>Change the Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br></label>
     <button type="submit">Save Changes</button>
 </form>
 <a th:href="@{/get-book-list}">Back to Book List</a>
