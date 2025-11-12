@@ -20,10 +20,14 @@
     <label>Author: <input type="text" th:field="*{author}" /><br/></label>
     <label>Publisher: <input type="text" th:field="*{publisher}" /><br/></label>
     <label>Description: <input type="text" th:field="*{description}" /><br/></label>
+    <label>Page Count: <input type="number" th:field="*{pageCount}"/><br/></label>
     <label>Inventory: <input type="text" th:field="*{inventory}" id="amount"/><button type="button" onclick="changeAmt(1)">+</button><button type="button" onclick="changeAmt(-1)">-</button><br/></label>
     <label>Page Count: <input type="text" th:field="*{pageCount}" /><br/></label>
     <label>Price: <input type="text" th:field="*{price}" /><br/></label>
-    <label>Change the Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br></label>
+    <label>Change the Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
+    <label class="form-label">Book Series: <select id="seriesSelector" class="form-control" name="seriesName">
+        <option th:each="s : ${series}" th:value="${s.seriesCode}" th:text="${s.seriesName}" ></option>
+    </select></label>
     <button type="submit">Save Changes</button>
 </form>
 <a th:href="@{/get-book-list}">Back to Book List</a>

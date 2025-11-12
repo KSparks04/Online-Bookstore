@@ -3,6 +3,8 @@ package org.project.model;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 //@Entity
 public class ShoppingCart {
@@ -34,4 +36,25 @@ public class ShoppingCart {
     public void removeBook (Book book) {
         this.bookList.remove(book);
     }
+
+    public double getTotalPrice() {
+        double totalPrice = 0;
+        for (Book book : bookList) {
+            totalPrice += book.getPrice();
+        }
+        return totalPrice;
+    }
+
+    public void clearBooks() {
+        bookList.clear();
+    }
+
+    public Map<Integer, Integer> getBookCounts() {
+        HashMap<Integer, Integer> counts = new HashMap<>();
+        for (Book book : bookList) {
+            counts.put(book.getISBN(), counts.getOrDefault(book.getISBN(), 0) + 1);
+        }
+        return counts;
+    }
+
 }
