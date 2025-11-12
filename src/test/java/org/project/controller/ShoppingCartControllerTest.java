@@ -72,7 +72,7 @@ class ShoppingCartControllerTest {
     void checkoutWithoutLoginShowsError() throws Exception {
         MockHttpSession session = new MockHttpSession();
         ShoppingCart cart = new ShoppingCart();
-        cart.addBook(new Book(1, "Sample Book", "Author", "Publisher", "Desc"));
+        cart.addBook(new Book(1, "Sample Book", "Author", "Publisher", "Desc", 12, 1.3, 1));
         session.setAttribute("shoppingCart", cart);
 
         mockMvc.perform(post("/shopping-cart/checkout").session(session))
@@ -82,7 +82,7 @@ class ShoppingCartControllerTest {
 
     @Test
     void checkoutWithUserCreatesPurchases() throws Exception {
-        Book book = bookRepository.save(new Book(1234, "Checkout Test", "Author", "Pub", "Desc"));
+        Book book = bookRepository.save(new Book(1234, "Checkout Test", "Author", "Pub", "Desc", 1, 1.0, 23));
 
         MockHttpSession session = new MockHttpSession();
         User user = new User("buyer", "pass");
