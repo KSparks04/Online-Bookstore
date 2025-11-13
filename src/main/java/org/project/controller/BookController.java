@@ -3,6 +3,7 @@ package org.project.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
+import org.project.model.Rating;
 import org.project.model.Series;
 import org.project.repository.BookRepository;
 import org.project.repository.SeriesRepository;
@@ -21,8 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class BookController {
@@ -164,11 +164,13 @@ public class BookController {
             }
         }
         Series series = seriesRepo.findBySeriesName(seriesName);
-        if( series == null){
-            series = new Series(seriesName);
-            seriesRepo.save(series);
+        if(series != null){
+            book.setSeries(series);
+        }else{
+            Series newSeries = new Series(seriesName);
+            book.setSeries(newSeries);
+            seriesRepo.save(newSeries);
         }
-        book.setSeries(series);
         bookRepo.save(book);
         return "redirect:/get-book-list";
     }
@@ -194,6 +196,25 @@ public class BookController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+    }
+    @PostMapping("/book/{ISBN}/review")
+    public String reviewBook(@PathVariable int ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
+        Book book = bookRepo.findByISBN(ISBN);
+        List<Rating> ratings = book.getRatings();
+        Rating rating = null;
+        for(int i = 0; i < ratings.size(); i++){
+            if(reviewLevel == ratings.get(i).getRatingLevel()){
+                rating = ratings.get(i);
+            }
+        }
+        if(rating != null){
+            rating.addReview(review);
+            model.addAttribute("book", book);
+            ShoppingCartController.addShoppingCartAttributes(model, session);
+            return "book";
+        }
+        return  "error/book-not-found";
+
     }
 
 
