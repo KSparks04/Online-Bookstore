@@ -205,7 +205,7 @@ public class BookController {
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
     @PostMapping("/book/{ISBN}/review")
-    public String reviewBook(@PathVariable int ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
+    public String reviewBook(@PathVariable String ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
         Book book = bookRepo.findByISBN(ISBN);
         List<Rating> ratings = book.getRatings();
         Rating rating = null;

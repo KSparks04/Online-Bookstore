@@ -1,6 +1,7 @@
 package org.project.controller;
 
 import org.project.model.ShoppingCart;
+import org.project.model.Book;
 import org.project.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -85,9 +86,9 @@ public class ShoppingCartController {
         }
 
         List<Book> notEnoughStock = new ArrayList<>();
-        Map<Integer, Integer> bookCounts = cart.getBookCounts();
+        Map<String, Integer> bookCounts = cart.getBookCounts();
 
-        for (Map.Entry<Integer, Integer> entry : bookCounts.entrySet()) {
+        for (Map.Entry<String, Integer> entry : bookCounts.entrySet()) {
             Book storedBook = bookRepository.findByISBN(entry.getKey());
             int quantity = entry.getValue();
             if (storedBook.getInventory() < quantity) {
@@ -102,7 +103,7 @@ public class ShoppingCartController {
             model.addAttribute("total", cart.getTotalPrice());
             return "fragments/shopping-cart/checkout";
         }
-        for (Map.Entry<Integer, Integer> entry : bookCounts.entrySet()) {
+        for (Map.Entry<String, Integer> entry : bookCounts.entrySet()) {
             Book storedBook = bookRepository.findByISBN(entry.getKey());
             storedBook.setInventory(storedBook.getInventory() - entry.getValue());
             bookRepository.save(storedBook);
