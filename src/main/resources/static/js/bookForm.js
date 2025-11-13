@@ -82,3 +82,9 @@ function isValidISBN13(isbn) {
     // Valid if last digit matches checksum
     return checkDigit === Number(isbn[12]);
 }
+$(document).ready(function(){
+    $('#seriesSelector').select2({
+        tags:true,
+        placeholder:'Select a series or Add a new series'
+    });
+});

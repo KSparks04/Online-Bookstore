@@ -9,6 +9,11 @@ import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
+
+import jakarta.validation.constraints.*;
+
+import java.util.*;
 
     @Entity
     public class Book {
@@ -25,7 +30,7 @@ import jakarta.validation.constraints.NotNull;
         private String publisher;
         @NotBlank(message = "Description is required")
         private String description;
-        @Min(value = 1, message = "Inventory must be equal to or greater than 1")
+        @Min(value = 0, message = "Inventory must be equal to or greater than 0")
         private int inventory;
         @NotNull(message = "Price is required")
         @Min(value = 0,  message = "Price must be non-negative")
@@ -38,8 +43,14 @@ import jakarta.validation.constraints.NotNull;
         private byte[] pictureFile;
 
         private List<String> genres;
+        @ManyToOne
+        private Series series;
+        @OneToMany( cascade = CascadeType.ALL)
+        private List<Rating> ratings = new ArrayList<>();
+
 
         public  Book() {
+            populateRatings();
         }
 
         public Book(String ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
@@ -52,6 +63,8 @@ import jakarta.validation.constraints.NotNull;
             this.inventory = inventory;
             this.price = price;
             this.pageCount = pageCount;
+            populateRatings();
+
         }
 
         public String getISBN() {return  ISBN;}
@@ -83,7 +96,20 @@ import jakarta.validation.constraints.NotNull;
 
         public int getPageCount() {return pageCount;}
         public void setPageCount(int pageCount) {this.pageCount = pageCount;}
+        public  Series getSeries() {return series;}
+        public void setSeries(Series series) {this.series = series;}
+        public List<Rating> getRatings() {return ratings;}
+        public void setRatings(List<Rating> ratings) {this.ratings = ratings;}
+        private void  populateRatings(){
+            this.ratings = new ArrayList<>();
+            ratings.add(new Rating(Rating.Level.ONE));
+            ratings.add(new Rating(Rating.Level.TWO));
+            ratings.add(new Rating(Rating.Level.THREE));
+            ratings.add(new Rating(Rating.Level.FOUR));
+            ratings.add(new Rating(Rating.Level.FIVE));
 
+
+        }
         @Override
         public boolean equals(Object o){
             if(this == o) return true;

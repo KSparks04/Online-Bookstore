@@ -1,0 +1,31 @@
+
+.star-rating{
+    display: inline-flex;
+    cursor: pointer;
+    padding: 10px 15px;
+}
+
+.star-rating .star {
+    font-size: 50px;
+    color: white;
+    text-shadow:
+            -1px -1px 0 black,
+            1px -1px 0 black,
+            -1px 1px 0 black,
+            1px 1px 0 black;
+    transition: color 0.2s ease-in-out;
+}
+
+.star.selected,
+.star:hover{
+    color: gold;
+}
+
+.star-rating .star.filled {
+    color: gold;
+}
+
+#reviewArea{
+    padding: 10px 15px;
+    width: fit-content;
+}

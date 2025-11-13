@@ -1,4 +1,3 @@
-
 <div th:fragment="book-form">
     <h3 th:text="|Add a Book:|"/>
     <form th:action="@{/add-book}" th:object="${book}" method="post" enctype="multipart/form-data">
@@ -37,4 +36,6 @@
         <label>Choose a Book Cover: <input type="file" name="pictureUpload" accept="image/jpeg"/></br> </label>
         <button type="submit">Add Book</button>
     </form>
+
 </div>
+
