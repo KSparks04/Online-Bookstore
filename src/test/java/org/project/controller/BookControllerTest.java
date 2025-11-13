@@ -64,7 +64,7 @@ class BookControllerTest {
         Book book = new Book(123, "Sample Title", "Author Name", "Publisher Co", "Sample description", 1, 1.0, 5);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
         this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN", "123").param("title", "Sample Title").param("author", "Author Name")
-                .param("publisher", "Publisher Co").param("description", "Sample description").param("inventory", "1").param("price", "1.0").param("pageCount", "5").param("seriesName","Divergent")).andExpect(status().is3xxRedirection());
+                .param("publisher", "Publisher Co").param("description", "Sample description").param("inventory", "1").param("price", "1.0").param("pageCount", "5").param("seriesName","Divergent")).andExpect(status().isOk());
 
         this.mockMvc.perform(get("/book/123"))
                 .andDo(print())
