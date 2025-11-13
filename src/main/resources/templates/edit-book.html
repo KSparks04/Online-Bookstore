@@ -9,10 +9,6 @@
 <body>
 <h3>Edit Book</h3>
 
-<!-- Add login status -->
-<div th:insert="~{fragments/user-status :: userStatus}"></div>
-
-
 <form th:action="@{/update-book}" th:object="${book}" method="post" enctype="multipart/form-data">
     <input type="hidden" th:field="*{ISBN}" />
     <label>ISBN: <input type="text" th:field="*{ISBN}" readonly/><br/></label>

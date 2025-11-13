@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-book-fill" viewBox="0 0 16 16">
+        <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+    </svg>
+    <a class="navbar-brand" href="/">Online Bookstore</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+        </ul>
+        <ul class="navbar-nav mx-auto">
+            <li>
+                <!-- Book Search Bar -->
+                <form class="d-flex flex-grow-1 my-2 my-lg-0 mx-2" th:action="@{/get-book-list}" method="get">
+                    <input hidden name="function" value="search">
+                    <input class="form-control mr-sm-2 flex-grow-1" type="search" placeholder="Search for a book" aria-label="Search" name="variable">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li>
+                <span class="navbar-text" th:if="${session.currentUser != null}">
+                  Logged in as: <strong th:text="${session.currentUser.username}" ></strong>
+                </span>
+            </li>
+            <li>
+                <a class="btn btn-danger my-2 my-sm-0 mx-2" th:href="@{/logout}" th:if="${session.currentUser != null}">Logout</a>
+            </li>
+            <li>
+                <a class="btn btn-primary my-2 my-sm-0 mx-2" th:href="@{/login}" th:unless="${session.currentUser != null}">Login</a>
+            </li>
+            <li>
+                <button th:id="open-shopping-cart" class="btn btn-success my-2 my-sm-0">Shopping Cart</button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div th:insert="~{fragments/shopping-cart/shopping-cart}"></div>

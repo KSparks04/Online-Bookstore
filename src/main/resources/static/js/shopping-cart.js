@@ -10,15 +10,14 @@ $(document).ready(function () {
     })
 });
 
-function updateShoppingCart(data){
-    $("#shopping-cart-modal-body").html(data);
-}
-
 function getShoppingCart(){
+    event.preventDefault();
     $.ajax({
         type: "GET",
         url: "/shopping-cart",
         timeout: 5000,
-        success: updateShoppingCart
+        success: function(data){
+            $("#shopping-cart-modal-body").html(data);
+        }
     });
 }

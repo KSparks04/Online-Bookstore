@@ -12,27 +12,28 @@
 <tr th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}" >
     <td th:text="${book.ISBN}"></td>
     <td>
-        <a th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
+        <a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
     </td>
     <td th:text="${book.author}"></td>
     <td th:text="${book.publisher}"></td>
-    <td th:text="${book.description}"></td>
+    <td class="text-wrap" th:text="${book.description}"></td>
     <td>
         <span th:if="${book.inventory > 0}" th:text="${book.inventory}"></span>
         <span th:if="${book.inventory == 0}" style="color:red; font-weight:bold;">Out of Stock</span>
     </td>
-    <td th:text="${book.price}"></td>
-    <td th:text="${book.pageCount}"></td>
+    <td th:text="'$' + ${book.price}"></td>
     <td>
         <!-- Edit Book Form -->
         <form class="book-update-button" th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
-            <button type="submit">Edit</button>
+            <button class="btn btn-outline-secondary p-0 w-100" type="submit">Edit</button>
         </form>
         <!-- Delete Book Form -->
         <form class="book-update-button" th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
-            <button type="submit">Delete</button>
+            <button class="btn btn-outline-danger p-0 w-100" type="submit">Delete</button>
         </form>
+        <!-- Purchase Book Form-->
         <div class="purchase-button" th:data-isbn="${book.ISBN}" th:insert="~{fragments/shopping-cart/purchase-button}"></div>
+
     </td>
 </tr>
 <script th:src="@{/js/purchase-button.js}"></script>
