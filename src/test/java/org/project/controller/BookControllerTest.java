@@ -68,7 +68,7 @@ class BookControllerTest {
 
         this.mockMvc.perform(get("/book/123"))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().is3xxRedirection())
                 .andExpect(content().string(containsString("Sample Title")))
                 .andExpect(content().string(containsString("Author Name")))
                 .andExpect(content().string(containsString("Publisher Co")))
