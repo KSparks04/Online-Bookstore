@@ -144,6 +144,22 @@ class BookControllerTest {
     }
 
     /**
+     * Tests the edit book method
+     *
+     * @throws Exception
+     */
+    @Test
+    void editBook() throws Exception {
+        Book book = new Book(301, "Title 301", "Author 301", "Publisher 301", "Description 301", 15, 33.95, 2);
+
+        MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
+        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN", "301").param("title", "Title 301").param("author", "Author 301")
+                .param("publisher", "Publisher 301").param("description", "Description 301").param("inventory", "15").param("price", "33.95").param("pageCount", "2").param("seriesName","Divergent")).andExpect(status().is3xxRedirection());
+        this.mockMvc.perform(get("/edit-book/301?")).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString("15"))).andExpect(content().string(containsString("33.95")));
+    }
+
+    /**
      * Tests the update book method
      *
      * @throws Exception

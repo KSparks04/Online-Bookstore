@@ -1,17 +1,37 @@
 $(document).ready(function () {
     $(".open-edit-book-modal").click(function() {
+        event.preventDefault();
+        setEditFormData(this);
         $("#edit-book-modal" + $(this).data("isbn")).show();
-    })
-
-    $(".edit-book-form").submit(function() {
-        editBook(this);
-    })
-
-    $(".close-edit-book-modal").click(function() {
-        $("#edit-book-modal" + $(this).data("isbn")).hide();
     })
 });
 
+/**
+ * Sets the edit form data
+ * @param element the button element
+ */
+function setEditFormData(element){
+    const isbn = $(element).data("isbn");
+    $.ajax({
+        type: "GET",
+        url: "/edit-book/" + isbn,
+        timeout: 5000,
+        success: function (data){
+            $("#edit-book-form" + isbn).html(data);
+            $("#edit-book-form" + isbn).find("form").submit(function () {
+                editBook(this);
+            })
+            $("#close-edit-book-modal" + isbn).click(function() {
+                $("#edit-book-modal" + isbn).hide();
+            })
+        }
+    });
+}
+
+/**
+ * Run ajax to edit the book without reloading the page
+ * @param element the form element
+ */
 function editBook(element){
     event.preventDefault();
     $.ajax({
@@ -24,14 +44,6 @@ function editBook(element){
         success: function (data) {
             if ($(data).find(".field-error").length) {
                 $(element).html(data);
-
-                //Rerun since the button was reloaded
-                $(element).find(".edit-book-form").submit(function() {
-                    editBook(this);
-                })
-                $(element).find(".close-edit-book-modal").click(function() {
-                    $("#edit-book-modal" + $(element).data("isbn")).hide();
-                })
             } else {
                 getBookTable();
             }

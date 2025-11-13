@@ -6,10 +6,6 @@ $(document).ready(function () {
     $("#close-add-book-modal").click(function() {
         $("#add-book-modal").hide();
     })
-
-    $("#close-add-book-success-modal").click(function() {
-        $("#add-book-success-modal").hide();
-    })
 });
 
 function addBook(element){
@@ -36,7 +32,6 @@ function addBook(element){
                 $(element).trigger("reset");
                 getBookTable();
                 $("#add-book-modal").hide();
-                $("#add-book-success-modal").show();
             }
         }
     });

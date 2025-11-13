@@ -24,7 +24,7 @@
     <td th:text="${book.price}"></td>
     <td th:text="${book.pageCount}"></td>
     <td>
-        <button class="open-edit-book-modal" th:data-isbn="${book.ISBN}">Edit</button>
+        <button class="open-edit-book-modal" th:data-isbn="${book.ISBN}" th:href="@{'/edit-book/' + ${book.ISBN}}">Edit</button>
         <div th:insert="~{fragments/book-form/edit-book-modal}"></div>
         <!-- Delete Book Form -->
         <form class="book-update-button" th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
