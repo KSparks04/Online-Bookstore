@@ -11,7 +11,6 @@
 <body>
     <div th:insert="~{fragments/navigation-bar}"></div>
 
-
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -19,12 +18,13 @@
         </ol>
     </nav>
 
+    <div class="container-lg m-4 p-1 d-flex flex-row">
+        <div style="width:10%"></div>
+        <div class="w-100">
+            <h1>Book List</h1>
 
-    <div class="container-lg m-4 p-1">
-        <h1>Book List</h1>
-
-        <table class="table-striped table-bordered w-100 text-center">
-            <thead class="table-dark ">
+            <table class="table-striped table-bordered w-100 text-center">
+                <thead class="table-dark">
                 <tr class="list-header">
                     <th onclick="sortBy('ISBN')" data-sort="ISBN">ISBN</th>
                     <th onclick="sortBy('title')" data-sort="title">Title</th>
@@ -35,11 +35,13 @@
                     <th onclick="sortBy('price')" data-sort="price">Price</th>
                     <th>Actions</th>
                 </tr>
-            </thead>
-            <tbody id="book-table" th:insert="~{fragments/book-table}"></tbody>
-        </table>
+                </thead>
+                <tbody id="book-table" th:insert="~{fragments/book-table}"></tbody>
+            </table>
 
-        <div id="addBookForm" th:replace="~{fragments/book-form}"></div>
+            <div id="addBookForm" th:replace="~{fragments/book-form}"></div>
+        </div>
+        <div style="width:10%"></div>
     </div>
 </body>
 </html>
