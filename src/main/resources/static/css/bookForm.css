@@ -1,6 +1,7 @@
 .book-form-row{
     display: flex;
     margin-bottom: 15px;
+    text-align: left;
 }
 .purchase-btn{
     cursor: auto;

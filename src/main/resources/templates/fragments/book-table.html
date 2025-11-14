@@ -23,10 +23,9 @@
     </td>
     <td th:text="'$' + ${book.price}"></td>
     <td>
-        <!-- Edit Book Form -->
-        <form class="book-update-button" th:action="@{edit-book/{ISBN}(ISBN=${book.ISBN})}" method="get">
-            <button class="btn btn-outline-secondary p-0 w-100" type="submit">Edit</button>
-        </form>
+        <!-- Edit Book Form-->
+        <button class="open-edit-book-modal btn btn-outline-secondary p-0 w-100" th:data-isbn="${book.ISBN}" th:href="@{'/edit-book/' + ${book.ISBN}}">Edit</button>
+        <div th:insert="~{fragments/book-form/edit-book-modal}"></div>
         <!-- Delete Book Form -->
         <form class="book-update-button" th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
             <button class="btn btn-outline-danger p-0 w-100" type="submit">Delete</button>
@@ -40,4 +39,5 @@
         </div>
     </td>
 </tr>
+<script th:src="@{/js/edit-book.js}"></script>
 <script th:src="@{/js/purchase-button.js}"></script>

@@ -38,8 +38,6 @@ function initBookForm(retries = 10, delay = 100) {
 
 document.addEventListener("DOMContentLoaded", () => initBookForm());
 
-
-
 async function refreshBookTable(){
     $.ajax({
         type: "GET",
@@ -50,6 +48,7 @@ async function refreshBookTable(){
         }
     });
 }
+
 $(document).ready(function(){
     $('#seriesSelector').select2({
         tags:true,
