@@ -72,10 +72,12 @@ public class ShoppingCartController {
     /**
      * Checkout endpoint – processes the purchase and saves to history
      */
-    @PostMapping("/shopping-cart/checkout")
-    public String checkout(Model model, HttpSession session) {
+    @PostMapping("/shopping-cart/validate-checkout")
+    public String checkOut(Model model, HttpSession session) {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         User currentUser = (User) session.getAttribute("currentUser");
+
+        addShoppingCartAttributes(model, session);
 
         // If cart is empty
         if (cart == null || cart.getBookList().isEmpty()) {
@@ -85,9 +87,37 @@ public class ShoppingCartController {
 
         // If user is not logged in → redirect to register
         if (currentUser == null) {
-            session.setAttribute("redirectAfterRegister", "/shopping-cart");
+            session.setAttribute("redirectAfterRegister", "/shopping-cart/checkout");
             return "redirect:/register";
         }
+
+        return "redirect:/shopping-cart/checkout";
+    }
+
+    @GetMapping("/shopping-cart/checkout")
+    public String getCheckout(Model model, HttpSession session) {
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+
+        addShoppingCartAttributes(model, session);
+
+        // If cart is empty
+        if (cart == null || cart.getBookList().isEmpty()) {
+            model.addAttribute("error", "Your shopping cart is empty.");
+            return "fragments/shopping-cart/shopping-cart-body";
+        }
+
+        model.addAttribute("total", cart.getTotalPrice());
+
+        return "checkout";
+    }
+
+    /**
+     * Checkout endpoint – processes the purchase and saves to history
+     */
+    @PostMapping("/shopping-cart/checkout-success")
+    public String checkoutSuccess(Model model, HttpSession session) {
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        User currentUser = (User) session.getAttribute("currentUser");
 
         // Save each purchased book
         for (Book book : cart.getBookList()) {
@@ -98,7 +128,6 @@ public class ShoppingCartController {
         cart.getBookList().clear();
         session.setAttribute("shoppingCart", cart);
 
-        model.addAttribute("success", "Purchase completed successfully!");
         return "purchase-success";
     }
 }
