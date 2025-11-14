@@ -2,6 +2,11 @@ package org.project.controller;
 
 import org.junit.jupiter.api.Test;
 import org.project.model.Book;
+import org.project.model.ShoppingCart;
+import org.project.model.User;
+import org.project.repository.BookRepository;
+import org.project.repository.PurchaseRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,8 +18,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -23,6 +27,14 @@ class ShoppingCartControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private PurchaseRepository purchaseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Tests the get shopping cart method
@@ -59,5 +71,33 @@ class ShoppingCartControllerTest {
         session = (MockHttpSession) this.mockMvc.perform(post("/shopping-cart/edit/remove/123")).andDo(print()).andReturn().getRequest().getSession();
         this.mockMvc.perform(get("/shopping-cart").session(session)).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("No Books in Shopping Cart")));
+    }
+    @Test
+    void checkoutWithoutLoginShowsError() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        ShoppingCart cart = new ShoppingCart();
+        cart.addBook(new Book(1, "Sample Book", "Author", "Publisher", "Desc", 12, 1.3, 1));
+        session.setAttribute("shoppingCart", cart);
+
+        mockMvc.perform(post("/shopping-cart/checkout").session(session))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/register"));
+    }
+
+    @Test
+    void checkoutWithUserCreatesPurchases() throws Exception {
+        Book book = bookRepository.save(new Book(1234, "Checkout Test", "Author", "Pub", "Desc", 1, 1.0, 23));
+
+        MockHttpSession session = new MockHttpSession();
+        User user = userRepository.save(new User("buyer", "pass"));
+        session.setAttribute("currentUser", user);
+
+        ShoppingCart cart = new ShoppingCart();
+        cart.addBook(book);
+        session.setAttribute("shoppingCart", cart);
+
+        mockMvc.perform(post("/shopping-cart/checkout").session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Thank you for your purchase!")));
     }
 }
