@@ -33,7 +33,7 @@
         </form>
         <!-- Purchase Book Form-->
         <div>
-            <form class="purchase-button" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
+            <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
                 <button th:class="${book.inventory == 0} ? 'purchase-btn p-0 w-100 btn btn-outline-danger' : 'purchase-btn  p-0 w-100 btn btn-outline-warning'" type="submit" th:disabled="${book.inventory == 0}"
                         th:text="${book.inventory == 0} ? 'Out of Stock' : 'Add to Cart'"></button>
             </form>
