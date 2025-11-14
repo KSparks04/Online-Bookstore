@@ -4,6 +4,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <head>
     <title th:text="'Book Details - ' + ${book.title}">Book Details</title>
+    <link  th:href="@{/css/starRating.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -51,12 +52,14 @@
                     <p><strong>ISBN:</strong> <span th:text="${book.ISBN}"></span></p>
                     <p><strong>Page Count: <span th:text="${book.pageCount}"></span></strong></p>
                     <p><strong>Description:</strong> <span th:text="${book.description}"></span></p>
+                    <div class="review-button" th:data-isbn="${book.ISBN}" th:replace="~{fragments/review}"></div>
+
                 </div>
             </div>
             <div style="width:15%"></div><!--Padding-->
         </div>
     </div>
-
 </body>
 </html>
+<script th:src="@{/js/star-rating.js}"></script>
 <script th:src="@{/js/purchase-button.js}"></script>
