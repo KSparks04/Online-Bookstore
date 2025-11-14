@@ -19,7 +19,7 @@
         <input id="password" type="password" class="form-control" th:field="*{password}" required>
     </div>
 
-    <div th:if="${loginError}" class="alert alert-danger" th:text="${loginError}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
     <button type="submit" class="btn btn-primary">Login</button>
 </form>

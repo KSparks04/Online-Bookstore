@@ -1,0 +1,10 @@
+<link rel="stylesheet" th:href="@{/css/bookForm.css}">
+<form th:id="edit-book-form +${book.ISBN}" th:action="@{/update-book}" th:object="${book}" method="post" enctype="multipart/form-data" th:data-isbn="${book.ISBN}">
+    <div class="modal-body">
+        <div th:insert="~{fragments/book-form/book-form-fields}"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <button th:id="close-edit-book-modal + ${book.ISBN}" type="button" class="btn btn-secondary" th:data-isbn="${book.ISBN}">Cancel</button>
+    </div>
+</form>

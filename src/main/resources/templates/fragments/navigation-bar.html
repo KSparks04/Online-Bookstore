@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-between px-2">
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-book-fill" viewBox="0 0 16 16">
+            <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+        </svg>
+        <a class="navbar-brand" href="/">Online Bookstore</a>
+    </div>
+
+    <div class="d-flex flex-grow-1 mx-5">
+        <!-- Book Search Bar -->
+        <form class="d-flex flex-grow-1 my-2 my-lg-0 mx-2" th:action="@{/get-book-list}" method="get">
+            <input hidden name="function" value="search">
+            <input class="form-control mr-sm-2 flex-grow-1 mx-2" type="search" placeholder="Search for a book" aria-label="Search" name="variable">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="d-flex flex-row">
+        <a class="btn btn-primary my-2 my-sm-0 mx-2" th:href="@{/login}" th:unless="${session.currentUser != null}">Login</a>
+
+        <div class="dropdown my-2 my-sm-0 mx-2" th:if="${session.currentUser != null}">
+            <a class="dropdown-toggle btn btn-secondary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"
+               th:text="'Hello, '+${session.currentUser.username}"></a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" th:href="@{/purchase-history}">Purchase History</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li class="d-flex"><a class="btn btn-danger mx-2 flex-grow-1" th:href="@{/logout}" >Logout</a></li>
+            </ul>
+        </div>
+
+        <button th:id="open-shopping-cart" class="btn btn-success my-2 my-sm-0">Shopping Cart</button>
+    </div>
+</nav>
+
+<div th:insert="~{fragments/shopping-cart/shopping-cart}"></div>

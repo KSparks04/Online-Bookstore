@@ -2,8 +2,11 @@ package org.project.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
+import org.project.model.Purchase;
 import org.project.model.ShoppingCart;
+import org.project.model.User;
 import org.project.repository.BookRepository;
+import org.project.repository.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,20 +15,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 @Controller
 public class ShoppingCartController {
 
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private PurchaseRepository purchaseRepository;
 
-    public static Model addShoppingCartAttributes(Model model, HttpSession session){
+    /**
+     * Utility method to add cart info to model
+     */
+    public static Model addShoppingCartAttributes(Model model, HttpSession session) {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         if (cart == null) {
             cart = new ShoppingCart();
@@ -34,88 +36,98 @@ public class ShoppingCartController {
         return model;
     }
 
-    //Controller to display the shopping cart stored in session
-    //TODO store cart to Database and retrieve it from DB
+    /**
+     * Display current shopping cart
+     */
     @GetMapping("/shopping-cart")
     public String getShoppingCart(Model model, HttpSession session) {
-        ShoppingCartController.addShoppingCartAttributes(model, session);
+        addShoppingCartAttributes(model, session);
         return "fragments/shopping-cart/shopping-cart-body";
     }
 
-    //Edit
+    /**
+     * Add or remove book from cart
+     */
     @PostMapping("/shopping-cart/edit/{function}/{ISBN}")
-    public String editShoppingCart(@PathVariable("function") String function, @PathVariable("ISBN") int ISBN, Model model, HttpSession session) {
+    public String editShoppingCart(@PathVariable("function") String function,
+                                   @PathVariable("ISBN") int ISBN,
+                                   Model model, HttpSession session) {
+
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         if (cart == null) {
             cart = new ShoppingCart();
         }
 
-        //Adds or removes book from shopping cart
-        if (function.equalsIgnoreCase("add")){
-            cart.addBook(bookRepository.findByISBN(ISBN));
+        Book book = bookRepository.findByISBN(ISBN);
+        if (function.equalsIgnoreCase("add")) {
+            cart.addBook(book);
         } else if (function.equalsIgnoreCase("remove")) {
-            cart.removeBook(bookRepository.findByISBN(ISBN));
+            cart.removeBook(book);
         }
 
         session.setAttribute("shoppingCart", cart);
         return "redirect:/shopping-cart";
     }
 
-    // Check out with what is currently in the shopping cart
-    @PostMapping("/shopping-cart/checkout")
-    public String checkout(Model model, HttpSession session) {
+    /**
+     * Checkout endpoint – processes the purchase and saves to history
+     */
+    @PostMapping("/shopping-cart/validate-checkout")
+    public String checkOut(Model model, HttpSession session) {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        User currentUser = (User) session.getAttribute("currentUser");
+
+        addShoppingCartAttributes(model, session);
+
+        // If cart is empty
         if (cart == null || cart.getBookList().isEmpty()) {
-            cart = new ShoppingCart();
-            session.setAttribute("shoppingCart", cart);
+            model.addAttribute("error", "Your shopping cart is empty.");
+            return "fragments/shopping-cart/shopping-cart-body";
         }
 
-        model.addAttribute("shoppingCart", cart);
-        model.addAttribute("total", cart.getTotalPrice());
-        return "fragments/shopping-cart/checkout";
+        // If user is not logged in → redirect to register
+        if (currentUser == null) {
+            session.setAttribute("redirectAfterRegister", "/shopping-cart/checkout");
+            return "redirect:/register";
+        }
+
+        return "redirect:/shopping-cart/checkout";
     }
 
+    @GetMapping("/shopping-cart/checkout")
+    public String getCheckout(Model model, HttpSession session) {
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+
+        addShoppingCartAttributes(model, session);
+
+        // If cart is empty
+        if (cart == null || cart.getBookList().isEmpty()) {
+            model.addAttribute("error", "Your shopping cart is empty.");
+            return "fragments/shopping-cart/shopping-cart-body";
+        }
+
+        model.addAttribute("total", cart.getTotalPrice());
+
+        return "checkout";
+    }
+
+    /**
+     * Checkout endpoint – processes the purchase and saves to history
+     */
     @PostMapping("/shopping-cart/checkout-success")
     public String checkoutSuccess(Model model, HttpSession session) {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
-        if (cart == null || cart.getBookList().isEmpty()) {
-            model.addAttribute("error", "Your shopping cart is empty.");
-            model.addAttribute("shoppingCart", cart);
-            model.addAttribute("total", cart.getTotalPrice());
-            return "fragments/shopping-cart/checkout";
+        User currentUser = (User) session.getAttribute("currentUser");
+
+        // Save each purchased book
+        for (Book book : cart.getBookList()) {
+            purchaseRepository.save(new Purchase(currentUser, book));
         }
 
-        List<Book> notEnoughStock = new ArrayList<>();
-        Map<Integer, Integer> bookCounts = cart.getBookCounts();
-
-        for (Map.Entry<Integer, Integer> entry : bookCounts.entrySet()) {
-            Book storedBook = bookRepository.findByISBN(entry.getKey());
-            int quantity = entry.getValue();
-            if (storedBook.getInventory() < quantity) {
-                notEnoughStock.add(storedBook);
-            }
-        }
-
-        if (!notEnoughStock.isEmpty()) {
-            model.addAttribute("error", "Some books do not have enough stock to complete your purchase: " +
-                    notEnoughStock.stream().map(Book::getTitle).collect(Collectors.joining(", ")));
-            model.addAttribute("shoppingCart", cart);
-            model.addAttribute("total", cart.getTotalPrice());
-            return "fragments/shopping-cart/checkout";
-        }
-        for (Map.Entry<Integer, Integer> entry : bookCounts.entrySet()) {
-            Book storedBook = bookRepository.findByISBN(entry.getKey());
-            storedBook.setInventory(storedBook.getInventory() - entry.getValue());
-            bookRepository.save(storedBook);
-        }
-
-        model.addAttribute("shoppingCart", cart);
-        model.addAttribute("bookCounts", bookCounts);
-        model.addAttribute("total", cart.getTotalPrice());
-
-        cart.clearBooks();
+        // Clear cart after purchase
+        cart.getBookList().clear();
         session.setAttribute("shoppingCart", cart);
 
-        return "fragments/shopping-cart/checkout-success";
+        return "purchase-success";
     }
 }
