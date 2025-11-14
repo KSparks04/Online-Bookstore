@@ -108,7 +108,7 @@ public class BookController {
     }
 
     @PostMapping("/add-book")
-    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
+    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam(name="seriesName", required = false)String seriesName){
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
@@ -118,14 +118,17 @@ public class BookController {
                 throw new RuntimeException(e);
             }
         }
-        Series series = seriesRepo.findBySeriesName(seriesName);
-        if(series != null){
-            book.setSeries(series);
-        }else{
-            Series newSeries = new Series(seriesName);
-            book.setSeries(newSeries);
-            seriesRepo.save(newSeries);
+        if(seriesName != null){
+            Series series = seriesRepo.findBySeriesName(seriesName);
+            if(series != null){
+                book.setSeries(series);
+            }else{
+                Series newSeries = new Series(seriesName);
+                book.setSeries(newSeries);
+                seriesRepo.save(newSeries);
+            }
         }
+    
         if(bookRepo.existsByISBN(book.getISBN())){
             bindingResult.rejectValue("ISBN", "error.book", "ISBN already exists");
         }
@@ -145,13 +148,13 @@ public class BookController {
 
     @Transactional
     @PostMapping("/delete-book/{ISBN}")
-    public String deleteBook(@PathVariable String ISBN){
+    public String deleteBook(@PathVariable long ISBN){
         bookRepo.deleteByISBN(ISBN);
         return "redirect:/get-book-list";
     }
 
     @GetMapping("/edit-book/{ISBN}")
-    public String editBook(@PathVariable String ISBN, Model model){
+    public String editBook(@PathVariable long ISBN, Model model){
         Book book = bookRepo.findByISBN(ISBN);
         model.addAttribute("series", seriesRepo.findAll());
         model.addAttribute("book", book);
@@ -183,7 +186,7 @@ public class BookController {
     }
 
     @GetMapping("/book/{ISBN}")
-    public String getBook(@PathVariable("ISBN") String ISBN, Model model, HttpSession session) {
+    public String getBook(@PathVariable("ISBN") long ISBN, Model model, HttpSession session) {
         Book book = bookRepo.findByISBN(ISBN);
         if (book == null) {
             // Book not found, show a dedicated error page
@@ -194,7 +197,7 @@ public class BookController {
         return "book";
     }
     @GetMapping("/book-image/{ISBN}")
-    public ResponseEntity<byte[]> getBookImage(@PathVariable String ISBN){
+    public ResponseEntity<byte[]> getBookImage(@PathVariable long ISBN){
         Book book =bookRepo.findByISBN(ISBN);
         byte[] imageBytes = book.getPictureFile();
         if(imageBytes == null){
@@ -205,7 +208,7 @@ public class BookController {
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
     @PostMapping("/book/{ISBN}/review")
-    public String reviewBook(@PathVariable String ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
+    public String reviewBook(@PathVariable long ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
         Book book = bookRepo.findByISBN(ISBN);
         List<Rating> ratings = book.getRatings();
         Rating rating = null;

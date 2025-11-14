@@ -9,7 +9,7 @@ public class BookTest {
 
     @Before
     public void setUp() throws Exception {
-        book = new Book("128791","Coding 101","John Smith","Ravens","Learn",15,29.99, 111);
+        book = new Book(128791,"Coding 101","John Smith","Ravens","Learn",15,29.99, 111);
     }
 
     @Test
@@ -20,7 +20,7 @@ public class BookTest {
 
     @Test
     public void setISBN() {
-        book.setISBN("128712");
+        book.setISBN(128712);
         assertEquals(128712,book.getISBN());
     }
     @Test

@@ -9,7 +9,7 @@ async function sortBy(attribute){
     }else{
         currentSort.attribute = attribute;
         currentSort.ascending = true;
-    }
+    }   
 
 
     const response = await fetch(`/sortFragment/${attribute}/${currentSort.ascending}`);

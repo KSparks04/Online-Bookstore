@@ -44,7 +44,7 @@ public class ShoppingCartController {
 
     //Edit
     @PostMapping("/shopping-cart/edit/{function}/{ISBN}")
-    public String editShoppingCart(@PathVariable("function") String function, @PathVariable("ISBN") String ISBN, Model model, HttpSession session) {
+    public String editShoppingCart(@PathVariable("function") String function, @PathVariable("ISBN") long ISBN, Model model, HttpSession session) {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         if (cart == null) {
             cart = new ShoppingCart();
@@ -86,9 +86,9 @@ public class ShoppingCartController {
         }
 
         List<Book> notEnoughStock = new ArrayList<>();
-        Map<String, Integer> bookCounts = cart.getBookCounts();
+        Map<Long, Integer> bookCounts = cart.getBookCounts();
 
-        for (Map.Entry<String, Integer> entry : bookCounts.entrySet()) {
+        for (Map.Entry<Long, Integer> entry : bookCounts.entrySet()) {
             Book storedBook = bookRepository.findByISBN(entry.getKey());
             int quantity = entry.getValue();
             if (storedBook.getInventory() < quantity) {
@@ -103,7 +103,7 @@ public class ShoppingCartController {
             model.addAttribute("total", cart.getTotalPrice());
             return "fragments/shopping-cart/checkout";
         }
-        for (Map.Entry<String, Integer> entry : bookCounts.entrySet()) {
+        for (Map.Entry<Long, Integer> entry : bookCounts.entrySet()) {
             Book storedBook = bookRepository.findByISBN(entry.getKey());
             storedBook.setInventory(storedBook.getInventory() - entry.getValue());
             bookRepository.save(storedBook);

@@ -1,22 +1,14 @@
 function initBookForm(retries = 10, delay = 100) {
-    const container = document.getElementById("addBookForm");
-    if (!container) {
-        if (retries > 0) setTimeout(() => initBookForm(retries - 1, delay), delay);
-        return;
-    }
 
-    const form = container.querySelector("form");
-    if (!form) {
-        if (retries > 0) setTimeout(() => initBookForm(retries - 1, delay), delay);
-        return;
-    }
-
-    form.addEventListener("submit", async (e) => {
+    document.addEventListener("submit", async (e) => {
+        if(!e.target.matches("#addBookForm form")) return;
         e.preventDefault();
 
-        const isbnInput = form.querySelector("#ISBN");
-        const isbnErrorDiv = form.querySelector("#isbn-error"); // select once
-        const isbn = isbnInput.value.trim();
+        const form = e.target;
+        const container = document.getElementById("addBookForm");
+        const isbnInput = document.querySelector("#ISBN");
+        const isbnErrorDiv = document.querySelector("#isbn-error"); // select once
+        const isbn = isbnInput.value;
 
         if (!isValidISBN13(isbn)) {
             // Show unobtrusive inline error
@@ -70,17 +62,18 @@ async function refreshBookTable(){
 }
 
 function isValidISBN13(isbn) {
-    // Compute checksum
-    let sum = 0;
-    for (let i = 0; i < 12; i++) {
-        const digit = parseInt(isbn[i]);
-        sum += (i % 2 === 0) ? digit : digit * 3;
-    }
+    //add every digit left to right alternating from just the value and the value*3
+    //divide the whole sum by 10 (denote x)[floor math]
+    //10-x = checksum bit
 
-    const checkDigit = (10 - (sum % 10)) % 10;
+   let sum = 0;
+   for(i=12; i > 0; i--){
+    digit = Math.floor(isbn / (10 ** i)) % 10;
+    sum += !(i%2==0) ? digit : digit * 3;
+   }
+   checksum_calc = (Math.floor(sum / 10)) - 10;
+   return checksum_calc == Math.floor(isbn) % 10;
 
-    // Valid if last digit matches checksum
-    return checkDigit === Number(isbn[12]);
 }
 $(document).ready(function(){
     $('#seriesSelector').select2({

@@ -49,8 +49,8 @@ public class ShoppingCart {
         bookList.clear();
     }
 
-    public Map<String, Integer> getBookCounts() {
-        HashMap<String, Integer> counts = new HashMap<>();
+    public Map<Long, Integer> getBookCounts() {
+        HashMap<Long, Integer> counts = new HashMap<>();
         for (Book book : bookList) {
             counts.put(book.getISBN(), counts.getOrDefault(book.getISBN(), 0) + 1);
         }

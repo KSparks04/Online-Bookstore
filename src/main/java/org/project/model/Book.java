@@ -21,7 +21,7 @@ import java.util.*;
 
         @Id
         @NotNull
-        private String ISBN;
+        private long ISBN;
         @NotBlank(message = "Title is required")
         private String title;
         @NotBlank(message = "Author is required")
@@ -53,7 +53,7 @@ import java.util.*;
             populateRatings();
         }
 
-        public Book(String ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
+        public Book(long ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
 
             this.ISBN = ISBN;
             this.title = title;
@@ -67,8 +67,8 @@ import java.util.*;
 
         }
 
-        public String getISBN() {return  ISBN;}
-        public void setISBN(String ISBN) {this.ISBN = ISBN;}
+        public long getISBN() {return  ISBN;}
+        public void setISBN(long ISBN) {this.ISBN = ISBN;}
 
         public String getTitle() {return title;}
         public void setTitle(String title) {this.title = title;}
