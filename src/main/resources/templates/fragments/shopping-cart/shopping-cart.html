@@ -8,6 +8,9 @@
                 <div th:insert="~{fragments/shopping-cart/shopping-cart-body}"></div>
             </div>
             <div class="modal-footer">
+                <form th:action="@{/shopping-cart/checkout}" method="post">
+                    <button type="submit" class="btn btn-success">Checkout</button>
+                </form>
                 <button id="close-shopping-cart" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>

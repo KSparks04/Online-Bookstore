@@ -3,7 +3,7 @@
         <p>No Books in Shopping Cart</p>
     </div>
     <div th:if="${not shoppingCart.bookList.isEmpty()}">
-        <table class="table-striped text-center w-100">
+        <table class="table table-striped text-center w-100">
             <thead class="table-secondary">
                 <tr>
                     <th>ISBN</th>
@@ -20,16 +20,13 @@
                 <td>
                     <div class="shopping-cart-remove-book" th:data-isbn="${book.ISBN}" >
                         <form th:action="@{/shopping-cart/edit/remove/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                            <button class="btn btn-outline-danger p-0 w-100" type="submit">Remove</button>
+                            <button class="btn btn-outline-danger w-100" type="submit">Remove</button>
                         </form>
                     </div>
                 </td>
             </tr>
             </tbody>
         </table>
-        <form th:action="@{/shopping-cart/checkout}" method="post">
-            <button type="submit" class="btn btn-success">Checkout</button>
-        </form>
     </div>
 </div>
 <script th:src="@{/js/shopping-cart-body.js}"></script>
