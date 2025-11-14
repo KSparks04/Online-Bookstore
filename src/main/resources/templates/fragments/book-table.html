@@ -9,7 +9,7 @@
         Sorry, no books found.
     </td>
 </tr>
-<tr th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}" >
+<tr class="align-middle" th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}" >
     <td th:text="${book.ISBN}"></td>
     <td>
         <a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
@@ -32,8 +32,12 @@
             <button class="btn btn-outline-danger p-0 w-100" type="submit">Delete</button>
         </form>
         <!-- Purchase Book Form-->
-        <div class="purchase-button" th:data-isbn="${book.ISBN}" th:insert="~{fragments/shopping-cart/purchase-button}"></div>
-
+        <div>
+            <form class="purchase-button" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                <button th:class="${book.inventory == 0} ? 'purchase-btn p-0 w-100 btn btn-outline-danger' : 'purchase-btn  p-0 w-100 btn btn-outline-warning'" type="submit" th:disabled="${book.inventory == 0}"
+                        th:text="${book.inventory == 0} ? 'Out of Stock' : 'Add to Cart'"></button>
+            </form>
+        </div>
     </td>
 </tr>
 <script th:src="@{/js/purchase-button.js}"></script>
