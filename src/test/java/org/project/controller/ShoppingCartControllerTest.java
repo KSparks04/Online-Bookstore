@@ -57,18 +57,18 @@ class ShoppingCartControllerTest {
     @Test
     void editShoppingCart() throws Exception {
         MockHttpSession session = null;
-       // Book book = new Book(123, "Sample Title", "Author Name", "Publisher Co", "Sample description", 1, 1.0, 5);
-        //MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
+        Book book = new Book(4000, "Sample Title", "Author Name", "Publisher Co", "Sample description", 1, 1.0, 5);
+        MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
 
-        //this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","123").param("title","Sample Title").param("author","Author Name")
-                //.param("publisher","Publisher Co").param("description","Sample description").param("inventory","1").param("price","1.0").param("pageCount", "5").param("seriesName","Divergent")).andExpect(status().is3xxRedirection());
+        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","4000").param("title","Sample Title").param("author","Author Name")
+                .param("publisher","Publisher Co").param("description","Sample description").param("inventory","1").param("price","1.0").param("pageCount", "5").param("seriesName","Divergent")).andExpect(status().is3xxRedirection());
 
         //Test add
-        session = (MockHttpSession) this.mockMvc.perform(post("/shopping-cart/edit/add/123")).andDo(print()).andReturn().getRequest().getSession();
+        session = (MockHttpSession) this.mockMvc.perform(post("/shopping-cart/edit/add/4000")).andDo(print()).andReturn().getRequest().getSession();
         session = (MockHttpSession) this.mockMvc.perform(get("/shopping-cart").session(session)).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Sample Title"))).andReturn().getRequest().getSession();
-//      //Test remove
-        session = (MockHttpSession) this.mockMvc.perform(post("/shopping-cart/edit/remove/123")).andDo(print()).andReturn().getRequest().getSession();
+        //Test remove
+        session = (MockHttpSession) this.mockMvc.perform(post("/shopping-cart/edit/remove/4000")).andDo(print()).andReturn().getRequest().getSession();
         this.mockMvc.perform(get("/shopping-cart").session(session)).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("No Books in Shopping Cart")));
     }
@@ -79,7 +79,7 @@ class ShoppingCartControllerTest {
         cart.addBook(new Book(1, "Sample Book", "Author", "Publisher", "Desc", 12, 1.3, 1));
         session.setAttribute("shoppingCart", cart);
 
-        mockMvc.perform(post("/shopping-cart/checkout").session(session))
+        mockMvc.perform(post("/shopping-cart/validate-checkout").session(session))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/register"));
     }
@@ -96,7 +96,7 @@ class ShoppingCartControllerTest {
         cart.addBook(book);
         session.setAttribute("shoppingCart", cart);
 
-        mockMvc.perform(post("/shopping-cart/checkout").session(session))
+        mockMvc.perform(post("/shopping-cart/checkout-success").session(session))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Thank you for your purchase!")));
     }
