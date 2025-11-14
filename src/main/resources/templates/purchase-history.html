@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+<head>
+    <title>My Purchases</title>
+</head>
+
+<body class="container mt-4">
+<h2>My Purchase History</h2>
+
+<div th:if="${purchases.isEmpty()}">
+    <p>You haven’t purchased any books yet.</p>
+</div>
+
+<table class="table" th:if="${!purchases.isEmpty()}">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Purchase Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="purchase : ${purchases}">
+        <td th:text="${purchase.book.title}"></td>
+        <td th:text="${purchase.book.author}"></td>
+        <td th:text="${#temporals.format(purchase.purchaseDate, 'yyyy-MM-dd HH:mm')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/}" class="btn btn-primary mt-3">Back to Home</a>
+</body>
+</html>

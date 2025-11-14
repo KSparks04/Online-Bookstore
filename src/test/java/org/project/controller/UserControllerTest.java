@@ -60,7 +60,7 @@ class UserControllerTest {
                         .param("username", "newuser")
                         .param("password", "newpass"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/"));
     }
 
     @Test
@@ -71,7 +71,7 @@ class UserControllerTest {
                         .param("username", "dupeuser")
                         .param("password", "anotherpass"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Username already taken")));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Username already exists.")));
     }
 
 }

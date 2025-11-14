@@ -1,0 +1,29 @@
+<div th:if="${shoppingCart.bookList.isEmpty()}">
+    <p>No Books in Shopping Cart</p>
+</div>
+<div th:if="${not shoppingCart.bookList.isEmpty()}">
+    <table class="table table-striped text-center w-100">
+        <thead class="table-secondary">
+        <tr>
+            <th>ISBN</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book: ${shoppingCart.bookList}">
+            <td th:text="${book.ISBN}"></td>
+            <td class="text-wrap"  th:text="${book.title}"></td>
+            <td th:text="'$' + ${book.price}"></td>
+            <td>
+                <div class="shopping-cart-remove-book" th:data-isbn="${book.ISBN}" >
+                    <form th:action="@{/shopping-cart/edit/remove/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                        <button class="btn btn-outline-danger w-100" type="submit">Remove</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
