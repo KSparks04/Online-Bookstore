@@ -137,13 +137,13 @@ public class BookController {
     }
 
     @PostMapping("/delete-book/{ISBN}")
-    public String deleteBook(@PathVariable int ISBN){
+    public String deleteBook(@PathVariable long ISBN){
         bookRepo.deleteById(ISBN);
         return "redirect:/get-book-list";
     }
 
     @GetMapping("/edit-book/{ISBN}")
-    public String editBook(@PathVariable int ISBN, Model model){
+    public String editBook(@PathVariable long ISBN, Model model){
         Book book = bookRepo.findByISBN(ISBN);
         model.addAttribute("series", seriesRepo.findAll());
         model.addAttribute("book", book);
@@ -175,7 +175,7 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}")
-    public String getBook(@PathVariable("id") int id, Model model, HttpSession session) {
+    public String getBook(@PathVariable("id") long id, Model model, HttpSession session) {
         Book book = bookRepo.findByISBN(id);
         if (book == null) {
             // Book not found, show a dedicated error page
@@ -186,7 +186,7 @@ public class BookController {
         return "book";
     }
     @GetMapping("/book-image/{ISBN}")
-    public ResponseEntity<byte[]> getBookImage(@PathVariable int ISBN){
+    public ResponseEntity<byte[]> getBookImage(@PathVariable long ISBN){
         Book book =bookRepo.findByISBN(ISBN);
         byte[] imageBytes = book.getPictureFile();
         if(imageBytes == null){
@@ -197,7 +197,7 @@ public class BookController {
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
     @PostMapping("/book/{ISBN}/review")
-    public String reviewBook(@PathVariable int ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
+    public String reviewBook(@PathVariable long ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
         Book book = bookRepo.findByISBN(ISBN);
         List<Rating> ratings = book.getRatings();
         Rating rating = null;
