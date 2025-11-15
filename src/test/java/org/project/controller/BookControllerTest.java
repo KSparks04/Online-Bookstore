@@ -119,8 +119,17 @@ class BookControllerTest {
     void addBook() throws Exception {
         //Book book = new Book(201, "Title 201", "Author 201", "Publisher 201", "Description 201", 15, 33.95, 4);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
-        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN", "201").param("title", "Title 201").param("author", "Author 201")
-                .param("publisher", "Publisher 201").param("description", "Description 201").param("inventory", "15").param("price", "33.95").param("pageCount", "4").param("seriesName", "Divergent")).andExpect(status().is3xxRedirection());
+        this.mockMvc.perform(multipart("/add-book").file(file)
+                .param("ISBN", "201")
+                .param("title", "Title 201")
+                .param("author", "Author 201")
+                .param("publisher", "Publisher 201")
+                .param("description", "Description 201")
+                .param("inventory", "15")
+                .param("price", "33.95")
+                .param("pageCount", "4")
+                .param("seriesName", "Divergent"))
+                .andExpect(status().is3xxRedirection());
         this.mockMvc.perform(get("/get-book-list")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("201"))).andExpect(content().string(containsString("Title 201")))
                 .andExpect(content().string(containsString("Author 201"))).andExpect(content().string(containsString("Publisher 201")))
