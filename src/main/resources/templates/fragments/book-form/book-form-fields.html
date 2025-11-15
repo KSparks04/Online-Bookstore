@@ -2,6 +2,7 @@
     <div class="book-form-row">
     <label>ISBN: <input th:field="*{ISBN}" type="number"/><br/>
         <div class="field-error" style="color:red" th:errors="*{ISBN}" th:if="${#fields.hasErrors('ISBN')}"></div>
+        <div id="isbn-error" style="color:red"></div>
     </label>
     </div>
     <div class="book-form-row">
@@ -32,7 +33,7 @@
     <div class="book-form-row"><label>Inventory: <input th:field="*{inventory}" type="number"/><br/>
         <div class="field-error" style="color:red" th:errors="*{inventory}" th:if="${#fields.hasErrors('inventory')}"></div>
     </label></div>
-    <div class="book-form-row"><label>Price: <input min="0" th:field="*{price}" type="number"/><br/>
+    <div class="book-form-row"><label>Price: <input min="0" th:field="*{price}" type="number" step="any"/><br/>
         <div class="field-error" style="color:red" th:errors="*{price}" th:if="${#fields.hasErrors('price')}"></div>
     </label></div>
     <div class="book-form-row"><label>Choose a Book Cover: <input accept="image/jpeg" name="pictureUpload"

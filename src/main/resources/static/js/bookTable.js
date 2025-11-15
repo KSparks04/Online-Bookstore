@@ -16,20 +16,6 @@ async function sortBy(attribute){
     const html = await response.text();
     const tbody = document.querySelector("table tbody").innerHTML = html;
 
-    updateSortArrows(attribute, currentSort.ascending);
-}
-
-function updateSortArrows(attribute, ascending){
-    document.querySelectorAll(".sort-arrow").forEach(el=>el.remove());
-
-    const header = document.querySelector(`[data-sort="${attribute}"]`);
-    if(!header) return;
-
-    const arrow = document.createElement("span");
-    arrow.classList.add("sort-arrow");
-    arrow.textContent = ascending ? " ▲" : " ▼";
-
-    header.appendChild(arrow);
 }
 
 $(document).ready(function () {
