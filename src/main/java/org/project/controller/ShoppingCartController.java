@@ -1,6 +1,8 @@
 package org.project.controller;
 
-import jakarta.servlet.http.HttpSession;
+import java.util.Collections;
+import java.util.Map;
+
 import org.project.model.Book;
 import org.project.model.Purchase;
 import org.project.model.ShoppingCart;
@@ -11,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ShoppingCartController {
@@ -129,5 +133,13 @@ public class ShoppingCartController {
         session.setAttribute("shoppingCart", cart);
 
         return "purchase-success";
+    }
+
+    @GetMapping("/shopping-cart/count")
+    @ResponseBody
+    public Map<String, Integer> getCount(HttpSession session){
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        int count = cart != null ? cart.getBookList().size() : 0;
+        return Collections.singletonMap("count", count);
     }
 }
