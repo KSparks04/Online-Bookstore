@@ -9,6 +9,8 @@ public class Series {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int seriesCode;
+
+    @Column(unique = true)
     private String seriesName;
     @OneToMany
     private List<Book> bookList;
