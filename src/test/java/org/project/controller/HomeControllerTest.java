@@ -1,5 +1,7 @@
 package org.project.controller;
 
+import jakarta.transaction.Transactional;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,6 +26,7 @@ class HomeControllerTest {
 	 * @throws Exception
 	 */
 	@Test
+    @Transactional
 	void home() throws Exception {
 		this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk()).
 				andExpect(content().string(containsString("Online Bookstore")));
