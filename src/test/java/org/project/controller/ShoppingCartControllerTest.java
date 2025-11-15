@@ -61,7 +61,7 @@ class ShoppingCartControllerTest {
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
 
         this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","4000").param("title","Sample Title").param("author","Author Name")
-                .param("publisher","Publisher Co").param("description","Sample description").param("inventory","1").param("price","1.0").param("pageCount", "5").param("seriesName","Divergent")).andExpect(status().is3xxRedirection());
+                .param("publisher","Publisher Co").param("description","Sample description").param("inventory","1").param("price","1.0").param("pageCount", "5").param("seriesName","Not Divergent")).andExpect(status().is3xxRedirection());
 
         //Test add
         session = (MockHttpSession) this.mockMvc.perform(post("/shopping-cart/edit/add/4000")).andDo(print()).andReturn().getRequest().getSession();
