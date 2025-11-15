@@ -111,11 +111,12 @@ public class BookController {
                 throw new RuntimeException(e);
             }
         }
-        Series series = seriesRepo.findBySeriesName(seriesName);
+        String input = seriesName.trim();
+        Series series = seriesRepo.findBySeriesName(input);
         if(series != null){
             book.setSeries(series);
         }else{
-            Series newSeries = new Series(seriesName);
+            Series newSeries = new Series(input);
             book.setSeries(newSeries);
             seriesRepo.save(newSeries);
         }
@@ -162,11 +163,12 @@ public class BookController {
                 throw new RuntimeException(e);
             }
         }
-        Series series = seriesRepo.findBySeriesName(seriesName);
+        String input = seriesName.trim();
+        Series series = seriesRepo.findBySeriesName(input);
         if(series != null){
             book.setSeries(series);
         }else{
-            Series newSeries = new Series(seriesName);
+            Series newSeries = new Series(input);
             book.setSeries(newSeries);
             seriesRepo.save(newSeries);
         }
