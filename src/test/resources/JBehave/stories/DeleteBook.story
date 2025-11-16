@@ -1,5 +1,3 @@
-Meta:
-@add-book
 
 Scenario: Delete a book
 Given the bookstore is not empty
