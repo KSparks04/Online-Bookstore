@@ -32,7 +32,13 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
   - Adding purchase functionality
     - Includes: providing a button on a books details page to add to cart/purchase
   - Research on using Jaccard to develop a recommendations feature
-  - Update the book model to feature new attributes such as page count and genre 
+  - Update the book model to feature new attributes such as page count and genre
+## Sprint 3 (November 17th - December 1st)
+**Objectives**
+- Finish updating the book model with final attributes
+- Finish styling the bookstore
+- Implement recommendations feature
+- Add displaying review lists and sorting
 
 # Planned Application
 ## Bookstore Web App
