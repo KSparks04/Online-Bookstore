@@ -1,5 +1,6 @@
 package org.project.controller;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.project.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ class BookControllerTest {
      * @throws Exception
      */
     @Test
+    @Transactional
     void getBookListSearch() throws Exception {
         //Book book = new Book(1, "Title 1", "Author 1", "Publisher 1", "Description 1",15,25.99);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
@@ -60,6 +62,7 @@ class BookControllerTest {
      * Confirms all book info appears on the resulting page
      */
     @Test
+    @Transactional
     void getBookDetails() throws Exception {
         Book book = new Book(123, "Sample Title", "Author Name", "Publisher Co", "Sample description", 1, 1.0, 5);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
@@ -84,6 +87,7 @@ class BookControllerTest {
      * Verifies that the response is the friendly “Book Not Found” page.
      */
     @Test
+    @Transactional
     void getBookNotFound() throws Exception {
         this.mockMvc.perform(get("/book/99999"))
                 .andDo(print())
@@ -93,6 +97,7 @@ class BookControllerTest {
     }
 
     @Test
+    @Transactional
     void searchBookNotFound() throws Exception {
         this.mockMvc.perform(get("/get-book-list")
                         .param("function", "search")
@@ -110,11 +115,21 @@ class BookControllerTest {
      */
     //Need test for no picture still
     @Test
+    @Transactional
     void addBook() throws Exception {
         //Book book = new Book(201, "Title 201", "Author 201", "Publisher 201", "Description 201", 15, 33.95, 4);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
-        this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN", "201").param("title", "Title 201").param("author", "Author 201")
-                .param("publisher", "Publisher 201").param("description", "Description 201").param("inventory", "15").param("price", "33.95").param("pageCount", "4").param("seriesName", "Divergent")).andExpect(status().is3xxRedirection());
+        this.mockMvc.perform(multipart("/add-book").file(file)
+                .param("ISBN", "201")
+                .param("title", "Title 201")
+                .param("author", "Author 201")
+                .param("publisher", "Publisher 201")
+                .param("description", "Description 201")
+                .param("inventory", "15")
+                .param("price", "33.95")
+                .param("pageCount", "4")
+                .param("seriesName", "Divergent"))
+                .andExpect(status().is3xxRedirection());
         this.mockMvc.perform(get("/get-book-list")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("201"))).andExpect(content().string(containsString("Title 201")))
                 .andExpect(content().string(containsString("Author 201"))).andExpect(content().string(containsString("Publisher 201")))
@@ -128,6 +143,7 @@ class BookControllerTest {
      * @throws Exception
      */
     @Test
+    @Transactional
     void deleteBook() throws Exception {
         Book book = new Book(7, "Title 7", "Author 7", "Publisher 7", "Description 7", 13, 26.99, 3);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
@@ -149,6 +165,7 @@ class BookControllerTest {
      * @throws Exception
      */
     @Test
+    @Transactional
     void editBook() throws Exception {
         Book book = new Book(301, "Title 301", "Author 301", "Publisher 301", "Description 301", 15, 33.95, 2);
 
@@ -165,6 +182,7 @@ class BookControllerTest {
      * @throws Exception
      */
     @Test
+    @Transactional
     void updateBook() throws Exception {
         // Has to be changed to 5 (anything not 401) as to not conflict with deleteBook test.
         Book book = new Book(401, "Title 401", "Author 401", "Publisher 401", "Description 401", 15, 29.99, 1);
