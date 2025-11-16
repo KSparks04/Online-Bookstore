@@ -34,11 +34,11 @@ public class StoryRunner extends JUnitStories {
     }
 
     @Override
-    public List<String> storyPaths() {
+    public List storyPaths() {
         return new StoryFinder().findPaths(
-                codeLocationFromClass(this.getClass()).getFile(),
-                List.of("**/*.story"),
-                List.of("")
+                codeLocationFromClass(this.getClass()),
+                "**/*.story",
+                ""
         );
     }
 }
