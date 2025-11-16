@@ -17,6 +17,7 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
       - Basic html pages to complement features such as editing book information and displaying list of books in the store
   - Developing comprehensive test cases for the controllers to test endpoints
   - Set up the azure deployment and CI
+
 **What Was Accomplished**
 - Book model and Book repository
 - Controllers for displaying, editing, adding, deleting and sorting books
@@ -33,6 +34,7 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
     - Includes: providing a button on a books details page to add to cart/purchase
   - Research on using Jaccard to develop a recommendations feature
   - Update the book model to feature new attributes such as page count and genre
+**What Was Accomplished**
 ## Sprint 3 (November 17th - December 1st)
 **Objectives**
 - Finish updating the book model with final attributes
