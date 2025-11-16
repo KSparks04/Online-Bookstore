@@ -35,6 +35,11 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
   - Research on using Jaccard to develop a recommendations feature
   - Update the book model to feature new attributes such as page count and genre
 **What Was Accomplished**
+- User model and User repository allowing for registration, login, and purchase tracking
+- Added a shopping cart for users to purchase books
+- Added checkout page that displays the current cart, the total of all books in the cart, and a    checkout button. Checking out removes purchased books from the inventory, when a book is out     of stock its displayed on the book list page.
+- Added purchase functionality including add to cart button and user purchase tracking
+- Updated book model to include a cover photo, page count, and genre
 ## Sprint 3 (November 17th - December 1st)
 **Objectives**
 - Finish updating the book model with final attributes
@@ -75,3 +80,11 @@ For this application, the simulated books is paperback or hardback.
   - Reviews
   - Genre
   - Page count
+
+## Diagrams
+UML class diagram (updated for milestone 2): 
+<img width="4135" height="3508" alt="OnlineBookstoreUML drawio" src="https://github.com/user-attachments/assets/820b92f4-8805-4472-b611-05b0fc7530a0" />
+
+ORM diagram:
+
+
