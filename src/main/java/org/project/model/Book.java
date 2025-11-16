@@ -12,7 +12,7 @@ import java.util.*;
 
         @Id
         @Min(value = 1, message = "ISBN must be a non-negative number")
-        private int ISBN;
+        private long ISBN;
         @NotBlank(message = "Title is required")
         private String title;
         @NotBlank(message = "Author is required")
@@ -44,7 +44,7 @@ import java.util.*;
             populateRatings();
         }
 
-        public Book(int ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
+        public Book(long ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
 
             this.ISBN = ISBN;
             this.title = title;
@@ -58,8 +58,8 @@ import java.util.*;
 
         }
 
-        public int getISBN() {return  ISBN;}
-        public void setISBN(int ISBN) {this.ISBN = ISBN;}
+        public long getISBN() {return  ISBN;}
+        public void setISBN(long ISBN) {this.ISBN = ISBN;}
 
         public String getTitle() {return title;}
         public void setTitle(String title) {this.title = title;}
