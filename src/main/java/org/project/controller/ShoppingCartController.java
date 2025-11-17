@@ -7,7 +7,6 @@ import org.project.model.ShoppingCart;
 import org.project.model.User;
 import org.project.repository.BookRepository;
 import org.project.repository.PurchaseRepository;
-import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class ShoppingCartController {
@@ -27,9 +25,6 @@ public class ShoppingCartController {
 
     @Autowired
     private PurchaseRepository purchaseRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     /**
      * Utility method to add cart info to model
@@ -66,7 +61,6 @@ public class ShoppingCartController {
         }
 
         Book book = bookRepository.findByISBN(ISBN);
-
         if (function.equalsIgnoreCase("add")) {
             cart.addBook(book);
         } else if (function.equalsIgnoreCase("remove")) {
@@ -80,8 +74,8 @@ public class ShoppingCartController {
     /**
      * Checkout endpoint – processes the purchase and saves to history
      */
-    @PostMapping("/shopping-cart/checkout")
-    public String checkout(Model model, HttpSession session) {
+    @PostMapping("/shopping-cart/validate-checkout")
+    public String checkOut(Model model, HttpSession session) {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         User currentUser = (User) session.getAttribute("currentUser");
 
@@ -95,40 +89,74 @@ public class ShoppingCartController {
 
         // If user is not logged in → redirect to register
         if (currentUser == null) {
-            session.setAttribute("redirectAfterRegister", "/shopping-cart");
+            session.setAttribute("redirectAfterRegister", "/shopping-cart/checkout");
             return "redirect:/register";
         }
 
-        //Use quantity map instead of looping raw list
-        Map<Integer, Integer> quantities = cart.getBookCounts();
+        return "redirect:/shopping-cart/checkout";
+    }
 
-        for (var entry : quantities.entrySet()) {
+    @GetMapping("/shopping-cart/checkout")
+    public String getCheckout(Model model, HttpSession session) {
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
 
-            int isbn = entry.getKey();
-            int qty  = entry.getValue();
+        addShoppingCartAttributes(model, session);
+
+        // If cart is empty
+        if (cart == null || cart.getBookList().isEmpty()) {
+            model.addAttribute("error", "Your shopping cart is empty.");
+            return "fragments/shopping-cart/shopping-cart-body";
+        }
+
+        model.addAttribute("total", cart.getTotalPrice());
+
+        return "checkout";
+    }
+
+    /**
+     * Checkout endpoint – processes the purchase and saves to history
+     */
+    @PostMapping("/shopping-cart/checkout-success")
+    public String checkoutSuccess(Model model, HttpSession session) {
+
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        User currentUser = (User) session.getAttribute("currentUser");
+
+        if (cart == null || cart.getBookList().isEmpty()) {
+            model.addAttribute("error", "Your shopping cart is empty.");
+            return "fragments/shopping-cart/shopping-cart-body";
+        }
+
+        // Get book quantities (ISBN → count)
+        Map<Long, Integer> quantities = cart.getBookCounts();
+
+        for (Map.Entry<Long, Integer> entry : quantities.entrySet()) {
+
+            int isbn = Math.toIntExact(entry.getKey());
+            int qty = entry.getValue();
 
             Book book = bookRepository.findByISBN(isbn);
+            if (book == null) continue;
 
-            //Inventory decreases by exactly 'qty'
+            // Update inventory
             int newInventory = book.getInventory() - qty;
             if (newInventory < 0) newInventory = 0;
+
             book.setInventory(newInventory);
             bookRepository.save(book);
 
-            //Save each purchase individually
+            // Save purchase entries
             for (int i = 0; i < qty; i++) {
-                Purchase purchase = new Purchase(currentUser, book);
-                purchaseRepository.save(purchase);
+                purchaseRepository.save(new Purchase(currentUser, book));
             }
         }
 
-        // clear cart after checkout
+        // Clear cart
         cart.clearBooks();
         session.setAttribute("shoppingCart", cart);
 
         model.addAttribute("success", "Purchase completed successfully!");
         return "purchase-success";
     }
-
 
 }

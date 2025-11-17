@@ -109,4 +109,8 @@ import java.util.*;
             return this.ISBN == book.ISBN && Objects.equals(this.title, book.title) && Objects.equals(this.author, book.author)
                     && Objects.equals(this.publisher, book.publisher) && this.price == book.price;
         }
+        @Override
+        public int hashCode() {
+            return Long.hashCode(ISBN);
+        }
     }
