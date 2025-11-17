@@ -34,6 +34,7 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
     - Includes: providing a button on a books details page to add to cart/purchase
   - Research on using Jaccard to develop a recommendations feature
   - Update the book model to feature new attributes such as page count and genre
+    
 **What Was Accomplished**
 - User model and User repository allowing for registration, login, and purchase tracking
 - Added a shopping cart for users to purchase books
