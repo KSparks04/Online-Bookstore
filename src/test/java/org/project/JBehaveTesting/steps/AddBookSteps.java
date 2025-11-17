@@ -10,7 +10,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AddBookSteps {
-
     // Mock repository to simulate the real one
     private Map<Integer, Book> mockBookRepo = new HashMap<>();
     private Book addedBook;
@@ -21,7 +20,8 @@ public class AddBookSteps {
         System.out.println("Bookstore cleared");
     }
 
-    @When("I add a book with ISBN $isbn, title $title, author $author, publisher $publisher, description $description, inventory $inventory, price $price, page count $pageCount, series $seriesName")
+    @When("I add a book with ISBN $isbn, title $title, author $author, publisher $publisher, description $description," +
+            " inventory $inventory, price $price, page count $pageCount, series $seriesName")
     public void addBook(int isbn, String title, String author, String publisher, String description,
                         int inventory, double price, int pageCount, String seriesName) {
         // Create book and series objects
