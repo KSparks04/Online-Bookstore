@@ -7,6 +7,7 @@ import org.project.model.ShoppingCart;
 import org.project.model.User;
 import org.project.repository.BookRepository;
 import org.project.repository.PurchaseRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class ShoppingCartController {
@@ -23,6 +27,9 @@ public class ShoppingCartController {
 
     @Autowired
     private PurchaseRepository purchaseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Utility method to add cart info to model
@@ -59,6 +66,7 @@ public class ShoppingCartController {
         }
 
         Book book = bookRepository.findByISBN(ISBN);
+
         if (function.equalsIgnoreCase("add")) {
             cart.addBook(book);
         } else if (function.equalsIgnoreCase("remove")) {
@@ -72,8 +80,8 @@ public class ShoppingCartController {
     /**
      * Checkout endpoint – processes the purchase and saves to history
      */
-    @PostMapping("/shopping-cart/validate-checkout")
-    public String checkOut(Model model, HttpSession session) {
+    @PostMapping("/shopping-cart/checkout")
+    public String checkout(Model model, HttpSession session) {
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         User currentUser = (User) session.getAttribute("currentUser");
 
@@ -87,47 +95,40 @@ public class ShoppingCartController {
 
         // If user is not logged in → redirect to register
         if (currentUser == null) {
-            session.setAttribute("redirectAfterRegister", "/shopping-cart/checkout");
+            session.setAttribute("redirectAfterRegister", "/shopping-cart");
             return "redirect:/register";
         }
 
-        return "redirect:/shopping-cart/checkout";
-    }
+        //Use quantity map instead of looping raw list
+        Map<Integer, Integer> quantities = cart.getBookCounts();
 
-    @GetMapping("/shopping-cart/checkout")
-    public String getCheckout(Model model, HttpSession session) {
-        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        for (var entry : quantities.entrySet()) {
 
-        addShoppingCartAttributes(model, session);
+            int isbn = entry.getKey();
+            int qty  = entry.getValue();
 
-        // If cart is empty
-        if (cart == null || cart.getBookList().isEmpty()) {
-            model.addAttribute("error", "Your shopping cart is empty.");
-            return "fragments/shopping-cart/shopping-cart-body";
+            Book book = bookRepository.findByISBN(isbn);
+
+            //Inventory decreases by exactly 'qty'
+            int newInventory = book.getInventory() - qty;
+            if (newInventory < 0) newInventory = 0;
+            book.setInventory(newInventory);
+            bookRepository.save(book);
+
+            //Save each purchase individually
+            for (int i = 0; i < qty; i++) {
+                Purchase purchase = new Purchase(currentUser, book);
+                purchaseRepository.save(purchase);
+            }
         }
 
-        model.addAttribute("total", cart.getTotalPrice());
-
-        return "checkout";
-    }
-
-    /**
-     * Checkout endpoint – processes the purchase and saves to history
-     */
-    @PostMapping("/shopping-cart/checkout-success")
-    public String checkoutSuccess(Model model, HttpSession session) {
-        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
-        User currentUser = (User) session.getAttribute("currentUser");
-
-        // Save each purchased book
-        for (Book book : cart.getBookList()) {
-            purchaseRepository.save(new Purchase(currentUser, book));
-        }
-
-        // Clear cart after purchase
-        cart.getBookList().clear();
+        // clear cart after checkout
+        cart.clearBooks();
         session.setAttribute("shoppingCart", cart);
 
+        model.addAttribute("success", "Purchase completed successfully!");
         return "purchase-success";
     }
+
+
 }
