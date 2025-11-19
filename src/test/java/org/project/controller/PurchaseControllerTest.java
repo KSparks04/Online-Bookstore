@@ -45,7 +45,7 @@ class PurchaseControllerTest {
     void showsPurchaseHistoryWhenLoggedIn() throws Exception {
         User user = userRepository.save(new User("buyer_" + System.currentTimeMillis(), "password"));
         Book book = bookRepository.save(new Book(1234, "Test Title", "Test Author", "Pub", "Desc",1, 1.0,12));
-        purchaseRepository.save(new Purchase(user, book));
+        purchaseRepository.save(new Purchase(user, book, 1));
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("currentUser", user);
