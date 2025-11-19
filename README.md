@@ -17,6 +17,7 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
       - Basic html pages to complement features such as editing book information and displaying list of books in the store
   - Developing comprehensive test cases for the controllers to test endpoints
   - Set up the azure deployment and CI
+
 **What Was Accomplished**
 - Book model and Book repository
 - Controllers for displaying, editing, adding, deleting and sorting books
@@ -32,7 +33,20 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
   - Adding purchase functionality
     - Includes: providing a button on a books details page to add to cart/purchase
   - Research on using Jaccard to develop a recommendations feature
-  - Update the book model to feature new attributes such as page count and genre 
+  - Update the book model to feature new attributes such as page count and genre
+    
+**What Was Accomplished**
+- User model and User repository allowing for registration, login, and purchase tracking
+- Added a shopping cart for users to purchase books
+- Added checkout page that displays the current cart, the total of all books in the cart, and a    checkout button. Checking out removes purchased books from the inventory, when a book is out     of stock its displayed on the book list page.
+- Added purchase functionality including add to cart button and user purchase tracking
+- Updated book model to include a cover photo, page count, and genre
+## Sprint 3 (November 17th - December 1st)
+**Objectives**
+- Finish updating the book model with final attributes
+- Finish styling the bookstore
+- Implement recommendations feature
+- Add displaying review lists and sorting
 
 # Planned Application
 ## Bookstore Web App
@@ -67,3 +81,13 @@ For this application, the simulated books is paperback or hardback.
   - Reviews
   - Genre
   - Page count
+
+## Diagrams
+UML class diagram (updated for milestone 2): 
+<img width="4135" height="3508" alt="OnlineBookstoreUML drawio" src="https://github.com/user-attachments/assets/820b92f4-8805-4472-b611-05b0fc7530a0" />
+
+ORM diagram:
+
+<img width="555" height="626" alt="image" src="https://github.com/user-attachments/assets/29780621-5cbc-4c22-955e-233b2d4fbe82" />
+
+
