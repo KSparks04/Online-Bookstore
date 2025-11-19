@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    getCartCount();
     $("#shopping-cart-modal").hide()
 
     $(document).on("click", "#open-shopping-cart", function() {
