@@ -1,13 +1,12 @@
+let shoppingCartModal;
+
 $(document).ready(function () {
-    $("#shopping-cart-modal").hide()
+    const modalEl = document.getElementById('shopping-cart-modal');
+    shoppingCartModal = new bootstrap.Modal(modalEl);
 
     $("#open-shopping-cart").click(function() {
-        $("#shopping-cart-modal").show();
-    })
-
-    $("#close-shopping-cart").click(function() {
-        $("#shopping-cart-modal").hide();
-    })
+        shoppingCartModal.show();
+    });
 });
 
 function getShoppingCart(){
