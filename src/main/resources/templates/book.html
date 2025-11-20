@@ -61,6 +61,7 @@
                     <p><strong>Page Count: <span th:text="${book.pageCount}"></span></strong></p>
                     <p><strong>Description:</strong> <span th:text="${book.description}"></span></p>
                 </div>
+                <div th:insert="~{fragments/recommendations}"></div>
                 <div>
                     <div class="review-button" th:data-isbn="${book.ISBN}" th:replace="~{fragments/review}"></div>
                 </div>

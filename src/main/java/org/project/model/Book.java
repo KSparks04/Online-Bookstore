@@ -109,4 +109,64 @@ import java.util.*;
             return this.ISBN == book.ISBN && Objects.equals(this.title, book.title) && Objects.equals(this.author, book.author)
                     && Objects.equals(this.publisher, book.publisher) && this.price == book.price;
         }
+
+        public Set<String> getTagSet(){
+            Set<String> tags = new HashSet<>();
+
+            if(genres != null){
+                tags.addAll(genres.stream()
+                    .map(String::toLowerCase)
+                    .toList());
+            }
+
+            if(author != null){
+                tags.add("author:" + author.toLowerCase());
+            }
+
+
+            if (series != null && series.getSeriesName() != null) {
+                tags.add("series:" + series.getSeriesName().toLowerCase());
+            }
+
+            if (description != null) {
+                tags.addAll(extractDescriptionKeywords(description));
+            }
+
+            tags.add("pageCount:" + pageCountBucket(pageCount));
+
+            tags.add("price:" + priceBucket(price));
+
+            return tags;
+        }
+
+        private Set<String> extractDescriptionKeywords(String text){
+            String[] words = text
+                .toLowerCase()
+                .replaceAll("[^a-z ]", "")
+                .split("\\s+");
+            
+                Set<String> keywords = new HashSet<>();
+
+                Set<String> stopwords = Set.of("the", "and", "of", "a", "to", "in","is","on","for","with","that","this");
+
+                for(String w: words){
+                    if(!stopwords.contains(w) && w.length() > 2){
+                        keywords.add(w);
+                    }
+                }
+                return keywords;
+        }
+
+        private String pageCountBucket(int pages){
+            if (pages <= 150) return "short";
+            if (pages <= 350) return "medium";
+            if (pages <= 600) return "long";
+            return "epic";
+        }
+
+        private String priceBucket(double price){
+            if (price <= 10) return "cheap";
+            if (price <= 20) return "mid";
+            return "premium";
+        }
     }
