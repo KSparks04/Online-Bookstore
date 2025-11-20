@@ -19,6 +19,7 @@
     <tr>
         <th>Title</th>
         <th>Author</th>
+        <th>Count</th>
         <th>Purchase Date</th>
     </tr>
     </thead>
@@ -26,6 +27,7 @@
     <tr th:each="purchase : ${purchases}">
         <td th:text="${purchase.book.title}"></td>
         <td th:text="${purchase.book.author}"></td>
+        <td th:text="${purchase.quantity}"></td>
         <td th:text="${#temporals.format(purchase.purchaseDate, 'yyyy-MM-dd HH:mm')}"></td>
     </tr>
     </tbody>

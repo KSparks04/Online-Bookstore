@@ -40,10 +40,30 @@ public class ShoppingCart {
     public double getTotalPrice() {
         double totalPrice = 0;
         for (Book book : bookList) {
-            totalPrice += book.getPrice();
+            totalPrice += book.getPrice() * book.getInventory();
         }
         return totalPrice;
     }
+
+    public void increaseBookInventory(Book book){
+        Book b = getBook(book.getISBN());
+        if(b!=null) b.setInventory(b.getInventory() + 1);
+    }
+
+    public void decreaseBookInventory(Book book){
+        Book b = getBook(book.getISBN());
+        if(b!=null) b.setInventory(b.getInventory() - 1);
+    }
+
+    private Book getBook(long ISBN){
+        for(Book b: bookList){
+            if(b.getISBN() == ISBN){
+                return b;
+            }
+        }
+        return null;
+    }
+
 
     public void clearBooks() {
         bookList.clear();
