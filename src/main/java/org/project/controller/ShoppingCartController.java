@@ -54,7 +54,7 @@ public class ShoppingCartController {
      */
     @PostMapping("/shopping-cart/edit/{function}/{ISBN}")
     public String editShoppingCart(@PathVariable("function") String function,
-                                   @PathVariable("ISBN") int ISBN,
+                                   @PathVariable("ISBN") long ISBN,
                                    Model model, HttpSession session) {
 
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
