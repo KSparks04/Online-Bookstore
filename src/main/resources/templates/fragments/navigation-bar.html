@@ -17,9 +17,11 @@
     </div>
 
     <div class="d-flex flex-row">
-        <a class="btn btn-primary my-2 my-sm-0 mx-2" th:href="@{/login}" th:unless="${session.currentUser != null}">Login</a>
+        <a class="btn btn-primary d-flex align-items-center justify-content-center my-2 my-sm-0 mx-2"
+            th:href="@{/login}"
+            th:unless="${session.currentUser != null}">Login</a>
 
-        <div class="dropdown my-2 my-sm-0 mx-2" th:if="${session.currentUser != null}">
+        <div class="dropdown my-2 my-sm-0 mx-2 d-flex align-items-center justify-content-center" th:if="${session.currentUser != null}">
             <a class="dropdown-toggle btn btn-secondary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"
                th:text="'Hello, '+${session.currentUser.username}"></a>
             <ul class="dropdown-menu">
