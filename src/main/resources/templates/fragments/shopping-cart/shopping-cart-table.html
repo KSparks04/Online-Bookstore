@@ -14,7 +14,9 @@
         <tbody>
         <tr th:each="book: ${shoppingCart.bookList}">
             <td th:text="${book.ISBN}"></td>
-            <td class="text-wrap"  th:text="${book.title}"></td>
+            <td>
+                <a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
+            </td>
             <td th:text="'$' + ${book.price}"></td>
             <td>
                 <div class="shopping-cart-remove-book" th:data-isbn="${book.ISBN}" >
