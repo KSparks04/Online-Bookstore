@@ -1,0 +1,21 @@
+#description-wrap{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 3.6em;
+
+}
+.purchase-btn{
+    background-color: #c2a6d5;
+    border-color: #d5a6d3;
+    width: 50px;
+}
+.purchase-btn .hover-icon{
+    display: none;
+}
+.purchase-btn:hover{
+    background-color: #e0e6e0;
+}
+.purchase-btn:active {
+    background-color: #d5a6d3;
+}

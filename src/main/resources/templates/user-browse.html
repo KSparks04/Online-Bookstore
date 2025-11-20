@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Browse for Your Next Read ' + ${book.title}">Book Details</title>
+    <link th:href="@{/css/browse.css}" rel="stylesheet">
+</head>
+<body>
+<div th:insert="~{fragments/navigation-bar}"></div>
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/get-book-list}">Book List</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Book</li>
+            </ol>
+        </nav>
+        <div class="container">
+            <div class ="row">
+                <div class="col-md-4 md-4" th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="w-50 p-4">
+                                <img class="mx-auto" style="display:block; width:80%" th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}">
+                            </div>
+                            <p><strong><a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a></strong></p>
+                            <p id ="description-wrap"><span th:text="${book.description}"></span></p>
+                            <p><strong>Price: </strong><span th:text="${book.price}"></span></p>
+                            <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                                <button th:class="${book.inventory == 0} ? 'purchase-btn p-0 w-100 btn btn-danger' : 'purchase-btn  p-0 w-100 btn btn-warning'" type="submit"
+                                        th:disabled="${book.inventory == 0}"
+                                        onclick="toggleCart(this)"
+                                >
+                                <i class="bi bi-cart-plus" th:if="${book.inventory > 0}"></i>
+                                    <i class="bi bi-cart-plus-fill hover-icon"></i>
+                                <i class="bi bi-cart-x" th:if="${book.inventory == 0}"></i>
+
+
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script th:src="@{/js/userBrowse.js}"></script>
+<script th:src="@{/js/purchase-button.js}"></script>
+</html>
