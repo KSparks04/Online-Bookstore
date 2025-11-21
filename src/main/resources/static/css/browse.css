@@ -6,16 +6,35 @@
 
 }
 .purchase-btn{
-    background-color: #c2a6d5;
-    border-color: #d5a6d3;
+    background-color: #b248ff;
+    border-color: #b248ff;
+    color: white;
     width: 50px;
+    align-content: center;
+
 }
 .purchase-btn .hover-icon{
     display: none;
 }
-.purchase-btn:hover{
-    background-color: #e0e6e0;
+.purchase-btn:not(.clicked):hover .hover-icon{
+    display: inline;
+    color: white;
 }
+.purchase-btn:hover i.bi-cart-plus{
+    display: none;
+}
+
+
 .purchase-btn:active {
-    background-color: #d5a6d3;
+    background-color: #b248ff;
+    color: white;
+}
+.purchase-button{
+    width: 100%;
+}
+#purchase-price{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
 }

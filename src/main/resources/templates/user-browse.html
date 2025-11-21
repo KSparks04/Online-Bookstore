@@ -29,19 +29,25 @@
                             </div>
                             <p><strong><a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a></strong></p>
                             <p id ="description-wrap"><span th:text="${book.description}"></span></p>
-                            <p><strong>Price: </strong><span th:text="${book.price}"></span></p>
-                            <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                                <button th:class="${book.inventory == 0} ? 'purchase-btn p-0 w-100 btn btn-danger' : 'purchase-btn  p-0 w-100 btn btn-warning'" type="submit"
-                                        th:disabled="${book.inventory == 0}"
-                                        onclick="toggleCart(this)"
-                                >
-                                <i class="bi bi-cart-plus" th:if="${book.inventory > 0}"></i>
-                                    <i class="bi bi-cart-plus-fill hover-icon"></i>
-                                <i class="bi bi-cart-x" th:if="${book.inventory == 0}"></i>
+                            <div id="purchase-price">
+                                <div>
+                                    <p><strong>Price: </strong><span th:text="${book.price}"></span></p>
+                                </div>
+                                <div>
+                                    <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                                        <button th:class="${book.inventory == 0} ? 'purchase-btn px-3 py-2 w-100 btn btn-danger' : 'purchase-btn  px-3 py-2 w-100 btn btn-warning'" type="submit"
+                                                th:disabled="${book.inventory == 0}"
+                                                onclick="toggleCart(this)">
+                                            <i class="bi bi-cart-plus main-icon" th:if="${book.inventory > 0}"></i>
+                                            <i class="bi bi-cart-plus-fill hover-icon" ></i>
+
+                                            <i class="bi bi-cart-x" th:if="${book.inventory == 0}"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
 
 
-                                </button>
-                            </form>
                         </div>
                     </div>
 
