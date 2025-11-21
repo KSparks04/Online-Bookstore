@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 
+import java.util.Map;
+
 @Controller
 public class ShoppingCartController {
 
@@ -120,18 +122,44 @@ public class ShoppingCartController {
      */
     @PostMapping("/shopping-cart/checkout-success")
     public String checkoutSuccess(Model model, HttpSession session) {
+
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         User currentUser = (User) session.getAttribute("currentUser");
 
-        // Save each purchased book
-        for (Book book : cart.getBookList()) {
-            purchaseRepository.save(new Purchase(currentUser, book));
+        if (cart == null || cart.getBookList().isEmpty()) {
+            model.addAttribute("error", "Your shopping cart is empty.");
+            return "fragments/shopping-cart/shopping-cart-body";
         }
 
-        // Clear cart after purchase
-        cart.getBookList().clear();
+        // Get book quantities (ISBN → count)
+        Map<Long, Integer> quantities = cart.getBookCounts();
+
+        for (Map.Entry<Long, Integer> entry : quantities.entrySet()) {
+
+            int isbn = Math.toIntExact(entry.getKey());
+            int qty = entry.getValue();
+
+            Book book = bookRepository.findByISBN(isbn);
+            if (book == null) continue;
+
+            // Update inventory
+            int newInventory = book.getInventory() - qty;
+            if (newInventory < 0) newInventory = 0;
+
+            book.setInventory(newInventory);
+            bookRepository.save(book);
+
+            // Save purchase entries
+            for (int i = 0; i < qty; i++) {
+                purchaseRepository.save(new Purchase(currentUser, book));
+            }
+        }
+
+        // Clear cart
+        cart.clearBooks();
         session.setAttribute("shoppingCart", cart);
 
+        model.addAttribute("success", "Purchase completed successfully!");
         return "purchase-success";
     }
 
