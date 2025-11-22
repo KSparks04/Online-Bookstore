@@ -19,6 +19,8 @@ import java.util.*;
         private String author;
         @NotBlank(message = "Publisher is required")
         private String publisher;
+
+        @Column(length = 2000)
         @NotBlank(message = "Description is required")
         private String description;
         @Min(value = 0, message = "Inventory must be equal to or greater than 0")

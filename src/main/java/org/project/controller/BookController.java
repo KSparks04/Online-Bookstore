@@ -81,6 +81,40 @@ public class BookController {
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book-list";
     }
+    @GetMapping("/get-browse-view")
+    public String getBrowseList(
+            @RequestParam(required = false, defaultValue = "") String function,
+            @RequestParam(required = false) String variable,
+            Model model, HttpSession session) {
+
+        Iterable<Book> bookList = null;
+
+        switch (function) {
+            case "search":
+                model.addAttribute("searchQuery", variable);
+                bookList = bookRepo.findByAllColumns(variable);
+                break;
+
+            case "refresh":
+                bookList = bookRepo.findAll();
+                model.addAttribute("bookList", bookList);
+                model.addAttribute("book", new Book());
+                model.addAttribute("genres", genres());
+                model.addAttribute("series",seriesRepo.findAll());
+                return "fragments/book-table";
+
+            default:
+                bookList = bookRepo.findAll();
+                break;
+        }
+
+        model.addAttribute("bookList", bookList);
+        model.addAttribute("book", new Book());
+        model.addAttribute("genres", genres());
+        model.addAttribute("series",seriesRepo.findAll());
+        ShoppingCartController.addShoppingCartAttributes(model, session);
+        return "user-browse";
+    }
     //Potentially shrink getBookList
     /**@GetMapping("/book-table")
     public String getBookTable(Model model){
