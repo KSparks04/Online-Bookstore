@@ -6,10 +6,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Browse for Your Next Read ' + ${book.title}">Book Details</title>
+    <title>Browse Books</title>
     <link th:href="@{/css/browse.css}" rel="stylesheet">
 </head>
 <body>
+
 <div th:insert="~{fragments/navigation-bar}"></div>
     <div>
         <nav aria-label="breadcrumb">
@@ -19,6 +20,7 @@
                 <li class="breadcrumb-item active" aria-current="page">Book</li>
             </ol>
         </nav>
+        <h2>Browse for Your Next Read</h2>
         <div class="container">
             <div class ="row">
                 <div class="col-md-4 md-4" th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}">
