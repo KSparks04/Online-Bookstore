@@ -117,6 +117,17 @@ public class ShoppingCartController {
         return "checkout";
     }
 
+    @GetMapping("/shopping-cart/checkout-table")
+    public String getCheckoutBody(Model model, HttpSession session){
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+
+        addShoppingCartAttributes(model, session);
+
+        model.addAttribute("total", cart.getTotalPrice());
+
+        return "fragments/checkout-table";
+    }
+
     /**
      * Checkout endpoint – processes the purchase and saves to history
      */
