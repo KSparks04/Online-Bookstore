@@ -230,8 +230,6 @@ public class BookController {
         byte[] imageBytes = book.getPictureFile();
         HttpHeaders headers = new HttpHeaders();
         if(imageBytes == null){
-            String currentPath = System.getProperty("user.dir");
-            System.out.println("The current working directory is: " + currentPath);
             File imageFile = new File("src/main/resources/static/images/default_image.jpg");
             Path imagePath = imageFile.toPath();
             try {
