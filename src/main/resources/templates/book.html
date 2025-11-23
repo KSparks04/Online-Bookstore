@@ -59,7 +59,8 @@
                     <br>
                     <p><strong>ISBN:</strong> <span th:text="${book.ISBN}"></span></p>
                     <p><strong>Page Count: <span th:text="${book.pageCount}"></span></strong></p>
-                    <p><strong>Description:</strong> <span th:text="${book.description}"></span></p>
+                    <p><strong>Description: </strong> <span th:text="${book.description}"></span></p>
+                    <p><strong>Cover Type: </strong><span th:text="${book.bookType}"></span></p>
                 </div>
                 <div>
                     <div class="review-button" th:data-isbn="${book.ISBN}" th:replace="~{fragments/review}"></div>
