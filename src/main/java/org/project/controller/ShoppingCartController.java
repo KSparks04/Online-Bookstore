@@ -198,9 +198,7 @@ public class ShoppingCartController {
             bookRepository.save(book);
 
             // Save purchase entries
-            for (int i = 0; i < qty; i++) {
-                purchaseRepository.save(new Purchase(currentUser, book));
-            }
+            purchaseRepository.save(new Purchase(currentUser, book, qty));
         }
 
         // Clear cart
