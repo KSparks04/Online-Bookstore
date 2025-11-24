@@ -170,6 +170,7 @@ import java.util.*;
             if (price <= 10) return "cheap";
             if (price <= 20) return "mid";
             return "premium";
+        }
         @Override
         public int hashCode() {
             return Long.hashCode(ISBN);

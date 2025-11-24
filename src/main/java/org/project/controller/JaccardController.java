@@ -10,7 +10,6 @@ import org.project.model.JaccardEntry;
 import org.project.repository.BookRepository;
 import org.project.repository.JaccardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -43,7 +42,7 @@ public class JaccardController {
     public void addBook(@PathVariable("ISBN")int ISBN){
         Book refBook = bookRepository.findByISBN(ISBN);
         if(refBook == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        List<JaccardEntry> calculatedEntries = calculateEntries(refBook);
+        calculateEntries(refBook);
     }
 
 
@@ -57,7 +56,7 @@ public class JaccardController {
         for(Book other: otherBooks){
             Set<String> otherTags = other.getTagSet();
             double similarity = jaccard(refTags, otherTags);
-            results.add(new JaccardEntry(referenceBook.getISBN(), other.getISBN(), other.getTitle(),similarity));
+            results.add(new JaccardEntry(referenceBook.getISBN(), other.getISBN(), other.getTitle(), similarity));
         }
         jaccardRepository.saveAll(results);
         return results;

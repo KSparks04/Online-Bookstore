@@ -10,10 +10,10 @@ public class JaccardEntry {
     private Long id;
 
     @Column(nullable = false)
-    private int referenceBookISBN;
+    private long referenceBookISBN;
 
     @Column(nullable = false)
-    private int similarBookISBN;
+    private long similarBookISBN;
 
     @Column(nullable=false)
     private String similarBookTitle;
@@ -23,7 +23,7 @@ public class JaccardEntry {
 
     protected JaccardEntry() {}
 
-    public JaccardEntry(int referenceBookISBN, int similarBookISBN, String similarBookTitle, double similarityScore) {
+    public JaccardEntry(long referenceBookISBN, long similarBookISBN, String similarBookTitle, double similarityScore) {
         this.referenceBookISBN = referenceBookISBN;
         this.similarBookISBN = similarBookISBN;
         this.similarBookTitle = similarBookTitle;
@@ -31,8 +31,8 @@ public class JaccardEntry {
     }
 
     public Long getId() { return id; }
-    public int getReferenceBookIsbn() { return referenceBookISBN; }
-    public int getSimilarBookIsbn() { return similarBookISBN; }
+    public long getReferenceBookIsbn() { return referenceBookISBN; }
+    public long getSimilarBookIsbn() { return similarBookISBN; }
     public double getSimilarityScore() { return similarityScore; }
     public String getSimilarBookTitle(){return similarBookTitle;}
 }
