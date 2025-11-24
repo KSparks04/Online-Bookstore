@@ -35,9 +35,9 @@ public class HomeController {
         Series series2 = new Series("Divergent");
         Series series3 = new Series("James Bond");
 
-        seriesRepository.save(series1);
-        seriesRepository.save(series2);
-        seriesRepository.save(series3);
+        if(seriesRepository.findBySeriesName(series1.getSeriesName()) == null) seriesRepository.save(series1);
+        if(seriesRepository.findBySeriesName(series2.getSeriesName()) == null) seriesRepository.save(series2);
+        if(seriesRepository.findBySeriesName(series3.getSeriesName()) == null) seriesRepository.save(series3);
     }
 
     @GetMapping("/")

@@ -12,13 +12,15 @@ import java.util.*;
 
         @Id
         @Min(value = 1, message = "ISBN must be a non-negative number")
-        private int ISBN;
+        private long ISBN;
         @NotBlank(message = "Title is required")
         private String title;
         @NotBlank(message = "Author is required")
         private String author;
         @NotBlank(message = "Publisher is required")
         private String publisher;
+
+        @Column(length = 2000)
         @NotBlank(message = "Description is required")
         private String description;
         @Min(value = 0, message = "Inventory must be equal to or greater than 0")
@@ -44,7 +46,7 @@ import java.util.*;
             populateRatings();
         }
 
-        public Book(int ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
+        public Book(long ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
 
             this.ISBN = ISBN;
             this.title = title;
@@ -58,8 +60,8 @@ import java.util.*;
 
         }
 
-        public int getISBN() {return  ISBN;}
-        public void setISBN(int ISBN) {this.ISBN = ISBN;}
+        public long getISBN() {return  ISBN;}
+        public void setISBN(long ISBN) {this.ISBN = ISBN;}
 
         public String getTitle() {return title;}
         public void setTitle(String title) {this.title = title;}
@@ -168,5 +170,8 @@ import java.util.*;
             if (price <= 10) return "cheap";
             if (price <= 20) return "mid";
             return "premium";
+        @Override
+        public int hashCode() {
+            return Long.hashCode(ISBN);
         }
     }
