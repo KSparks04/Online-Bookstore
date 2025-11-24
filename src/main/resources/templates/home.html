@@ -5,7 +5,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <head>
-    <title>Online Bookstore</title>
+    <title>Not Just Any Bookstore</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
@@ -17,15 +17,19 @@
             <div style="width:10%"></div>
             <div class="w-100 d-flex flex-column justify-content-center m-5 p-5">
 
-                <h1 th:text="|Online Bookstore|" />
+                <h1 th:text="|Not Just Any Bookstore|" />
 
-                <p>Welcome to the Online Bookstore</p>
+                <p>Welcome to the Not Just Any Bookstore</p>
 
                 <br>
                 <br>
 
                 <div>
-                    <a class="btn btn-primary " th:href="@{/get-book-list}" th:text="|Browse Books|"/>
+                    <a class="btn btn-primary " th:href="@{/get-book-list}" th:text="|Owner View|"/>
+                </div>
+                <div style="width:10%"></div>
+                <div>
+                    <a class="btn btn-primary " th:href="@{/get-browse-view}" th:text="|Browse Books|"/>
                 </div>
             </div>
             <div style="width:10%"></div>

@@ -10,6 +10,7 @@
     </td>
 </tr>
 <tr class="align-middle" th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}" >
+
     <td th:text="${book.ISBN}"></td>
     <td>
         <a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>

@@ -56,7 +56,7 @@ public class ShoppingCartController {
      */
     @PostMapping("/shopping-cart/edit/{function}/{ISBN}")
     public String editShoppingCart(@PathVariable("function") String function,
-                                   @PathVariable("ISBN") int ISBN,
+                                   @PathVariable("ISBN") long ISBN,
                                    Model model, HttpSession session) {
 
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
@@ -179,8 +179,32 @@ public class ShoppingCartController {
         
         }
 
-        // Clear cart after purchase
-        cart.getBookList().clear();
+        // Get book quantities (ISBN → count)
+        Map<Long, Integer> quantities = cart.getBookCounts();
+
+        for (Map.Entry<Long, Integer> entry : quantities.entrySet()) {
+
+            int isbn = Math.toIntExact(entry.getKey());
+            int qty = entry.getValue();
+
+            Book book = bookRepository.findByISBN(isbn);
+            if (book == null) continue;
+
+            // Update inventory
+            int newInventory = book.getInventory() - qty;
+            if (newInventory < 0) newInventory = 0;
+
+            book.setInventory(newInventory);
+            bookRepository.save(book);
+
+            // Save purchase entries
+            for (int i = 0; i < qty; i++) {
+                purchaseRepository.save(new Purchase(currentUser, book));
+            }
+        }
+
+        // Clear cart
+        cart.clearBooks();
         session.setAttribute("shoppingCart", cart);
 
         response.put("success", true);

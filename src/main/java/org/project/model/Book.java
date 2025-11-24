@@ -19,6 +19,8 @@ import java.util.*;
         private String author;
         @NotBlank(message = "Publisher is required")
         private String publisher;
+
+        @Column(length = 2000)
         @NotBlank(message = "Description is required")
         private String description;
         @Min(value = 0, message = "Inventory must be equal to or greater than 0")
@@ -108,5 +110,9 @@ import java.util.*;
             Book book = (Book) o;
             return this.ISBN == book.ISBN && Objects.equals(this.title, book.title) && Objects.equals(this.author, book.author)
                     && Objects.equals(this.publisher, book.publisher) && this.price == book.price;
+        }
+        @Override
+        public int hashCode() {
+            return Long.hashCode(ISBN);
         }
     }

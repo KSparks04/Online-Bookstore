@@ -1,4 +1,12 @@
+let shoppingCartModal;
+
 $(document).ready(function () {
+    const modalEl = document.getElementById('shopping-cart-modal');
+    shoppingCartModal = new bootstrap.Modal(modalEl);
+
+    $("#open-shopping-cart").click(function() {
+        shoppingCartModal.show();
+    });
     getCartCount();
     $("#shopping-cart-modal").hide()
 

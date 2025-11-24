@@ -72,9 +72,11 @@ public class ShoppingCart {
     public Map<Long, Integer> getBookCounts() {
         HashMap<Long, Integer> counts = new HashMap<>();
         for (Book book : bookList) {
-            counts.put(book.getISBN(), counts.getOrDefault(book.getISBN(), 0) + 1);
+            long isbn = book.getISBN();
+            counts.put(isbn, counts.getOrDefault(isbn, 0) + 1);
         }
         return counts;
     }
+
 
 }

@@ -1,0 +1,40 @@
+#description-wrap{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 3.6em;
+
+}
+.purchase-btn{
+    background-color: #b248ff;
+    border-color: #b248ff;
+    color: white;
+    width: 50px;
+    align-content: center;
+
+}
+.purchase-btn .hover-icon{
+    display: none;
+}
+.purchase-btn:not(.clicked):hover .hover-icon{
+    display: inline;
+    color: white;
+}
+.purchase-btn:hover i.bi-cart-plus{
+    display: none;
+}
+
+
+.purchase-btn:active {
+    background-color: #b248ff;
+    color: white;
+}
+.purchase-button{
+    width: 100%;
+}
+#purchase-price{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
