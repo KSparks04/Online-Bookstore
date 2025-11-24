@@ -31,9 +31,7 @@
 
                 <h4>Total: $<span th:text="${#numbers.formatDecimal(total, 1, 2)}"></span></h4>
 
-                <form action="/shopping-cart/checkout-success" method="post">
-                    <button type="submit" class="btn btn-success btn-lg">Confirm Purchase</button>
-                </form>
+                <button id="attempt-purchase" class="btn btn-success btn-lg">Confirm Purchase</button>
 
             </div>
 
@@ -43,4 +41,5 @@
         </div>
     </div>
 </body>
+<script th:src="@{/js/checkout.js}"></script>
 </html>

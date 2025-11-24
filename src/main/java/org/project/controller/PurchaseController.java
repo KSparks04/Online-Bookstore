@@ -27,4 +27,9 @@ public class PurchaseController {
         model.addAttribute("purchases", purchaseRepository.findByUser(currentUser));
         return "purchase-history";
     }
+
+    @GetMapping("/purchase-success")
+    public String getPurchaseSuccess(){
+        return "purchase-success";
+    }
 }
