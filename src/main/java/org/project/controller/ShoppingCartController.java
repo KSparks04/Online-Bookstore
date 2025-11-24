@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 
-import java.util.Map;
 
 @Controller
 public class ShoppingCartController {

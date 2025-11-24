@@ -23,4 +23,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "OR LOWER(b.description) LIKE %:str% " +
             "OR CONCAT('', b.ISBN) LIKE %:str%")
     public Iterable<Book> findByAllColumns(@Param("str") String str);
+
+    public List<Book> findByISBNNot(long isbn);
 }

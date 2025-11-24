@@ -1,6 +1,5 @@
 package org.project.model;
 
-import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

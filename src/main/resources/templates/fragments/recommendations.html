@@ -1,0 +1,10 @@
+<div class="container my-4" id="recommendations" th:attr="data-isbn=${book.ISBN}">
+    <h5>Recommended Books</h5>
+    <div class="position-relative">
+        <!-- Scrollable Row -->
+        <div id="bookSlider" class="d-flex overflow-auto" style="scroll-behavior: smooth;">
+            <!-- Dynamic content will be inserted here by JS -->
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/recommendations.js}"></script>
