@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function (event) {
     $(".shopping-cart-remove-book").submit(function () {
         event.preventDefault();
         removeBook(this);
