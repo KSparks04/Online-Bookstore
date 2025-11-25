@@ -8,6 +8,9 @@ import org.project.model.Series;
 import org.project.repository.BookRepository;
 import org.project.repository.SeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -87,10 +90,13 @@ public class BookController {
     @GetMapping("/get-browse-view")
     public String getBrowseList(
             @RequestParam(required = false, defaultValue = "") String function,
-            @RequestParam(required = false) String variable,
+            @RequestParam(required = false) String variable,@RequestParam(defaultValue = "1")int page,
             Model model, HttpSession session) {
 
         Iterable<Book> bookList = null;
+        int pageSize = 12;
+        Pageable pageable = PageRequest.of(page-1,pageSize);
+        Page<Book> bookPage = bookRepo.findAll(pageable);
 
         switch (function) {
             case "search":
@@ -100,7 +106,7 @@ public class BookController {
 
             case "refresh":
                 bookList = bookRepo.findAll();
-                model.addAttribute("bookList", bookList);
+                model.addAttribute("bookList", bookPage.getContent());
                 model.addAttribute("book", new Book());
                 model.addAttribute("genres", genres());
                 model.addAttribute("series",seriesRepo.findAll());
@@ -111,10 +117,12 @@ public class BookController {
                 break;
         }
 
-        model.addAttribute("bookList", bookList);
+        model.addAttribute("bookList", bookPage.getContent());
         model.addAttribute("book", new Book());
         model.addAttribute("genres", genres());
         model.addAttribute("series",seriesRepo.findAll());
+        model.addAttribute("currentPage",page);
+        model.addAttribute("totalPages",bookPage.getTotalPages());
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "user-browse";
     }

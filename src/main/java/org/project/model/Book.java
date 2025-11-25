@@ -35,7 +35,7 @@ import java.util.*;
         @Lob
         private byte[] pictureFile;
 
-        private List<String> genres;
+        private List<String> genres = new ArrayList<>();
         @ManyToOne
         private Series series;
         @OneToMany( cascade = CascadeType.ALL)
@@ -87,6 +87,8 @@ import java.util.*;
 
         public List<String> getGenres() {return genres;}
         public void setGenres(List<String> genres) {this.genres = genres;}
+        public void addGenre(String genre){this.genres.add(genre);}
+
 
         public int getPageCount() {return pageCount;}
         public void setPageCount(int pageCount) {this.pageCount = pageCount;}
