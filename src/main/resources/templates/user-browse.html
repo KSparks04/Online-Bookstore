@@ -23,17 +23,17 @@
         <h2>Browse for Your Next Read</h2>
         <div class="container">
             <div class ="row">
-                <div class="col-md-4 md-4" th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}">
+                <div class="col-md-3 p-3" th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}">
                     <div class="card">
                         <div class="card-body">
-                            <div class="w-50 p-4">
-                                <img class="mx-auto" style="display:block; width:80%" th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}">
+                            <div>
+                                <img class="mx-auto w-100 p-4" style="display:block;" th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}">
                             </div>
                             <p><strong><a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a></strong></p>
                             <p id ="description-wrap"><span th:text="${book.description}"></span></p>
                             <div id="purchase-price">
                                 <div>
-                                    <p><strong>Price: </strong><span th:text="${book.price}"></span></p>
+                                    <p><strong>Price: $<span th:text="${book.price}"></span></strong></p>
                                 </div>
                                 <div>
                                     <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
