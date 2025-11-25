@@ -21,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -229,11 +231,14 @@ public class BookController {
         Book book =bookRepo.findByISBN(ISBN);
         byte[] imageBytes = book.getPictureFile();
         HttpHeaders headers = new HttpHeaders();
-        if(imageBytes == null){
-            File imageFile = new File("src/main/resources/static/images/default_image.jpg");
-            Path imagePath = imageFile.toPath();
-            try {
-                imageBytes = Files.readAllBytes(imagePath);
+        if(imageBytes == null) {
+            try (InputStream is = getClass().getResourceAsStream("/static/images/default_image.jpg")) {
+                if (is == null) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+
+
+                imageBytes = is.readAllBytes();
                 return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
             } catch (IOException e) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -241,6 +246,7 @@ public class BookController {
         }
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+
     }
     @PostMapping("/book/{ISBN}/review")
     public String reviewBook(@PathVariable long ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
