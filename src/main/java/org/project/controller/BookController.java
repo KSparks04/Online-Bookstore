@@ -233,6 +233,7 @@ public class BookController {
             return "error/book-not-found";
         }
 
+        session.setAttribute("redirectAfterRegister", "/book/"+id);
         model.addAttribute("book", book);
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book";
