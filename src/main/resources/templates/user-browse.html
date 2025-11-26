@@ -16,8 +16,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/get-book-list}">Book List</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Book</li>
+                <li class="breadcrumb-item active" aria-current="page">Browse Books</li>
             </ol>
         </nav>
         <h2>Browse for Your Next Read</h2>
@@ -57,7 +56,15 @@
             </div>
 
         </div>
+        <div class="d-flex justify-content-center mt-3 page-browse">
+            <a th:href="@{/get-browse-view(page=${currentPage -1})}"
+               th:if="${currentPage >1}" class="btn btn-outline-primary me-2">Previous</a>
+            <span class="btn btn-outline-secondary disabled">Page <span th:text="${currentPage}"></span> of <span th:text="${totalPages}"></span></span>
+            <a th:href="@{/get-browse-view(page=${currentPage +1})}"
+               th:if="${currentPage <= totalPages}" class="btn btn-outline-primary ms-2">Next</a>
+        </div>
     </div>
+
 </body>
 <script th:src="@{/js/userBrowse.js}"></script>
 <script th:src="@{/js/purchase-button.js}"></script>
