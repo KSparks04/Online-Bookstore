@@ -20,7 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 @Controller
@@ -80,6 +85,40 @@ public class BookController {
         model.addAttribute("series",seriesRepo.findAll());
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book-list";
+    }
+    @GetMapping("/get-browse-view")
+    public String getBrowseList(
+            @RequestParam(required = false, defaultValue = "") String function,
+            @RequestParam(required = false) String variable,
+            Model model, HttpSession session) {
+
+        Iterable<Book> bookList = null;
+
+        switch (function) {
+            case "search":
+                model.addAttribute("searchQuery", variable);
+                bookList = bookRepo.findByAllColumns(variable);
+                break;
+
+            case "refresh":
+                bookList = bookRepo.findAll();
+                model.addAttribute("bookList", bookList);
+                model.addAttribute("book", new Book());
+                model.addAttribute("genres", genres());
+                model.addAttribute("series",seriesRepo.findAll());
+                return "fragments/book-table";
+
+            default:
+                bookList = bookRepo.findAll();
+                break;
+        }
+
+        model.addAttribute("bookList", bookList);
+        model.addAttribute("book", new Book());
+        model.addAttribute("genres", genres());
+        model.addAttribute("series",seriesRepo.findAll());
+        ShoppingCartController.addShoppingCartAttributes(model, session);
+        return "user-browse";
     }
     //Potentially shrink getBookList
     /**@GetMapping("/book-table")
@@ -191,12 +230,23 @@ public class BookController {
     public ResponseEntity<byte[]> getBookImage(@PathVariable long ISBN){
         Book book =bookRepo.findByISBN(ISBN);
         byte[] imageBytes = book.getPictureFile();
-        if(imageBytes == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         HttpHeaders headers = new HttpHeaders();
+        if(imageBytes == null) {
+            try (InputStream is = getClass().getResourceAsStream("/static/images/default_image.jpg")) {
+                if (is == null) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+
+
+                imageBytes = is.readAllBytes();
+                return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+            } catch (IOException e) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+
     }
     @PostMapping("/book/{ISBN}/review")
     public String reviewBook(@PathVariable long ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){

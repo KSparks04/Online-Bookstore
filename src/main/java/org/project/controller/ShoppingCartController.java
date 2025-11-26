@@ -1,5 +1,9 @@
 package org.project.controller;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
+
+import java.util.HashMap;
 import java.util.Collections;
 import java.util.Map;
 
@@ -16,10 +20,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import jakarta.servlet.http.HttpSession;
-
-import java.util.Map;
 
 @Controller
 public class ShoppingCartController {
@@ -65,10 +65,22 @@ public class ShoppingCartController {
         }
 
         Book book = bookRepository.findByISBN(ISBN);
+        for(Book entry: cart.getBookList()){
+            if(entry.getISBN() == book.getISBN()){
+
+            }
+        }
         if (function.equalsIgnoreCase("add")) {
-            cart.addBook(book);
+            if(cart.getBookList().contains(book)) cart.increaseBookInventory(book);
+            else{
+                book.setInventory(1);
+                cart.addBook(book);
+            }
         } else if (function.equalsIgnoreCase("remove")) {
-            cart.removeBook(book);
+            if(cart.getBookList().contains(book)) cart.decreaseBookInventory(book);
+            else{
+                cart.removeBook(book);
+            }
         }
 
         session.setAttribute("shoppingCart", cart);
@@ -131,15 +143,51 @@ public class ShoppingCartController {
     /**
      * Checkout endpoint – processes the purchase and saves to history
      */
-    @PostMapping("/shopping-cart/checkout-success")
-    public String checkoutSuccess(Model model, HttpSession session) {
-
+    @PostMapping("/shopping-cart/attempt-purchase")
+    @Transactional
+    @ResponseBody
+    public Map<String, Object> checkoutSuccess(HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         User currentUser = (User) session.getAttribute("currentUser");
 
+        if (currentUser == null) {
+            response.put("success", false);
+            response.put("message", "You must log in first");
+            return response;
+        }
+
         if (cart == null || cart.getBookList().isEmpty()) {
-            model.addAttribute("error", "Your shopping cart is empty.");
-            return "fragments/shopping-cart/shopping-cart-body";
+            response.put("success", false);
+            response.put("message", "Your cart is empty");
+            return response;
+        }
+
+
+        // Save each purchased book
+        for (Book cartBook : cart.getBookList()) {
+            //pull repo version of book
+            Book repoBook = bookRepository.findByISBN(cartBook.getISBN());
+
+            int quantityPurchased = cartBook.getInventory();
+            //check if book exists
+            if(repoBook == null){
+                response.put("success", false);
+                response.put("message", cartBook.getTitle() + " does not exist in repo");
+                return response;
+            }
+            //check if purchase inventory is larger than actual inventory
+            if(quantityPurchased > repoBook.getInventory()){
+                response.put("success", false);
+                response.put("message", "Cannot order more than whats in stock");
+                return response;
+            }
+            //decrease inventory in book repo by purchase number
+            bookRepository.decreaseInventoryByISBN(cartBook.getISBN(), quantityPurchased);
+            //Save purchase
+            purchaseRepository.save(new Purchase(currentUser, cartBook, quantityPurchased));
+        
         }
 
         // Get book quantities (ISBN → count)
@@ -161,17 +209,16 @@ public class ShoppingCartController {
             bookRepository.save(book);
 
             // Save purchase entries
-            for (int i = 0; i < qty; i++) {
-                purchaseRepository.save(new Purchase(currentUser, book));
-            }
+            purchaseRepository.save(new Purchase(currentUser, book, qty));
         }
 
         // Clear cart
         cart.clearBooks();
         session.setAttribute("shoppingCart", cart);
 
-        model.addAttribute("success", "Purchase completed successfully!");
-        return "purchase-success";
+        response.put("success", true);
+        response.put("message", "Purchase completed successfully");
+        return response;
     }
 
     @GetMapping("/shopping-cart/count")

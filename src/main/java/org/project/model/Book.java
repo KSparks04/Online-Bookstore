@@ -19,6 +19,8 @@ import java.util.*;
         private String author;
         @NotBlank(message = "Publisher is required")
         private String publisher;
+
+        @Column(length = 2000)
         @NotBlank(message = "Description is required")
         private String description;
         @Min(value = 0, message = "Inventory must be equal to or greater than 0")
@@ -29,7 +31,7 @@ import java.util.*;
         @NotNull(message="Page count is required")
         @Min(value = 1, message = "Page count must be equal to or greater than 1")
         private int pageCount;
-        //Eventually picture
+
         @Lob
         private byte[] pictureFile;
 
@@ -38,6 +40,7 @@ import java.util.*;
         private Series series;
         @OneToMany( cascade = CascadeType.ALL)
         private List<Rating> ratings = new ArrayList<>();
+        private String bookType;
 
 
         public  Book() {
@@ -91,6 +94,8 @@ import java.util.*;
         public void setSeries(Series series) {this.series = series;}
         public List<Rating> getRatings() {return ratings;}
         public void setRatings(List<Rating> ratings) {this.ratings = ratings;}
+        public String  getBookType() {return bookType;}
+        public void setBookType(String bookType) {this.bookType = bookType;}
         private void  populateRatings(){
             this.ratings = new ArrayList<>();
             ratings.add(new Rating(Rating.Level.ONE));

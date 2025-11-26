@@ -96,8 +96,9 @@ class ShoppingCartControllerTest {
         cart.addBook(book);
         session.setAttribute("shoppingCart", cart);
 
-        mockMvc.perform(post("/shopping-cart/checkout-success").session(session))
+        mockMvc.perform(post("/shopping-cart/attempt-purchase").session(session))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Thank you for your purchase!")));
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("Purchase completed successfully"));
     }
 }
