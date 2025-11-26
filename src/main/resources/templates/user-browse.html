@@ -20,8 +20,10 @@
                 <li class="breadcrumb-item active" aria-current="page">Book</li>
             </ol>
         </nav>
+
         <h2>Browse for Your Next Read</h2>
         <div class="container">
+            <div id="wishlist-alert"></div>
             <div class ="row">
                 <div class="col-md-3 p-3" th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}">
                     <div class="card">

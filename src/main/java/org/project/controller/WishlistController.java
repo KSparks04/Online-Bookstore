@@ -50,8 +50,9 @@ public class WishlistController {
 
         // If user is not logged in → redirect to register
         if (user == null) {
-            session.setAttribute("redirectAfterRegister", "/get-browse-view");
-            return "redirect:/register";
+            throw new RuntimeException("User must first login");
+//            session.setAttribute("redirectAfterRegister", "/get-browse-view");
+//            return "redirect:/register";
         }
 
         if (function.equalsIgnoreCase("add")) {
