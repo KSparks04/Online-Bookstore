@@ -19,7 +19,7 @@
                 <a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
             </td>
             <td th:text="'$' + ${book.price}"></td>
-            <td th:text="${book.getInventory()}"></td>
+            <td th:text="${shoppingCart.getBookCountByISBN(book.ISBN)}"></td>
             <td>
                 <div class="shopping-cart-remove-book" th:data-isbn="${book.ISBN}" >
                     <form th:action="@{/shopping-cart/edit/remove/{ISBN}(ISBN=${book.ISBN})}" method="post">
