@@ -42,7 +42,7 @@ public class ShoppingCart {
 
     public void removeBook (Book book) {
         long isbn = book.getISBN();
-        if(this.bookCount.get(isbn) >= 1){
+        if(this.bookCount.containsKey(isbn) && this.bookCount.get(isbn) >= 1){
             this.bookCount.put(isbn, this.bookCount.get(isbn) - 1);
             if(this.bookCount.get(isbn) == 0){
                 this.bookList.remove(book);
