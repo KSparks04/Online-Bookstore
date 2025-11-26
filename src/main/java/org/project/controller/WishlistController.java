@@ -60,19 +60,7 @@ public class WishlistController {
             user.removeBookFromWishlist(book);
         }
 
-        return "redirect:/wishlist";
-    }
-
-    @PostMapping("/wishlist/validate")
-    public String checkOut(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("currentUser");
-
-        // If user is not logged in → redirect to register
-        if (user == null) {
-            session.setAttribute("redirectAfterRegister", "/wishlist");
-            return "redirect:/register";
-        }
-
+        session.setAttribute("currentUser", user);
         return "redirect:/wishlist";
     }
 }

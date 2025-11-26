@@ -1,18 +1,19 @@
-<div th:if="${wishlist.isEmpty()}">
-    <p>No Books in Wishlist</p>
-</div>
-<div th:if="${not wishlist.isEmpty()}">
-    <table class="table table-striped text-center w-100">
-        <thead class="table-secondary">
-        <tr>
-            <th>ISBN</th>
-            <th>Title</th>
-            <th>Price</th>
-            <th>Action</th>
+<table class="table table-striped text-center w-100">
+    <thead class="table-secondary">
+    <tr>
+        <th>ISBN</th>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr th:if="${wishlist.isEmpty()}">
+            <td colspan="100%">
+                <strong><p>No Books in Wishlist</p></strong>
+            </td>
         </tr>
-        </thead>
-        <tbody>
-        <tr th:each="book: ${wishlist}">
+        <tr th:if="${not wishlist.isEmpty()}" th:each="book: ${wishlist}">
             <td class="align-middle"  th:text="${book.ISBN}"></td>
             <td class="align-middle">
                 <a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
@@ -21,16 +22,17 @@
             <td>
                 <div class="wishlist-remove-book p-1" th:data-isbn="${book.ISBN}" >
                     <form th:action="@{/wishlist/edit/remove/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                        <button class="btn btn-outline-danger w-100" type="submit">Remove</button>
+                        <button class="btn btn-danger w-100" type="submit">Remove</button>
                     </form>
                 </div>
-                <div class="wishlist-purchase-book p-1" th:data-isbn="${book.ISBN}" >
-                    <form th:action="@{/shopping-cart/edit/dd/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                        <button class="btn btn-outline-success w-100" type="submit">Add to Cart</button>
+                <div>
+                    <form class="purchase-button p-1" th:data-isbn="${book.ISBN}"  th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                        <button class="btn btn-success w-100" type="submit">Add to Cart</button>
                     </form>
                 </div>
             </td>
         </tr>
-        </tbody>
-    </table>
-</div>
+    </tbody>
+</table>
+<script th:src="@{/js/purchase-button.js}"></script>
+<script th:src="@{/js/wishlist.js}"></script>
