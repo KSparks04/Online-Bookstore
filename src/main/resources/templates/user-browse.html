@@ -12,7 +12,7 @@
 <body>
 
 <div th:insert="~{fragments/navigation-bar}"></div>
-    <div>
+    <div class="m-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -35,7 +35,13 @@
                                 <div>
                                     <p><strong>Price: $<span th:text="${book.price}"></span></strong></p>
                                 </div>
-                                <div>
+                                <div class="d-flex">
+                                    <form class="wishlist-button mx-1" th:data-isbn="${book.ISBN}" th:action="@{/wishlist/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                                        <button class="wishlist-btn  px-3 py-2 w-100 btn btn-primary" type="submit">
+                                            <i class="bi bi-bookmark-check main-icon"></i>
+                                            <i class="bi bi-bookmark-check-fill hover-icon" ></i>
+                                        </button>
+                                    </form>
                                     <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
                                         <button th:class="${book.inventory == 0} ? 'purchase-btn px-3 py-2 w-100 btn btn-danger' : 'purchase-btn  px-3 py-2 w-100 btn btn-warning'" type="submit"
                                                 th:disabled="${book.inventory == 0}"
