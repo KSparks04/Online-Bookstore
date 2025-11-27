@@ -263,23 +263,31 @@ public class BookController {
     @PostMapping("/book/{ISBN}/review")
     public String reviewBook(@PathVariable long ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
         Book book = bookRepo.findByISBN(ISBN);
-        List<Rating> ratings = book.getRatings();
-        Rating rating = null;
+        User user = (User) session.getAttribute("currentUser");
 
-        for(int i = 0; i < ratings.size(); i++){
-            if(reviewLevel == ratings.get(i).getRatingLevel()){
-                rating = ratings.get(i);
-            }
-        }
-        if(rating != null){
-            rating.addReview(review);
-            model.addAttribute("book", book);
-            ShoppingCartController.addShoppingCartAttributes(model, session);
-            return "book";
+        if (book == null || user == null) {
+            return "error/book-not-found";
         }
 
-        return  "error/book-not-found";
+        Rating.Level level = Rating.Level.fromInt(reviewLevel);
 
+        // check if user already reviewed this book
+        Optional<Rating> existing = book.getRatings().stream()
+                .filter(r -> r.getUser().getId() == user.getId())
+                .findFirst();
+
+        if (existing.isPresent()) {
+            existing.get().setRatingLevel(level);
+            existing.get().setReview(review);
+        } else {
+            Rating r = new Rating(book, user, level, review);
+            book.getRatings().add(r);
+        }
+
+        bookRepo.save(book);
+        model.addAttribute("book", book);
+        ShoppingCartController.addShoppingCartAttributes(model, session);
+        return "book";
     }
 
 

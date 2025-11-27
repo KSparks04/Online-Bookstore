@@ -44,7 +44,7 @@ import java.util.*;
 
 
         public  Book() {
-            populateRatings();
+            //populateRatings();
         }
 
         public Book(long ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
@@ -57,7 +57,7 @@ import java.util.*;
             this.inventory = inventory;
             this.price = price;
             this.pageCount = pageCount;
-            populateRatings();
+            //populateRatings();
 
         }
 
@@ -98,16 +98,16 @@ import java.util.*;
         public void setRatings(List<Rating> ratings) {this.ratings = ratings;}
         public String  getBookType() {return bookType;}
         public void setBookType(String bookType) {this.bookType = bookType;}
-        private void  populateRatings(){
-            this.ratings = new ArrayList<>();
-            ratings.add(new Rating(Rating.Level.ONE));
-            ratings.add(new Rating(Rating.Level.TWO));
-            ratings.add(new Rating(Rating.Level.THREE));
-            ratings.add(new Rating(Rating.Level.FOUR));
-            ratings.add(new Rating(Rating.Level.FIVE));
-
-
-        }
+//        private void  populateRatings(){
+//            this.ratings = new ArrayList<>();
+//            ratings.add(new Rating(Rating.Level.ONE));
+//            ratings.add(new Rating(Rating.Level.TWO));
+//            ratings.add(new Rating(Rating.Level.THREE));
+//            ratings.add(new Rating(Rating.Level.FOUR));
+//            ratings.add(new Rating(Rating.Level.FIVE));
+//
+//
+//        }
         @Override
         public boolean equals(Object o){
             if(this == o) return true;
@@ -119,5 +119,18 @@ import java.util.*;
         @Override
         public int hashCode() {
             return Long.hashCode(ISBN);
+        }
+
+        public double averageRating() {
+            if (ratings.isEmpty()) return 0;
+
+            double sum = 0;
+            for (Rating r : ratings) {
+                sum += r.getRatingValue();
+            }
+            return sum / ratings.size();
+        }
+        public double getAverageRating() {
+            return averageRating();
         }
     }

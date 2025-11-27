@@ -32,9 +32,44 @@
 
     </div>
 </div>
+
 <div class="border border-warning border-3 p-3">
     <h2 class="m-0">Reviews</h2>
 
+    <div class="star-rating-readonly-wrapper">
+        <div class="star-rating-readonly" th:with="avg=${book.averageRating}">
+            <!-- empty stars -->
+            <div class="stars-empty">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+            </div>
+            <!-- filled stars -->
+            <div class="stars-filled"
+                 th:style="'width:' + (${avg} / 5.0 * 100) + '%'">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+            </div>
+        </div>
 
-</div>
+        <span class="avg-number" th:text="${book.averageRating}"></span>
+    </div>
+
+    <div th:if="${book.ratings.isEmpty()}">
+        <p>No reviews yet. Be the first to leave one!</p>
+    </div>
+    <div th:each="rating : ${book.ratings}" class="review-item border-bottom py-2">
+        <p>
+            <strong th:text="${rating.user.username}">Username</strong>
+            <span th:text="' - ' + ${rating.ratingValue} + '/5'"></span>
+        </p>
+        <p th:text="${rating.review}">Review text</p>
+
+    </div>
+
 <script th:src="@{/js/star-rating.js}"></script>
