@@ -50,9 +50,6 @@ public class Rating {
 
     private String review;
 
-    //private ArrayList<String> reviews = new ArrayList<>();
-    //private long ratingNumber = 0;
-
     public  Rating() {}
 
     public Rating(Book book, User user, Level ratingLevel,  String review) {
@@ -86,15 +83,5 @@ public class Rating {
     public void setUser(User user) {
         this.user = user;
     }
-//    public ArrayList<String> reviews(){
-//        return reviews;
-//    }
-//    public void addReview(String review){
-//        reviews.add(review);
-//        ratingNumber++;
-//    }
-//    public long getRatingNumber(){
-//        return ratingNumber;
-//    }
 }
 
