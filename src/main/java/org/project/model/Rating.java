@@ -2,7 +2,6 @@ package org.project.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 @Entity
 public class Rating {
     public enum Level{
