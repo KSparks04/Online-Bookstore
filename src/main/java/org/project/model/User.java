@@ -22,11 +22,22 @@ public class User {
     @OneToMany(mappedBy = "ISBN")
     private List<Book> wishlist;
 
+    @Column(nullable = false)
+    private boolean isOwner;
+
     public User() {}
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.isOwner = false;
+        this.wishlist = new ArrayList<>();
+    }
+
+    public User(String username, String password, boolean isOwner) {
+        this.username = username;
+        this.password = password;
+        this.isOwner = isOwner;
         this.wishlist = new ArrayList<>();
     }
 
@@ -48,6 +59,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setIsOwner(boolean isOwner){
+        this.isOwner = isOwner;
+    }
+
+    public boolean getIsOwner(){
+        return this.isOwner;
     }
 
     public List<Book> getWishlist() {

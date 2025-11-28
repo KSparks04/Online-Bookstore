@@ -56,14 +56,15 @@ class WishlistControllerTest {
     @Transactional
     void editWishlist() throws Exception {
         MockHttpSession session = new MockHttpSession();
+        User user = new User("tester", "password", true);
+        userRepository.save(user);
+        session.setAttribute("currentUser", user);
+
         Book book = new Book(4100, "Sample Title", "Author Name", "Publisher Co", "Sample description", 1, 1.0, 5);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
 
-        User user = new User("buyer", "pass");
-        session.setAttribute("currentUser", user);
-
         this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","4100").param("title","Sample Title").param("author","Author Name")
-                .param("publisher","Publisher Co").param("description","Sample description").param("inventory","1").param("price","1.0").param("pageCount", "5").param("seriesName","Not Divergent")).andExpect(status().is3xxRedirection());
+                .param("publisher","Publisher Co").param("description","Sample description").param("inventory","1").param("price","1.0").param("pageCount", "5").param("seriesName","Not Divergent").session(session)).andExpect(status().is3xxRedirection());
 
         //Test add
         session = (MockHttpSession) this.mockMvc.perform(post("/wishlist/edit/add/4100").session(session)).andDo(print()).andReturn().getRequest().getSession();

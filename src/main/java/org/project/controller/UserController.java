@@ -70,6 +70,7 @@ public class UserController {
     @PostMapping("/register")
     public String register(@RequestParam String username,
                            @RequestParam String password,
+                           @RequestParam(required = false) boolean isOwner,
                            Model model,
                            HttpSession session) {
 
@@ -81,7 +82,7 @@ public class UserController {
         }
 
         // Create new user
-        User user = new User(username, password);
+        User user = new User(username, password, isOwner);
         userRepository.save(user);
         session.setAttribute("currentUser", user);
 
