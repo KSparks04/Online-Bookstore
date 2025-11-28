@@ -1,0 +1,10 @@
+.search{
+    background-color: darkslategrey;
+
+}
+.login{
+    background-color: #a345ff;
+}
+.login:hover{
+    background-color: #5f1fff;
+}
