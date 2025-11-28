@@ -3,7 +3,8 @@ let currentSort = {
     ascending: true
 }
 
-async function sortBy(attribute){
+$(document).on("click", ".sortBy", function() {
+    var attribute = $(this).data("attribute");
     if(currentSort.attribute === attribute){
         currentSort.ascending = !currentSort.ascending;
     }else{
@@ -11,12 +12,16 @@ async function sortBy(attribute){
         currentSort.ascending = true;
     }
 
+    $.ajax({
+        type: "GET",
+        url:`/sortFragment/${attribute}/${currentSort.ascending}`,
+        timeout: 5000,
+        success: function (data){
+            $("#book-table").html(data);
+        }
+    })
 
-    const response = await fetch(`/sortFragment/${attribute}/${currentSort.ascending}`);
-    const html = await response.text();
-    const tbody = document.querySelector("table tbody").innerHTML = html;
-
-}
+});
 
 $(document).ready(function () {
     $("#open-add-book-modal").click(function() {
