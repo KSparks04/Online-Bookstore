@@ -31,15 +31,16 @@ import java.util.*;
         @NotNull(message="Page count is required")
         @Min(value = 1, message = "Page count must be equal to or greater than 1")
         private int pageCount;
-        //Eventually picture
+
         @Lob
         private byte[] pictureFile;
 
-        private List<String> genres;
+        private List<String> genres = new ArrayList<>();
         @ManyToOne
         private Series series;
         @OneToMany( cascade = CascadeType.ALL)
         private List<Rating> ratings = new ArrayList<>();
+        private String bookType;
 
 
         public  Book() {
@@ -86,6 +87,8 @@ import java.util.*;
 
         public List<String> getGenres() {return genres;}
         public void setGenres(List<String> genres) {this.genres = genres;}
+        public void addGenre(String genre){this.genres.add(genre);}
+
 
         public int getPageCount() {return pageCount;}
         public void setPageCount(int pageCount) {this.pageCount = pageCount;}
@@ -93,6 +96,8 @@ import java.util.*;
         public void setSeries(Series series) {this.series = series;}
         public List<Rating> getRatings() {return ratings;}
         public void setRatings(List<Rating> ratings) {this.ratings = ratings;}
+        public String  getBookType() {return bookType;}
+        public void setBookType(String bookType) {this.bookType = bookType;}
         private void  populateRatings(){
             this.ratings = new ArrayList<>();
             ratings.add(new Rating(Rating.Level.ONE));

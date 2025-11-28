@@ -1,5 +1,7 @@
 package org.project.controller;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
 import org.project.model.Series;
@@ -9,6 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 
 @Controller
 public class HomeController {
@@ -23,14 +31,7 @@ public class HomeController {
     private boolean setup = true;
 
     public void setup(){
-        Book book1 = new Book(0000000000001, "Harry Potter and the Sorcerer's Stone", "J.K. Rowling", "BloomsBury", "Description of book 1",5,23.99, 350);
-        Book book2 = new Book(0000000000002, "Title2", "Author2", "Publisher2", "Description of book 2",4,21.99, 200);
-        Book book3 = new Book(0000000000003, "Title3", "Author3", "Publisher3", "Description of book 3",10,22.99, 450);
-
-        bookRepository.save(book1);
-        bookRepository.save(book2);
-        bookRepository.save(book3);
-
+        readCSV();
         Series series1 = new Series("Harry Potter");
         Series series2 = new Series("Divergent");
         Series series3 = new Series("James Bond");
@@ -38,6 +39,58 @@ public class HomeController {
         if(seriesRepository.findBySeriesName(series1.getSeriesName()) == null) seriesRepository.save(series1);
         if(seriesRepository.findBySeriesName(series2.getSeriesName()) == null) seriesRepository.save(series2);
         if(seriesRepository.findBySeriesName(series3.getSeriesName()) == null) seriesRepository.save(series3);
+    }
+    public void readCSV(){
+        String line;
+        String delimit = ",";
+        try(InputStream is = getClass().getResourceAsStream("/static/Database/books.csv")){
+            if(is == null){
+                return;
+            }
+            CSVReader br = new CSVReader(new InputStreamReader(is));
+            String[] lineArr = br.readNext(); //Skip first line
+            while((lineArr = br.readNext()) != null){
+                System.out.println(Arrays.toString(lineArr));
+
+                Book book = new Book();
+                book.setISBN(Long.parseLong(lineArr[0]));
+                book.setTitle(lineArr[1]);
+                book.setAuthor(lineArr[2]);
+                book.setPublisher(lineArr[3]);
+                String[] genre =  lineArr[4].split("/");
+                for(String gen:genre){
+                    book.addGenre(gen);
+                }
+                if(!lineArr[5].isEmpty()){
+                    Series series = seriesRepository.findBySeriesName(lineArr[5]);
+                    if(series != null){
+                        book.setSeries(series);
+                    }else{
+                        Series newSeries = new Series(lineArr[5]);
+                        book.setSeries(newSeries);
+                        seriesRepository.save(newSeries);
+                    }
+                }else{
+                    book.setSeries(null);
+                }
+
+                book.setPrice(Double.parseDouble(lineArr[6]));
+                book.setInventory(Integer.parseInt(lineArr[7]));
+                book.setPageCount(Integer.parseInt(lineArr[8]));
+
+                book.setDescription(lineArr[9]);
+                book.setBookType(lineArr[10]);
+                bookRepository.save(book);
+
+
+            }
+//ISBN	Title	Author	Publisher	Genres	Series	Price	Inventory	Page Count	Description	Cover type
+        }catch (IOException e){
+            return;
+        } catch (CsvValidationException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @GetMapping("/")
