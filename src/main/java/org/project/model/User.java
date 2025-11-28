@@ -16,11 +16,21 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private boolean isOwner;
+
     public User() {}
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.isOwner = false;
+    }
+
+    public User(String username, String password, boolean isOwner) {
+        this.username = username;
+        this.password = password;
+        this.isOwner = isOwner;
     }
 
     public int getId() {
@@ -41,5 +51,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setIsOwner(boolean isOwner){
+        this.isOwner = isOwner;
+    }
+
+    public boolean getIsOwner(){
+        return this.isOwner;
     }
 }

@@ -22,8 +22,11 @@
             th:unless="${session.currentUser != null}">Login</a>
 
         <div class="dropdown my-2 my-sm-0 mx-2 d-flex align-items-center justify-content-center" th:if="${session.currentUser != null}">
-            <a class="dropdown-toggle btn btn-secondary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"
-               th:text="'Hello, '+${session.currentUser.username}"></a>
+            <a class="d-flex dropdown-toggle btn btn-secondary align-items-center justify-content-center" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                <span th:if="${session.currentUser.isOwner}">Hello Owner: &nbsp;</span>
+                <span th:unless="${session.currentUser.isOwner}">Hello Customer: &nbsp;</span>
+                <span th:text="${session.currentUser.username}">&nbsp;</span>
+            </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" th:href="@{/purchase-history}">Purchase History</a></li>
                 <li><hr class="dropdown-divider"></li>

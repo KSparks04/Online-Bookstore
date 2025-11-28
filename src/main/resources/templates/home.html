@@ -24,7 +24,7 @@
                 <br>
                 <br>
 
-                <div>
+                <div th:if="${session.currentUser != null and session.currentUser.isOwner}">
                     <a class="btn btn-primary " th:href="@{/get-book-list}" th:text="|Owner View|"/>
                 </div>
                 <div style="width:10%"></div>

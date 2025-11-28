@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
 import org.project.model.Rating;
 import org.project.model.Series;
+import org.project.model.User;
 import org.project.repository.BookRepository;
 import org.project.repository.SeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,11 @@ public class BookController {
             @RequestParam(required = false, defaultValue = "") String function,
             @RequestParam(required = false) String variable,
             Model model, HttpSession session) {
+
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            return "redirect:/";
+        }
 
         Iterable<Book> bookList = null;
 
@@ -140,7 +146,12 @@ public class BookController {
     }
 
     @PostMapping("/add-book")
-    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
+    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
@@ -177,13 +188,22 @@ public class BookController {
     }
 
     @PostMapping("/delete-book/{ISBN}")
-    public String deleteBook(@PathVariable long ISBN){
+    public String deleteBook(@PathVariable long ISBN, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
         bookRepo.deleteById(ISBN);
         return "redirect:/get-book-list";
     }
 
     @GetMapping("/edit-book/{ISBN}")
-    public String editBook(@PathVariable long ISBN, Model model){
+    public String editBook(@PathVariable long ISBN, Model model, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+
         Book book = bookRepo.findByISBN(ISBN);
         model.addAttribute("series", seriesRepo.findAll());
         model.addAttribute("book", book);
@@ -192,7 +212,12 @@ public class BookController {
     }
 
     @PostMapping("/update-book")
-    public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
+    public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();

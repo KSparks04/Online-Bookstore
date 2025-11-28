@@ -3,8 +3,10 @@ package org.project.controller;
 import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
 import org.project.model.Series;
+import org.project.model.User;
 import org.project.repository.BookRepository;
 import org.project.repository.SeriesRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ public class HomeController {
     private BookRepository bookRepository;
     @Autowired
     private SeriesRepository seriesRepository;
+    @Autowired
+    private UserRepository userRepository;
 
 
     //TODO temp probably wanna have a DB with persistence
@@ -44,6 +48,9 @@ public class HomeController {
         if(seriesRepository.findBySeriesName(series1.getSeriesName()) == null) seriesRepository.save(series1);
         if(seriesRepository.findBySeriesName(series2.getSeriesName()) == null) seriesRepository.save(series2);
         if(seriesRepository.findBySeriesName(series3.getSeriesName()) == null) seriesRepository.save(series3);
+
+        User admin = new User("admin", "admin", true);
+        userRepository.save(admin);
     }
 
     @GetMapping("/")
