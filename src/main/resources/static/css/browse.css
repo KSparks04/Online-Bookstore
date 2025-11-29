@@ -62,3 +62,12 @@
     padding: 15px 20px;
 
 }
+.pagenumber{
+    padding: 15px;
+    align-content: center;
+}
+.pages{
+    align-content: center;
+    text-align: center;
+
+}

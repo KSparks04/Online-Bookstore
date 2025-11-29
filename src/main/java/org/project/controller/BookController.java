@@ -108,9 +108,17 @@ public class BookController {
 
         switch (function) {
             case "search":
+                variable = variable.toLowerCase();
                 model.addAttribute("searchQuery", variable);
-                bookList = bookRepo.findByAllColumns(variable);
-                break;
+                Page<Book> searchPage = bookRepo.findByAllColumns(variable,pageable);
+                model.addAttribute("bookList", searchPage.getContent());
+                model.addAttribute("currentPage", page);
+                model.addAttribute("totalPages", searchPage.getTotalPages());
+                ShoppingCartController.addShoppingCartAttributes(model, session);
+                model.addAttribute("genres", genres());
+                model.addAttribute("series",seriesRepo.findAll());
+
+                return "user-browse";
 
             case "refresh":
                 bookList = bookRepo.findAll();

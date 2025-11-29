@@ -4,6 +4,17 @@
 }
 .home{
     text-align: center;
-    background-color: rgba(211, 211, 211, 0.75);
-
+    background-color: #d0afff;
+    color: #4e3e33;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.title{
+    background-color: #F7C5CC; /* warm cream */
+    color: #4e3e33;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    height: fit-content;
 }

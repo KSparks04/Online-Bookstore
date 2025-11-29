@@ -10,6 +10,9 @@ import org.project.repository.BookRepository;
 import org.project.repository.SeriesRepository;
 import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,29 +37,30 @@ public class HomeController {
     //TODO temp probably wanna have a DB with persistence
     private boolean setup = true;
 
-    public void setup(){
+    public void setup() {
         readCSV();
         Series series1 = new Series("Harry Potter");
         Series series2 = new Series("Divergent");
         Series series3 = new Series("James Bond");
 
-        if(seriesRepository.findBySeriesName(series1.getSeriesName()) == null) seriesRepository.save(series1);
-        if(seriesRepository.findBySeriesName(series2.getSeriesName()) == null) seriesRepository.save(series2);
-        if(seriesRepository.findBySeriesName(series3.getSeriesName()) == null) seriesRepository.save(series3);
+        if (seriesRepository.findBySeriesName(series1.getSeriesName()) == null) seriesRepository.save(series1);
+        if (seriesRepository.findBySeriesName(series2.getSeriesName()) == null) seriesRepository.save(series2);
+        if (seriesRepository.findBySeriesName(series3.getSeriesName()) == null) seriesRepository.save(series3);
 
         User admin = new User("admin", "admin", true);
         userRepository.save(admin);
     }
-    public void readCSV(){
+
+    public void readCSV() {
         String line;
         String delimit = ",";
-        try(InputStream is = getClass().getResourceAsStream("/static/Database/books.csv")){
-            if(is == null){
+        try (InputStream is = getClass().getResourceAsStream("/static/Database/books.csv")) {
+            if (is == null) {
                 return;
             }
             CSVReader br = new CSVReader(new InputStreamReader(is));
             String[] lineArr = br.readNext(); //Skip first line
-            while((lineArr = br.readNext()) != null){
+            while ((lineArr = br.readNext()) != null) {
                 System.out.println(Arrays.toString(lineArr));
 
                 Book book = new Book();
@@ -64,20 +68,20 @@ public class HomeController {
                 book.setTitle(lineArr[1]);
                 book.setAuthor(lineArr[2]);
                 book.setPublisher(lineArr[3]);
-                String[] genre =  lineArr[4].split("/");
-                for(String gen:genre){
+                String[] genre = lineArr[4].split("/");
+                for (String gen : genre) {
                     book.addGenre(gen);
                 }
-                if(!lineArr[5].isEmpty()){
+                if (!lineArr[5].isEmpty()) {
                     Series series = seriesRepository.findBySeriesName(lineArr[5]);
-                    if(series != null){
+                    if (series != null) {
                         book.setSeries(series);
-                    }else{
+                    } else {
                         Series newSeries = new Series(lineArr[5]);
                         book.setSeries(newSeries);
                         seriesRepository.save(newSeries);
                     }
-                }else{
+                } else {
                     book.setSeries(null);
                 }
 
@@ -87,12 +91,34 @@ public class HomeController {
 
                 book.setDescription(lineArr[9]);
                 book.setBookType(lineArr[10]);
+                byte[] imageBytes = null;
+                String filepath;
+                if(lineArr[11].isEmpty()){
+                    filepath = "default_image.jpg";
+                }else{
+                    filepath = lineArr[11];
+                }
+                try (InputStream imageIn = getClass().getResourceAsStream("/static/images/book-covers/" + filepath)) {
+                    if (imageIn != null) {
+                        imageBytes = imageIn.readAllBytes();
+                        book.setPictureFile(imageBytes);
+
+                    }
+
+
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
                 bookRepository.save(book);
 
 
             }
 //ISBN	Title	Author	Publisher	Genres	Series	Price	Inventory	Page Count	Description	Cover type
-        }catch (IOException e){
+        } catch (IOException e) {
             return;
         } catch (CsvValidationException e) {
             throw new RuntimeException(e);
@@ -102,7 +128,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
-        if (setup){
+        if (setup) {
             setup = false;
             setup();
         }

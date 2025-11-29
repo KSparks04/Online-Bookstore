@@ -1,6 +1,8 @@
 package org.project.repository;
 
 import org.project.model.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +28,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "OR LOWER(b.description) LIKE %:str% " +
             "OR CONCAT('', b.ISBN) LIKE %:str%")
     public Iterable<Book> findByAllColumns(@Param("str") String str);
+    @Query("SELECT b FROM Book b " +
+            "WHERE LOWER(b.title) LIKE %:keyword% " +
+            "OR LOWER(b.author) LIKE %:keyword% " +
+            "OR LOWER(b.publisher) LIKE %:keyword% " +
+            "OR LOWER(b.description) LIKE %:keyword% " +
+            "OR CONCAT('', b.ISBN) LIKE %:keyword%")
+    public Page<Book> findByAllColumns(@Param("keyword") String keyword, Pageable pageable);
 
     @Modifying
     @Transactional

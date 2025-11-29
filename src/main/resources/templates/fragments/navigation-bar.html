@@ -7,7 +7,12 @@
 
     <div class="d-flex flex-grow-1 mx-5">
         <!-- Book Search Bar -->
-        <form class="d-flex flex-grow-1 my-2 my-lg-0 mx-2" th:action="@{/get-book-list}" method="get">
+        <form th:if="${session.currentUser == null or !session.currentUser.isOwner}" class="d-flex flex-grow-1 my-2 my-lg-0 mx-2" th:action="@{/get-browse-view(function ='search', variable=${searchQuery},page=${i})}" method="get">
+            <input hidden name="function" value="search">
+            <input class="form-control mr-sm-2 flex-grow-1 mx-2" type="search" placeholder="Search for a book" aria-label="Search" name="variable">
+            <button class="btn btn-outline-success my-2 my-sm-0 search" type="submit">Search</button>
+        </form>
+        <form th:if="${session.currentUser != null and session.currentUser.isOwner}" class="d-flex flex-grow-1 my-2 my-lg-0 mx-2" th:action="@{/get-book-list}" method="get">
             <input hidden name="function" value="search">
             <input class="form-control mr-sm-2 flex-grow-1 mx-2" type="search" placeholder="Search for a book" aria-label="Search" name="variable">
             <button class="btn btn-outline-success my-2 my-sm-0 search" type="submit">Search</button>

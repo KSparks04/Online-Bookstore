@@ -28,7 +28,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div>
-                                <img class="mx-auto w-100 p-4" style="display:block;" th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}">
+                                <a th:href="@{'/book/' + ${book.ISBN}}">
+                                    <img class="mx-auto w-100 p-4" style="display:block;" th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}">
+                                </a>
+
                             </div>
                             <p><strong><a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a></strong></p>
                             <p id ="description-wrap"><span th:text="${book.description}"></span></p>
@@ -64,13 +67,35 @@
             </div>
 
         </div>
-        <div class="d-flex justify-content-center mt-3 page-browse">
-            <a th:href="@{/get-browse-view(page=${currentPage -1})}"
-               th:if="${currentPage >1}" class="btn btn-outline-primary me-2">Previous</a>
-            <span class="btn btn-outline-secondary disabled">Page <span th:text="${currentPage}"></span> of <span th:text="${totalPages}"></span></span>
-            <a th:href="@{/get-browse-view(page=${currentPage +1})}"
-               th:if="${currentPage <= totalPages}" class="btn btn-outline-primary ms-2">Next</a>
+        <div clas="pages">
+            <div class="d-flex justify-content-center mt-3 page-browse">
+                <a th:href="@{/get-browse-view(page=${currentPage -1})}"
+                   th:classappend="${currentPage == 1}? 'disabled'" class="btn btn-outline-primary me-2">
+                    Previous
+                </a>
+                <div>
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                    <a th:href="@{/get-browse-view(page=${i})}" th:text="${i}" th:class="'btn btn-outline-primary mx-1' + (${currentPage == i} ? 'active':'')">
+
+                    </a>
+                </span>
+                </div>
+                <a th:href="@{/get-browse-view(page=${currentPage +1})}"
+                   th:classappend="${currentPage == totalPages}? 'disabled'"  class="btn btn-outline-primary ms-2">Next</a>
+            </div>
+            <div class="pagenumber text-center mt-2">
+            <span class="btn btn-outline-secondary disabled">Page
+                <span th:text="${currentPage}">
+
+            </span> of
+                <span th:text="${totalPages}">
+
+            </span>
+            </span>
+            </div>
         </div>
+
+
     </div>
 
 </body>
