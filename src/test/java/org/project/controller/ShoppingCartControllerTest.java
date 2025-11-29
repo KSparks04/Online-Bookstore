@@ -1,5 +1,6 @@
 package org.project.controller;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.project.model.Book;
 import org.project.model.ShoppingCart;
@@ -55,16 +56,21 @@ class ShoppingCartControllerTest {
      * @throws Exception
      */
     @Test
+    @Transactional
     void editShoppingCart() throws Exception {
-        MockHttpSession session = null;
+        MockHttpSession session = new MockHttpSession();
+        User user = new User("tester", "password", true);
+        userRepository.save(user);
+        session.setAttribute("currentUser", user);
+
         Book book = new Book(4000, "Sample Title", "Author Name", "Publisher Co", "Sample description", 1, 1.0, 5);
         MockMultipartFile file = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
 
         this.mockMvc.perform(multipart("/add-book").file(file).param("ISBN","4000").param("title","Sample Title").param("author","Author Name")
-                .param("publisher","Publisher Co").param("description","Sample description").param("inventory","1").param("price","1.0").param("pageCount", "5").param("seriesName","Not Divergent")).andExpect(status().is3xxRedirection());
+                .param("publisher","Publisher Co").param("description","Sample description").param("inventory","1").param("price","1.0").param("pageCount", "5").param("seriesName","Not Divergent").session(session)).andExpect(status().is3xxRedirection());
 
         //Test add
-        session = (MockHttpSession) this.mockMvc.perform(post("/shopping-cart/edit/add/4000")).andDo(print()).andReturn().getRequest().getSession();
+        session = (MockHttpSession) this.mockMvc.perform(post("/shopping-cart/edit/add/4000").session(session)).andDo(print()).andReturn().getRequest().getSession();
         session = (MockHttpSession) this.mockMvc.perform(get("/shopping-cart").session(session)).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Sample Title"))).andReturn().getRequest().getSession();
         //Test remove

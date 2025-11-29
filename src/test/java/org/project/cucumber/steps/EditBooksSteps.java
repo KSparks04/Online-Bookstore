@@ -3,11 +3,15 @@ package org.project.cucumber.steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import jakarta.transaction.Transactional;
 import org.project.model.Book;
 import org.project.model.Series;
+import org.project.model.User;
 import org.project.repository.BookRepository;
 import org.project.repository.SeriesRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.Assert.assertEquals;
@@ -18,7 +22,9 @@ public class EditBooksSteps {
     @Autowired
     private BookRepository bookRepository;
     @Autowired
-    private SeriesRepository seriesRepository;
+    private SeriesRepository seriesRepository;;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private MockMvc mockMvc;
     private Book testBook;
@@ -39,8 +45,14 @@ public class EditBooksSteps {
         testBook.setTitle(string);
     }
     @When("I save the book")
+    @Transactional
     public void i_save_the_book() throws Exception {
         MockMultipartFile imageFile = new MockMultipartFile("pictureUpload", "file.jpeg", "image/jpeg", "Hello World".getBytes());
+
+        MockHttpSession session = new MockHttpSession();
+        User user = new User("tester", "password", true);
+        userRepository.save(user);
+        session.setAttribute("currentUser", user);
 
         this.mockMvc.perform(multipart("/update-book").file(imageFile)
                         .param("ISBN", String.valueOf(testBook.getISBN()))
@@ -51,8 +63,10 @@ public class EditBooksSteps {
                         .param("inventory", String.valueOf(testBook.getInventory()))
                         .param("price", String.valueOf(testBook.getPrice()))
                         .param("pageCount", String.valueOf(testBook.getPageCount()))
-                        .param("seriesName", testBook.getSeries().getSeriesName()))
+                        .param("seriesName", testBook.getSeries().getSeriesName()).session(session))
                 .andExpect(status().is3xxRedirection());
+
+        userRepository.removeByIsOwner(true);
     }
     @Then("the book title should be updated to {string}")
     public void the_book_title_should_be_updated_to(String string) {

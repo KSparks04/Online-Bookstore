@@ -1,69 +1,66 @@
-ISBN,Title,Author,Publisher,Genres,Series,Price,Inventory,Page Count,Description,Cover type
-9780141040349,Pride and Prejudice,Jane Austen,Penguin Classics,Romance / Fiction,,12.99,15,432,"Classic Regency romance and social satire.",Paperback
-9780439023528,The Hunger Games,Suzanne Collins,Scholastic Press,YA / Dystopian / Action,The Hunger Games,16.99,20,374,"Teen survival competition, political uprising.",Paperback
-9780441172719,Dune,Frank Herbert,Ace,Science Fiction / Fantasy,Dune,19.99,10,688,"Planetary epic about politics, spice, and prophecy.",Paperback
-9780060853983,Good Omens,Neil Gaiman & Terry Pratchett,HarperCollins,Comedy / Fantasy,,17.99,9,416,"An angel and a demon team up to avert Armageddon.",Paperback
-9781439143321,The Bourne Identity,Robert Ludlum,Grand Central,Action / Thriller,Jason Bourne ,15.99,7,624,"Amnesiac spy thrust into international conspiracy.",Paperback
-9781501142970,It,Stephen King,Scribner,Horror,,24.99,6,1184,"Small town faces a shape-changing evil.",Hardcover
-9780590353427,Harry Potter and the Sorcerer's Stone,J.K. Rowling,Scholastic,Fantasy / YA,Harry Potter ,14.99,25,320,"Boy wizard discovers Hogwarts and his destiny.",Paperback
-9780307588371,Gone Girl,Gillian Flynn,Crown,Mystery / Thriller,,18.99,11,415,"Twisty domestic thriller with unreliable narrators.",Paperback
-9780451524935,1984,George Orwell,Signet Classic,Dystopian,,13.99,14,328,"Totalitarian surveillance state and rebellion.",Paperback
-9780143038858,The Guns of August,Barbara W. Tuchman,Random House,History,,24.99,5,511,"Narrative history of the opening month of WWI.",Paperback
-9780241950423,Normal People,Sally Rooney,Penguin,Fiction / Romance,,16.50,10,288,"Intimate portrait of two people over years of relationship.",Paperback
-9780525536291,Educated,Tara Westover,Random House,Non-Fiction / Memoir,,21.99,9,352,"Memoir of growing up isolated and pursuing education.",Paperback
-9780385603532,Me Before You,Jojo Moyes,Penguin,Romance / Contemporary,,15.99,8,369,"Unlikely relationship changes both lives profoundly.",Paperback
-9780142424179,The Fault in Our Stars,John Green,Dutton Books,YA / Romance,,14.99,13,313,"Teen romance with humor and poignancy amid illness.",Paperback
-9780441569595,Neuromancer,William Gibson,Ace,Science Fiction / Cyberpunk,Sprawl Trilogy ,16.99,6,271,"Hackers, AI, and cyberspace noir.",Paperback
-9780345391803,The Hitchhiker's Guide to the Galaxy,Douglas Adams,Del Rey,Comedy / Science Fiction,Hitchhiker's Guide ,14.99,12,224,"Absurd, comedic intergalactic road-trip.",Paperback
-9780307949486,The Girl with the Dragon Tattoo,Stieg Larsson,Knopf,Mystery / Thriller / Action,Millennium,18.99,9,465,"Investigative thriller with dark secrets and hackers.",Paperback
-9780307743657,The Shining,Stephen King,Anchor,Horror,,17.99,7,447,"Isolated hotel drives a man toward madness.",Paperback
-9780756404741,The Name of the Wind,Patrick Rothfuss,DAW,Fantasy,The Kingkiller Chronicle ,22.99,6,662,"Magical coming-of-age tale told by a legendary figure.",Paperback
-9780451528018,The Hound of the Baskervilles,Arthur Conan Doyle,Barnes & Noble Classics,Mystery / Detective,Sherlock Holmes,11.99,10,256,"Classic Holmes mystery on a moor with legend.",Paperback
-9780060850524,Brave New World,Aldous Huxley,Harper Perennial,Dystopian / Fiction,,14.99,8,311,"Satirical vision of a controlled, engineered society.",Paperback
-9781501139154,Team of Rivals,Doris Kearns Goodwin,Simon & Schuster,History / Biography,,28.99,4,944,"Lincoln's leadership and cabinet politics.",Hardcover
-9780553418026,The Martian,Andy Weir,Crown,Science Fiction / Action,,17.99,11,369,"Stranded astronaut uses science to survive on Mars.",Paperback
-9780307474278,The Da Vinci Code,Dan Brown,Anchor,Mystery / Thriller / Action, ,16.99,13,489,"Symbology, religious conspiracy, and chase across Europe.",Paperback
-9780385490818,The Handmaid's Tale,Margaret Atwood,Anchor,Dystopian / Fiction,,15.99,9,311,"Oppressive theocratic state and one woman's resistance.",Paperback
-9780765344326,Mistborn: The Final Empire,Brandon Sanderson,Tor,Fantasy,Mistborn ,18.99,8,672,"Magic system of metals in a world of oppression.",Paperback
-9780143127796,Frankenstein,Mary Shelley,Penguin Classics,Horror / Classic,,10.99,12,280,"Gothic novel about creation, responsibility and monstrosity.",Paperback
-9780735219106,Where the Crawdads Sing,Delia Owens,Penguin,Fiction / Mystery,,18.99,14,384,"Coming-of-age and murder mystery set in marshlands.",Paperback
-9780061120084,To Kill a Mockingbird,Harper Lee,Harper Perennial,Fiction/ Mystery/History,,15.99,120,281,"A timeless story of a lawyer defending a Black man accused of a crime in the American South.",Paperback
-9780385732551,Dune,Frank Herbert,Ace Books,Science Fiction/Fantasy,Dune ,22.99,60,412,"A futuristic tale of political intrigue, ecology, and human evolution on a desert planet.",Hardcover
-9780316015844,Twilight,Stephenie Meyer,Little Brown Books for Young Readers,YA/Romance/Fantasy,Twilight Saga ,10.99,200,544,"A teenage girl falls in love with a mysterious vampire in a small town.",Paperback
-9780307949486,Bossypants,Tina Fey,Little Brown and Company,Comedy/ Non-Fiction,,16.00,45,278,"A humorous memoir by the acclaimed comedian, writer, and actress.",Hardcover
-9780345391803,The Fellowship of the Ring,J.R.R. Tolkien,Del Rey,Fantasy/Action,The Lord of the Rings,19.99,70,479,"A young hobbit inherits a powerful, evil ring and must begin an epic quest to destroy it.",Paperback
-9780316556345,The Vanishing Half,Brit Bennett,Riverhead Books,Fiction,,17.00,90,352,"The story of twin sisters, one of whom secretly passes as white, and how their lives diverge.",Paperback
-9780316499835,The Love Hypothesis,Ali Hazelwood,Berkley,Romance/ Fiction,,16.00,180,356,"A Ph.D. student fakes a relationship with a cold professor, leading to unexpected feelings.",Paperback
-9780062677114,One of Us Is Lying,Karen M. McManus,Delacorte Press,YA/Mystery,One of Us Is Lying ,10.99,140,360,"Five students walk into detention, but only four walk out alive.",Paperback
-9780743477103,Slaughterhouse-Five,Kurt Vonnegut,Dial Press,Science Fiction/Comedy,,16.50,65,275,"A satirical, non-linear story about the bombing of Dresden and the nature of time.",Paperback
-9781401308302,Into Thin Air,Jon Krakauer,Anchor,Non-Fiction/ Action,,16.95,55,368,"A firsthand account of the disastrous 1996 climbing season on Mount Everest.",Paperback
-9780441013597,Foundation,Isaac Asimov,Spectra,Science Fiction,Foundation,15.00,70,255,"A mathematician develops a science to predict the collapse of a galactic empire.",Paperback
-9780399589300,Norse Mythology,Neil Gaiman,W. W. Norton & Company,Fantasy/ History,,16.95,60,304,"A retelling of the principal Norse myths, focusing on the major gods and their tales.",Hardcover
-9780735222380,Mexican Gothic,Silvia Moreno-Garcia,Del Rey,Horror/ Mystery,,17.00,55,352,"A young socialite travels to a remote mansion in the Mexican countryside to check on her cousin.",Paperback
-9780345806611,Ready Player One,Ernest Cline,Ballantine Books,Science Fiction/ Action,Ready Player One,18.00,70,384,"In a dystopian future, a young man seeks a hidden Easter egg in a vast virtual reality world.",Paperback
-9780062456481,Hillbilly Elegy,J.D. Vance,Harper,Non-Fiction/History,,16.99,40,272,"A memoir about the social and economic problems of the white working class in Appalachia.",Paperback
-9780446611417,The Last Man Standing ,Vince Flynn,Pocket Books,Action/ Fiction,,14.99,35,400,"A high-stakes political thriller involving a deadly threat to the US government.",Paperback
-9780062457716,The Hate U Give,Angie Thomas,Balzer + Bray,YA/Fiction/Action,,11.99,135,447,"A high school student witnesses the fatal shooting of her childhood best friend by a police officer.",Hardcover
-9780525620803,"Red, White & Royal Blue",Casey McQuiston,St. Martin's Griffin,Romance/Comedy/YA,,16.99,160,421,"The First Son of the U.S. and a British Prince fall in love after a diplomatic incident.",Paperback
-9780307455826,The Road,Cormac McCarthy,Vintage,Dystopian/Fiction,,14.95,40,287,"A man and his son journey across a post-apocalyptic landscape.",Paperback
-9780545258623,Catching Fire,Suzanne Collins,Scholastic Press,YA/Dystopian/Action,The Hunger Games,12.99,130,391,"Katniss and Peeta must return to the arena for a special anniversary competition.",Paperback
-9780545425124,Mockingjay,Suzanne Collins,Scholastic Press,YA/Dystopian/Action,The Hunger Games,12.99,110,390,"Katniss becomes the symbol of a full-scale rebellion against the Capitol.",Paperback
-9780316160193,New Moon,Stephenie Meyer,Little Brown Books,YA/Romance/Fantasy,Twilight Saga,10.99,170,576,"Bella struggles after Edward leaves her, finding comfort in her friendship with Jacob Black.",Paperback
-9780316016841,Eclipse,Stephenie Meyer,Little Brown Books,YA/Romance/Fantasy,Twilight Saga,10.99,155,629,"A series of mysterious killings leads to the realization of a new danger in Seattle.",Paperback
-9780316067928,Breaking Dawn,Stephenie Meyer,Little Brown Books,YA/Romance/Fantasy,Twilight Saga,10.99,140,756,"Bella and Edward face the consequences of their marriage and the birth of their child.",Paperback
-9780590353427,Harry Potter and the Sorcerer's Stone,J.K. Rowling,Scholastic,Fantasy/YA,	Harry Potter,11.99,250,309,"A young boy discovers he is a wizard and is invited to a magical school.",Paperback
-9780439064866,Harry Potter and the Chamber of Secrets,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,11.99,220,341,"A secret chamber is opened at Hogwarts, unleashing a monster that petrifies students.",Paperback
-9780439136365,Harry Potter and the Prisoner of Azkaban,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,12.99,200,435,"Harry learns a dangerous escaped prisoner, Sirius Black, is hunting him.",Paperback
-9780439139595,Harry Potter and the Goblet of Fire,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,15.99,180,734,"Harry is mysteriously entered into the Triwizard Tournament, a deadly competition.",Hardcover
-9780439358071,Harry Potter and the Order of the Phoenix,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,15.99,160,870,"Harry struggles with his reputation and the return of Lord Voldemort.",Hardcover
-9780439784542,Harry Potter and the Half-Blood Prince,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,14.99,150,652,"Harry delves into Voldemort's past to find the key to his defeat.",Hardcover
-9780545010221,Harry Potter and the Deathly Hallows,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,14.99,145,759,"Final battle against Voldemort and the fate of the wizarding world.",Hardcover
-9780441172959,Dune Messiah,Frank Herbert,Ace Books,Science Fiction/Fantasy,Dune,16.00,45,256,"Paul Atreides, now Emperor, faces a plot to dethrone him.",Paperback
-9780441107296,Children of Dune,Frank Herbert,Ace Books,Science Fiction/ Fantasy,Dune,17.00,35,408,"The struggle for power continues through Paul's children, the twins Ghanima and Leto II.",Paperback
-9780345339713,The Two Towers,J.R.R. Tolkien,Del Rey,Fantasy/Action,The Lord of the Rings,19.99,65,415,"The Fellowship is broken, and the war for Middle-earth escalates.",Paperback
-9780345339737,The Return of the King,J.R.R. Tolkien,Del Rey,Fantasy/Action,The Lord of the Rings,19.99,60,416,"The final battle is fought while Frodo and Sam approach Mount Doom.",Paperback
-9780553293361,Foundation and Empire,Isaac Asimov,Spectra,Science Fiction,Foundation,15.00,55,288,"The Foundation's predicted future is threatened by an unexpected mutant force.",Paperback
-9780553293354,Second Foundation,Isaac Asimov,Spectra,Science Fiction,Foundation,15.00,50,256,"The galaxy searches for the mythical Second Foundation, which guides human destiny.",Paperback
-9780307269784,The Girl Who Played with Fire,Stieg Larsson,Knopf,Mystery/Action,Millennium,18.00,75,503,"Lisbeth Salander is accused of three murders and goes into hiding to clear her name.",Hardcover
-9780307269890,The Girl Who Kicked the Hornet's Nest,Stieg Larsson,Knopf,Mystery/Action,Millennium,18.00,70,563,"Lisbeth is fighting for her life and exposed to the deep corruption of the establishment.",Hardcover
-9780525646872,One of Us Is Next,Karen M. McManus,Delacorte Press,YA/Mystery,One of Us Is Lying,10.99,120,368,"A new game of truth or dare starts at Bayview High a year after the first murder.",Paperback
+ISBN,Title,Author,Publisher,Genres,Series,Price,Inventory,Page Count,Description,Cover type, Book Cover
+9780141040349,Pride and Prejudice,Jane Austen,Penguin Classics,Romance / Fiction,,12.99,15,432,"Classic Regency romance and social satire.",Paperback,"PandP.jpg"
+9780439023528,The Hunger Games,Suzanne Collins,Scholastic Press,YA / Dystopian / Action,The Hunger Games,16.99,20,374,"Teen survival competition, political uprising.",Paperback,"hungergames.jpg"
+9780060853983,Good Omens,Neil Gaiman & Terry Pratchett,HarperCollins,Comedy / Fantasy,,17.99,9,416,"An angel and a demon team up to avert Armageddon.",Paperback,"goodomens.jpg"
+9781439143321,The Bourne Identity,Robert Ludlum,Grand Central,Action / Thriller,Jason Bourne ,15.99,7,624,"Amnesiac spy thrust into international conspiracy.",Paperback,"bourne.jpg"
+9781501142970,It,Stephen King,Scribner,Horror,,24.99,6,1184,"Small town faces a shape-changing evil.",Hardcover,"IT.jpg"
+9780307588371,Gone Girl,Gillian Flynn,Crown,Mystery / Thriller,,18.99,11,415,"Twisty domestic thriller with unreliable narrators.",Paperback,"gonegirl.jpg"
+9780451524935,1984,George Orwell,Signet Classic,Dystopian,,13.99,14,328,"Totalitarian surveillance state and rebellion.",Paperback,"1984.jpg"
+9780143038858,The Guns of August,Barbara W. Tuchman,Random House,History,,24.99,5,511,"Narrative history of the opening month of WWI.",Paperback,"guns.jpg"
+9780241950423,Normal People,Sally Rooney,Penguin,Fiction / Romance,,16.50,10,288,"Intimate portrait of two people over years of relationship.",Paperback,"NormalPeople.jpg"
+9780525536291,Educated,Tara Westover,Random House,Non-Fiction / Memoir,,21.99,9,352,"Memoir of growing up isolated and pursuing education.",Paperback,"educated.jpg"
+9780385603532,Me Before You,Jojo Moyes,Penguin,Romance / Contemporary,,15.99,8,369,"Unlikely relationship changes both lives profoundly.",Paperback,"beforeyou.jpg"
+9780142424179,The Fault in Our Stars,John Green,Dutton Books,YA / Romance,,14.99,13,313,"Teen romance with humor and poignancy amid illness.",Paperback,"TFIOS.jpg"
+9780441569595,Neuromancer,William Gibson,Ace,Science Fiction / Cyberpunk,Sprawl Trilogy ,16.99,6,271,"Hackers, AI, and cyberspace noir.",Paperback,"neuromancer.jpg"
+9780345391803,The Hitchhiker's Guide to the Galaxy,Douglas Adams,Del Rey,Comedy / Science Fiction,Hitchhiker's Guide ,14.99,12,224,"Absurd, comedic intergalactic road-trip.",Paperback,"hitch.jpg"
+9780307949486,The Girl with the Dragon Tattoo,Stieg Larsson,Knopf,Mystery / Thriller / Action,Millennium,18.99,9,465,"Investigative thriller with dark secrets and hackers.",Paperback,"withtattoo.jpg"
+9780307743657,The Shining,Stephen King,Anchor,Horror,,17.99,7,447,"Isolated hotel drives a man toward madness.",Paperback,"shining.jpg"
+9780756404741,The Name of the Wind,Patrick Rothfuss,DAW,Fantasy,The Kingkiller Chronicle ,22.99,6,662,"Magical coming-of-age tale told by a legendary figure.",Paperback,"nameofwind.jpg"
+9780451528018,The Hound of the Baskervilles,Arthur Conan Doyle,Barnes & Noble Classics,Mystery / Detective,Sherlock Holmes,11.99,10,256,"Classic Holmes mystery on a moor with legend.",Paperback,"hound.jpg"
+9780060850524,Brave New World,Aldous Huxley,Harper Perennial,Dystopian / Fiction,,14.99,8,311,"Satirical vision of a controlled, engineered society.",Paperback,"newworld.jpg"
+9781501139154,Team of Rivals,Doris Kearns Goodwin,Simon & Schuster,History / Biography,,28.99,4,944,"Lincoln's leadership and cabinet politics.",Hardcover,"rivals.jpg"
+9780553418026,The Martian,Andy Weir,Crown,Science Fiction / Action,,17.99,11,369,"Stranded astronaut uses science to survive on Mars.",Paperback,"martian.jpg"
+9780307474278,The Da Vinci Code,Dan Brown,Anchor,Mystery / Thriller / Action, ,16.99,13,489,"Symbology, religious conspiracy, and chase across Europe.",Paperback,"vincicode.jpg"
+9780385490818,The Handmaid's Tale,Margaret Atwood,Anchor,Dystopian / Fiction,,15.99,9,311,"Oppressive theocratic state and one woman's resistance.",Paperback,"handmaid.jpg"
+9780765344326,Mistborn: The Final Empire,Brandon Sanderson,Tor,Fantasy,Mistborn ,18.99,8,672,"Magic system of metals in a world of oppression.",Paperback,"finalemp.jpg"
+9780143127796,Frankenstein,Mary Shelley,Penguin Classics,Horror / Classic,,10.99,12,280,"Gothic novel about creation, responsibility and monstrosity.",Paperback,"franken.jpg"
+9780735219106,Where the Crawdads Sing,Delia Owens,Penguin,Fiction / Mystery,,18.99,14,384,"Coming-of-age and murder mystery set in marshlands.",Paperback,"wherecraw.jpg"
+9780061120084,To Kill a Mockingbird,Harper Lee,Harper Perennial,Fiction/ Mystery/History,,15.99,120,281,"A timeless story of a lawyer defending a Black man accused of a crime in the American South.",Paperback,"mockingbird.jpg"
+9780385732551,Dune,Frank Herbert,Ace Books,Science Fiction/Fantasy,Dune ,22.99,60,412,"A futuristic tale of political intrigue, ecology, and human evolution on a desert planet.",Hardcover,"Dune.jpg"
+9780316015844,Twilight,Stephenie Meyer,Little Brown Books for Young Readers,YA/Romance/Fantasy,Twilight Saga ,10.99,200,544,"A teenage girl falls in love with a mysterious vampire in a small town.",Paperback,"twilight.jpg"
+9780307949486,Bossypants,Tina Fey,Little Brown and Company,Comedy/ Non-Fiction,,16.00,45,278,"A humorous memoir by the acclaimed comedian, writer, and actress.",Hardcover,"bossypants.jpg"
+9780345391803,The Fellowship of the Ring,J.R.R. Tolkien,Del Rey,Fantasy/Action,The Lord of the Rings,19.99,70,479,"A young hobbit inherits a powerful, evil ring and must begin an epic quest to destroy it.",Paperback,"theringfellow.jpg"
+9780316556345,The Vanishing Half,Brit Bennett,Riverhead Books,Fiction,,17.00,90,352,"The story of twin sisters, one of whom secretly passes as white, and how their lives diverge.",Paperback,"vanishhalf.jpg"
+9780316499835,The Love Hypothesis,Ali Hazelwood,Berkley,Romance/ Fiction,,16.00,180,356,"A Ph.D. student fakes a relationship with a cold professor, leading to unexpected feelings.",Paperback,"lovehypo.jpg"
+9780062677114,One of Us Is Lying,Karen M. McManus,Delacorte Press,YA/Mystery,One of Us Is Lying ,10.99,140,360,"Five students walk into detention, but only four walk out alive.",Paperback,"onelying.jpg"
+9780743477103,Slaughterhouse-Five,Kurt Vonnegut,Dial Press,Science Fiction/Comedy,,16.50,65,275,"A satirical, non-linear story about the bombing of Dresden and the nature of time.",Paperback,"slaughted.jpg"
+9781401308302,Into Thin Air,Jon Krakauer,Anchor,Non-Fiction/ Action,,16.95,55,368,"A firsthand account of the disastrous 1996 climbing season on Mount Everest.",Paperback,"intothinair.jpg"
+9780441013597,Foundation,Isaac Asimov,Spectra,Science Fiction,Foundation,15.00,70,255,"A mathematician develops a science to predict the collapse of a galactic empire.",Paperback,"foundation.jpg"
+9780399589300,Norse Mythology,Neil Gaiman,W. W. Norton & Company,Fantasy/ History,,16.95,60,304,"A retelling of the principal Norse myths, focusing on the major gods and their tales.",Hardcover,"norse.jpg"
+9780735222380,Mexican Gothic,Silvia Moreno-Garcia,Del Rey,Horror/ Mystery,,17.00,55,352,"A young socialite travels to a remote mansion in the Mexican countryside to check on her cousin.",Paperback,"gothic.jpg"
+9780345806611,Ready Player One,Ernest Cline,Ballantine Books,Science Fiction/ Action,Ready Player One,18.00,70,384,"In a dystopian future, a young man seeks a hidden Easter egg in a vast virtual reality world.",Paperback,"RPO.jpg"
+9780062456481,Hillbilly Elegy,J.D. Vance,Harper,Non-Fiction/History,,16.99,40,272,"A memoir about the social and economic problems of the white working class in Appalachia.",Paperback,"hillbilly.jpg"
+9780062457716,The Hate U Give,Angie Thomas,Balzer + Bray,YA/Fiction/Action,,11.99,135,447,"A high school student witnesses the fatal shooting of her childhood best friend by a police officer.",Hardcover,"THUG.jpg"
+9780525620803,"Red, White & Royal Blue",Casey McQuiston,St. Martin's Griffin,Romance/Comedy/YA,,16.99,160,421,"The First Son of the U.S. and a British Prince fall in love after a diplomatic incident.",Paperback,"RWRB.jpg"
+9780307455826,The Road,Cormac McCarthy,Vintage,Dystopian/Fiction,,14.95,40,287,"A man and his son journey across a post-apocalyptic landscape.",Paperback,"theroad.jpg"
+9780545258623,Catching Fire,Suzanne Collins,Scholastic Press,YA/Dystopian/Action,The Hunger Games,12.99,130,391,"Katniss and Peeta must return to the arena for a special anniversary competition.",Paperback,"catchfire.jpg"
+9780545425124,Mockingjay,Suzanne Collins,Scholastic Press,YA/Dystopian/Action,The Hunger Games,12.99,110,390,"Katniss becomes the symbol of a full-scale rebellion against the Capitol.",Paperback,"mockjay.jpg"
+9780316160193,New Moon,Stephenie Meyer,Little Brown Books,YA/Romance/Fantasy,Twilight Saga,10.99,170,576,"Bella struggles after Edward leaves her, finding comfort in her friendship with Jacob Black.",Paperback,"newmoon.jpg"
+9780316016841,Eclipse,Stephenie Meyer,Little Brown Books,YA/Romance/Fantasy,Twilight Saga,10.99,155,629,"A series of mysterious killings leads to the realization of a new danger in Seattle.",Paperback,"eclipse.jpg"
+9780316067928,Breaking Dawn,Stephenie Meyer,Little Brown Books,YA/Romance/Fantasy,Twilight Saga,10.99,140,756,"Bella and Edward face the consequences of their marriage and the birth of their child.",Paperback,"breakingdawn.jpg"
+9780590353427,Harry Potter and the Philosopher's Stone,J.K. Rowling,Scholastic,Fantasy/YA,	Harry Potter,11.99,250,309,"A young boy discovers he is a wizard and is invited to a magical school.",Paperback,"HPPhilo.jpg"
+9780439064866,Harry Potter and the Chamber of Secrets,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,11.99,220,341,"A secret chamber is opened at Hogwarts, unleashing a monster that petrifies students.",Paperback,"HPChamber.jpg"
+9780439136365,Harry Potter and the Prisoner of Azkaban,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,12.99,200,435,"Harry learns a dangerous escaped prisoner, Sirius Black, is hunting him.",Paperback,"HPPrisonerAzk.jpg"
+9780439139595,Harry Potter and the Goblet of Fire,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,15.99,180,734,"Harry is mysteriously entered into the Triwizard Tournament, a deadly competition.",Hardcover,"HPGoblet.jpg"
+9780439358071,Harry Potter and the Order of the Phoenix,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,15.99,160,870,"Harry struggles with his reputation and the return of Lord Voldemort.",Hardcover,"HPOrder.jpg"
+9780439784542,Harry Potter and the Half-Blood Prince,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,14.99,150,652,"Harry delves into Voldemort's past to find the key to his defeat.",Hardcover,"HPPrince.jpg"
+9780545010221,Harry Potter and the Deathly Hallows,J.K. Rowling,Scholastic,Fantasy/YA,Harry Potter,14.99,145,759,"Final battle against Voldemort and the fate of the wizarding world.",Hardcover,"HPDeathlyHollows.jpg"
+9780441172959,Dune Messiah,Frank Herbert,Ace Books,Science Fiction/Fantasy,Dune,16.00,45,256,"Paul Atreides, now Emperor, faces a plot to dethrone him.",Paperback,"Dmessiah.jpg"
+9780441107296,Children of Dune,Frank Herbert,Ace Books,Science Fiction/ Fantasy,Dune,17.00,35,408,"The struggle for power continues through Paul's children, the twins Ghanima and Leto II.",Paperback,"childofD.jpg"
+9780345339713,The Two Towers,J.R.R. Tolkien,Del Rey,Fantasy/Action,The Lord of the Rings,19.99,65,415,"The Fellowship is broken, and the war for Middle-earth escalates.",Paperback,"twotowers.jpg"
+9780345339737,The Return of the King,J.R.R. Tolkien,Del Rey,Fantasy/Action,The Lord of the Rings,19.99,60,416,"The final battle is fought while Frodo and Sam approach Mount Doom.",Paperback,"returnofking.jpg"
+9780553293361,Foundation and Empire,Isaac Asimov,Spectra,Science Fiction,Foundation,15.00,55,288,"The Foundation's predicted future is threatened by an unexpected mutant force.",Paperback,"fande.jpg"
+9780553293354,Second Foundation,Isaac Asimov,Spectra,Science Fiction,Foundation,15.00,50,256,"The galaxy searches for the mythical Second Foundation, which guides human destiny.",Paperback,"secondF.jpg"
+9780307269784,The Girl Who Played with Fire,Stieg Larsson,Knopf,Mystery/Action,Millennium,18.00,75,503,"Lisbeth Salander is accused of three murders and goes into hiding to clear her name.",Hardcover,"playfire.jpg"
+9780307269890,The Girl Who Kicked the Hornet's Nest,Stieg Larsson,Knopf,Mystery/Action,Millennium,18.00,70,563,"Lisbeth is fighting for her life and exposed to the deep corruption of the establishment.",Hardcover,"kickhornets.jpg"
+9780525646872,One of Us Is Next,Karen M. McManus,Delacorte Press,YA/Mystery,One of Us Is Lying,10.99,120,368,"A new game of truth or dare starts at Bayview High a year after the first murder.",Paperback,"onenext.jpg"

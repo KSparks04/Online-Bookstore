@@ -29,7 +29,7 @@ class HomeControllerTest {
     @Transactional
 	void home() throws Exception {
 		this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk()).
-				andExpect(content().string(containsString("Online Bookstore")));
+				andExpect(content().string(containsString("Not Just Any Bookstore")));
 	}
 
 }

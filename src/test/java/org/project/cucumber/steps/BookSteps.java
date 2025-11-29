@@ -5,7 +5,10 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import jakarta.transaction.Transactional;
+import org.project.model.User;
 import org.project.repository.SeriesRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.Matchers.containsString;
@@ -13,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.project.model.Book;
 import org.project.repository.BookRepository;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -40,6 +44,8 @@ public class BookSteps {
     @Autowired
     private SeriesRepository seriesRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private MockMvc mockMvc;
     MockMultipartHttpServletRequestBuilder builder;
     Map<String, String> data = new HashMap<>();
@@ -50,11 +56,14 @@ public class BookSteps {
         //throw new io.cucumber.java.PendingException();
     }
     @When("I submit a book with:")
+    @Transactional
     public void i_submit_a_book_with(DataTable dataTable) throws  Exception {
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
-
-
+        MockHttpSession session = new MockHttpSession();
+        User user = new User("tester", "password", true);
+        userRepository.save(user);
+        session.setAttribute("currentUser", user);
 
         for (Map<String, String> row : rows) {
             for (Map.Entry<String, String> e : row.entrySet()) {
@@ -81,9 +90,11 @@ public class BookSteps {
                         .param("inventory", data.get("Inventory"))
                         .param("price", data.get("Price"))
                         .param("pageCount", data.get("PageCount"))
-                        .param("seriesName",data.get("Series")))
+                        .param("seriesName",data.get("Series")).session(session))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
+
+        userRepository.removeByIsOwner(true);
         // Write code here that turns the phrase above into concrete actions
         // For automatic transformation, change DataTable to one of
         // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
@@ -113,9 +124,16 @@ public class BookSteps {
         assertEquals(Integer.parseInt(data.get("ISBN")),book.getISBN());
     }
     @Then("I should see it on the Book List")
+    @Transactional
     public void i_should_see_it_on_the_book_list() throws Exception {
+
+        MockHttpSession session = new MockHttpSession();
+        User user = new User("tester", "password", true);
+        userRepository.save(user);
+        session.setAttribute("currentUser", user);
+
         // Write code here that turns the phrase above into concrete actions
-        this.mockMvc.perform(get("/get-book-list?function=search&variable=19393501")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/get-book-list?function=search&variable=19393501").session(session)).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString(data.get("ISBN"))))
                 .andExpect(content().string(containsString(data.get("Title"))))
                 .andExpect(content().string(containsString(data.get("Author"))))
@@ -123,5 +141,7 @@ public class BookSteps {
                 .andExpect(content().string(containsString(data.get("Description"))))
                 .andExpect(content().string(containsString(data.get("Inventory"))))
                 .andExpect(content().string(containsString(data.get("Price"))));
+
+        userRepository.removeByIsOwner(true);
     }
 }
