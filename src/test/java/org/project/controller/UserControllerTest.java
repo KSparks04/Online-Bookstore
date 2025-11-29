@@ -1,5 +1,6 @@
 package org.project.controller;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.project.model.User;
 import org.project.repository.UserRepository;
@@ -29,6 +30,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Transactional
     void loginWithValidCredentialsRedirectsHome() throws Exception {
         userRepository.save(new User("tester", "password"));
 
@@ -40,6 +42,7 @@ class UserControllerTest {
     }
 
     @Test
+    @Transactional
     void loginWithInvalidCredentialsShowsError() throws Exception {
         mockMvc.perform(post("/login")
                         .param("username", "nouser")

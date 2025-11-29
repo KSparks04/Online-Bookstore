@@ -19,6 +19,10 @@
         <input id="password" type="password" class="form-control" th:field="*{password}" required>
     </div>
 
+    <div class="mb-3">
+        <label><input id="isOwner" type="checkbox" class="check" th:field="*{isOwner}"> Is user an owner?</label>
+    </div>
+
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
     <div th:if="${registrationSuccess}" class="alert alert-success" th:text="${registrationSuccess}"></div>
 
