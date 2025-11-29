@@ -71,16 +71,11 @@ public class ShoppingCartController {
             }
         }
         if (function.equalsIgnoreCase("add")) {
-            if(cart.getBookList().contains(book)) cart.increaseBookInventory(book);
-            else{
-                book.setInventory(1);
+            if(book.getInventory() > 0){
                 cart.addBook(book);
             }
         } else if (function.equalsIgnoreCase("remove")) {
-            if(cart.getBookList().contains(book)) cart.decreaseBookInventory(book);
-            else{
-                cart.removeBook(book);
-            }
+            cart.removeBook(book);
         }
 
         session.setAttribute("shoppingCart", cart);
@@ -127,6 +122,17 @@ public class ShoppingCartController {
         model.addAttribute("total", cart.getTotalPrice());
 
         return "checkout";
+    }
+
+    @GetMapping("/shopping-cart/checkout-table")
+    public String getCheckoutBody(Model model, HttpSession session){
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+
+        addShoppingCartAttributes(model, session);
+
+        model.addAttribute("total", cart.getTotalPrice());
+
+        return "fragments/checkout-table";
     }
 
     /**
