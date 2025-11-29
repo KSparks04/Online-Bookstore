@@ -1,26 +1,49 @@
 $(document).on("click", "#attempt-purchase", function() {
-    attempt_purchase();
+    $("#purchaseModal").modal("show");
 });
 
-function attempt_purchase (){
+$(document).on("submit", "#purchaseForm", function(e) {
+    e.preventDefault();
+
+    const firstName = $("#firstNameInput").val();
+    const lastName = $("#lastNameInput").val();
+    const country = $("#countryInput").val();
+    const address = $("#addressInput").val();
+    const city = $("#cityInput").val();
+    const postalCode = $("#postalInput").val();
+    const phone = $("#phoneInput").val();
+    const paymentMethod = $("#paymentMethod").val();
+
     $.ajax({
         type: "POST",
         url: "/shopping-cart/attempt-purchase",
-        timeout: 5000,
+        contentType: "application/json",
+        data: JSON.stringify({
+            firstName: firstName,
+            lastName: lastName,
+            country: country,
+            address: address,
+            city: city,
+            postal: postalCode,
+            phone: phone,
+            paymentMethod: paymentMethod
+        }),
         dataType: "json",
-        success: function(response){
-            if(response.success){
+        timeout: 5000,
+        success: function(response) {
+            if (response.success) {
                 console.log("success");
+                $("#purchaseModal").modal("hide");
                 window.location.href = "/purchase-success";
-            }else{
+            } else {
                 showWarning(response.message);
             }
         },
-        error: function(){
+        error: function() {
             showWarning("Something went wrong. Please try again.");
         }
     });
-}
+})
 
 function showWarning(message){
     let container = $("#warning-container");
