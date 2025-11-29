@@ -1,7 +1,6 @@
 <link  th:href="@{/css/starRating.css}" rel="stylesheet">
 
 <div class="border border-warning border-3 p-3">
-
     <div th:if="${session.currentUser != null }">
         <h2 class="m-0">Leave a Review</h2>
         <div th:fragment = "review">
@@ -28,8 +27,6 @@
         <form th:action = "@{/register}" method="get">
             <button type="submit"  class="btn btn-primary btn-lg btn-reg" >Write a Review</button>
         </form>
-
-
     </div>
 </div>
 
@@ -57,19 +54,47 @@
             </div>
         </div>
 
-        <span class="avg-number" th:text="${book.averageRating}"></span>
+        <span class="avg-number" th:text="${#numbers.formatDecimal(book.averageRating, 1, 2)}"></span>
     </div>
 
     <div th:if="${book.ratings.isEmpty()}">
         <p>No reviews yet. Be the first to leave one!</p>
     </div>
-    <div th:each="rating : ${book.ratings}" class="review-item border-bottom py-2">
-        <p>
-            <strong th:text="${rating.user.username}">Username</strong>
-            <span th:text="' - ' + ${rating.ratingValue} + '/5'"></span>
-        </p>
-        <p th:text="${rating.review}">Review text</p>
 
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <label for="sortReviews" class="form-label me-2">Sort by:</label>
+            <select id="sortReviews" class="form-select d-inline-block w-auto">
+                <option value="mostRecent">Most Recent</option>
+                <option value="oldest">Oldest</option>
+                <option value="highestRating">Highest Rating</option>
+                <option value="lowestRating">Lowest Rating</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="filterRating" class="form-label me-2">Filter by Rating:</label>
+            <select id="filterRating" class="form-select d-inline-block w-auto">
+                <option value="">All</option>
+                <option value="1">1 stars</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+            </select>
+        </div>
     </div>
 
+    <div id="reviewsContainer">
+        <div th:each="rating : ${book.ratings}" class="review-item border-bottom py-2" th:data-rating="${rating.ratingValue}" th:data-date="${rating.timestamp}">
+            <p>
+                <strong th:text="${rating.user.username}">Username</strong>
+                <span th:text="' - ' + ${rating.ratingValue} + '/5'"></span>
+            </p>
+            <p th:text="${rating.review}">Review text</p>
+        </div>
+    </div>
+</div>
+
 <script th:src="@{/js/star-rating.js}"></script>
+<script th:src="@{/js/reviews.js}"></script>

@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -304,7 +305,7 @@ public class BookController {
             existing.get().setRatingLevel(level);
             existing.get().setReview(review);
         } else {
-            Rating r = new Rating(book, user, level, review);
+            Rating r = new Rating(book, user, level, review, LocalDateTime.now());
             book.getRatings().add(r);
         }
 

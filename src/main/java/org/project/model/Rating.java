@@ -2,6 +2,8 @@ package org.project.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Rating {
     public enum Level{
@@ -49,13 +51,16 @@ public class Rating {
 
     private String review;
 
+    private LocalDateTime timestamp;
+
     public  Rating() {}
 
-    public Rating(Book book, User user, Level ratingLevel,  String review) {
+    public Rating(Book book, User user, Level ratingLevel, String review, LocalDateTime timestamp) {
         this.book = book;
         this.user = user;
         this.ratingLevel = ratingLevel;
         this.review = review;
+        this.timestamp = timestamp;
     }
 
     public int getRatingValue() {
@@ -82,5 +87,7 @@ public class Rating {
     public void setUser(User user) {
         this.user = user;
     }
+    public LocalDateTime getTimestamp() {return timestamp;}
+    public void setTimestamp(LocalDateTime timestamp) {this.timestamp = timestamp;}
 }
 
