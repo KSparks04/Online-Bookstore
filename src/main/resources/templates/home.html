@@ -8,6 +8,7 @@
     <title>Not Just Any Bookstore</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link th:href="@{/css/home.css}" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -18,10 +19,18 @@
 
             <div class="w-100 d-flex flex-column justify-content-center m-5 p-5">
 
-                <h1 class="container rounded title " th:text="|Not Just Any Bookstore|"/>
+
                 <div class ="container rounded home">
+                    <h1  th:text="|Not Just Any Bookstore|"/>
                     <h3>Welcome to the Ultimate Book Shopping Experience!</h3>
-                    <p>Find Your Next Read</p>
+                    <p id="blurb">Find Your Next Read</p>
+                    <div class="view-buttons" th:if="${session.currentUser != null and session.currentUser.isOwner}">
+                        <a class="btn btn-primary " th:href="@{/get-book-list}" th:text="|Owner View|"/>
+                    </div>
+                    <div style="width:10%"></div>
+                    <div class="view-buttons">
+                        <a class="btn btn-primary browse" th:href="@{/get-browse-view}" th:text="|Browse Books|"/>
+                    </div>
                 </div>
 
 
@@ -29,13 +38,7 @@
                 <br>
                 <br>
 
-                <div class="view-buttons" th:if="${session.currentUser != null and session.currentUser.isOwner}">
-                    <a class="btn btn-primary " th:href="@{/get-book-list}" th:text="|Owner View|"/>
-                </div>
-                <div style="width:10%"></div>
-                <div class="view-buttons">
-                    <a class="btn btn-primary " th:href="@{/get-browse-view}" th:text="|Browse Books|"/>
-                </div>
+
             </div>
 
             <div class="scroll-container-wrapper">
