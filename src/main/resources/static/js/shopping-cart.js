@@ -38,7 +38,6 @@ function getCartCount(){
         dataType: "json",
         timeout: 5000,
         success: function(data){
-            console.log(data.count);
             updateCartCount(data.count);
         }
     });
