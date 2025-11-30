@@ -155,6 +155,10 @@ public class HomeController {
         } catch (IOException | CsvValidationException e) {
             throw new RuntimeException("Error reading reviews CSV", e);
         }
+        //Planting broken reviews
+        // 9780446611417,ian999,5,"Political thriller with excellent pacing."
+        //9780446611417,julia111,4,"Engaging and suspenseful story."
+
     }
 
     public void readUsersCSV() {
@@ -207,6 +211,7 @@ public class HomeController {
             setup();
             popularBooks = loadReviewWidget();
         }
+        session.setAttribute("redirectAfterRegister", "/");
         model.addAttribute("popularBooks",popularBooks);
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "home";

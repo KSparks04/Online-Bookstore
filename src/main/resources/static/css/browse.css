@@ -71,3 +71,6 @@
     text-align: center;
 
 }
+.bi-cart-x:hover{
+    pointer-events: none;
+}

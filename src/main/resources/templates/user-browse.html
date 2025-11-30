@@ -47,13 +47,18 @@
                                         </button>
                                     </form>
                                     <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                                        <button th:class="${book.inventory == 0} ? 'purchase-btn px-3 py-2 w-100 btn btn-danger' : 'purchase-btn  px-3 py-2 w-100 btn btn-warning'" type="submit"
-                                                th:disabled="${book.inventory == 0}"
+                                        <button th:class="${book.inventory == 0} ? 'purchase-btn px-3 py-2 w-100 btn btn-danger' : 'purchase-btn  px-3 py-2 w-100 btn btn-warning'"  type="submit"
+                                                th:disabled="${book.inventory == 0 or book.deleted}"
                                                 onclick="toggleCart(this)">
-                                            <i class="bi bi-cart-plus main-icon" th:if="${book.inventory > 0}"></i>
-                                            <i class="bi bi-cart-plus-fill hover-icon" ></i>
+                                            <span class="cart-icons" th:if="${book.inventory > 0 and !book.deleted}">
+                                                <i class="bi bi-cart-plus main-icon"  ></i>
+                                            <i class="bi bi-cart-plus-fill hover-icon"  ></i>
+                                            </span>
+                                            <span th:if="${book.inventory == 0 or book.deleted}">
+                                              <i class="bi bi-cart-x"  ></i>
+                                            </span>
 
-                                            <i class="bi bi-cart-x" th:if="${book.inventory == 0}"></i>
+
                                         </button>
                                     </form>
                                 </div>

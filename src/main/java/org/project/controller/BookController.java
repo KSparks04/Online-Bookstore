@@ -2,12 +2,10 @@ package org.project.controller;
 
 
 import jakarta.servlet.http.HttpSession;
-import org.project.model.Book;
-import org.project.model.Rating;
-import org.project.model.Series;
-import org.project.model.User;
+import org.project.model.*;
 import org.project.repository.BookRepository;
 import org.project.repository.SeriesRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +39,8 @@ public class BookController {
     private BookRepository bookRepo;
     @Autowired
     private SeriesRepository seriesRepo;
+    @Autowired
+    private UserRepository userRepo;
     @ModelAttribute("genres")
     public List<String> genres() {
         List<String> genres = new ArrayList<>();
@@ -211,7 +211,21 @@ public class BookController {
         if (user == null || !user.getIsOwner()){
             throw new RuntimeException("Invalid permissions");
         }
-        bookRepo.deleteById(ISBN);
+        Book book =  bookRepo.findByISBN(ISBN);
+        if(!book.isDeleted()){
+            book.setDeleted(true);
+            bookRepo.save(book);
+        }
+        List<User> users = userRepo.findAll();
+
+        for(User u : users){
+            u.removeBookFromWishlist(book);
+        }
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        if(cart != null){
+            cart.removeBook(book);
+        }
+
         return "redirect:/get-book-list";
     }
 
