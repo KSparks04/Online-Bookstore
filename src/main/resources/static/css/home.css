@@ -4,17 +4,82 @@
 }
 .home{
     text-align: center;
-    background-color: #d0afff;
-    color: #4e3e33;
+    background-color: #bf94ff;
+    color: #352923;
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 .title{
-    background-color: #F7C5CC; /* warm cream */
-    color: #4e3e33;
+    background-color: #f8b9c0; /* warm cream */
+    color: #352923;
     border-radius: 12px;
     padding: 15px;
     margin-bottom: 15px;
     font-weight: bold;
     height: fit-content;
+}
+.scroll-container-wrapper{
+    display: flex;
+    padding: 20px 20px;
+    border-radius: 20px;
+    margin: 30px;
+    width: 100%;
+    background-color: #f7f4f8;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgb(251, 236, 238);
+    justify-content: center;
+}
+.book-scroll{
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #ffff;
+    box-shadow: 0 4px 8px rgba(239, 239, 239, 0.1);
+
+
+}
+
+.book-scroll::-webkit-scrollbar-track {
+    background-color: #d5a6d3;
+}
+.book-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #d1d1d1;
+    border: 1px solid #d1d1d1;
+}
+.book-card{
+    width: 180px;
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.scroll-title{
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+    padding-left: 20px;
+}
+.book-card:hover{
+    transform: scale(1.2);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+.book-card img{
+    width: 100%;
+    object-fit: cover;
+}
+.price{
+    font-size: 16px;
+    font-weight: bold;
+
+    margin-top: 5px;
 }

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.*;
 
 @Controller
 public class HomeController {
@@ -62,7 +62,7 @@ public class HomeController {
             CSVReader br = new CSVReader(new InputStreamReader(is));
             String[] lineArr = br.readNext(); //Skip first line
             while ((lineArr = br.readNext()) != null) {
-                System.out.println(Arrays.toString(lineArr));
+                //System.out.println(Arrays.toString(lineArr));
 
                 Book book = new Book();
                 book.setISBN(Long.parseLong(lineArr[0]));
@@ -185,14 +185,31 @@ public class HomeController {
             throw new RuntimeException("Error reading users CSV", e);
         }
     }
-
+    public List<Book> loadReviewWidget(){
+        List<Book> books = bookRepository.findAll();
+        HashMap<Double, Book> bookHashMap = new HashMap<>();
+        for(Book book : books){
+            bookHashMap.put(book.averageRating(), book);
+        }
+        List<Book> popularBooks = new ArrayList<>();
+        for(Map.Entry<Double, Book> entry : bookHashMap.entrySet()){
+            if(entry.getKey() >= 3.5){
+                popularBooks.add(entry.getValue());
+            }
+        }
+        return popularBooks;
+    }
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
+        List<Book> popularBooks = bookRepository.findAll();
         if (setup) {
             setup = false;
             setup();
+            popularBooks = loadReviewWidget();
         }
+        model.addAttribute("popularBooks",popularBooks);
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "home";
     }
+
 }
