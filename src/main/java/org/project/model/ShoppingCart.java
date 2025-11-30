@@ -49,6 +49,14 @@ public class ShoppingCart {
             this.increaseBookInventory(book);
         }
     }
+    public void removeAllInstancesBook(Book book){
+        long isbn = book.getISBN();
+        if(this.bookCount.containsKey(isbn) && this.bookCount.get(isbn) >= 1){
+            this.bookCount.remove(isbn);
+            this.bookList.remove(book);
+            this.increaseBookInventory(book);
+        }
+    }
 
     public double getTotalPrice() {
         double totalPrice = 0;

@@ -2,12 +2,10 @@ package org.project.controller;
 
 
 import jakarta.servlet.http.HttpSession;
-import org.project.model.Book;
-import org.project.model.Rating;
-import org.project.model.Series;
-import org.project.model.User;
+import org.project.model.*;
 import org.project.repository.BookRepository;
 import org.project.repository.SeriesRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -39,6 +39,8 @@ public class BookController {
     private BookRepository bookRepo;
     @Autowired
     private SeriesRepository seriesRepo;
+    @Autowired
+    private UserRepository userRepo;
     @ModelAttribute("genres")
     public List<String> genres() {
         List<String> genres = new ArrayList<>();
@@ -108,9 +110,17 @@ public class BookController {
 
         switch (function) {
             case "search":
+                variable = variable.toLowerCase();
                 model.addAttribute("searchQuery", variable);
-                bookList = bookRepo.findByAllColumns(variable);
-                break;
+                Page<Book> searchPage = bookRepo.findByAllColumns(variable,pageable);
+                model.addAttribute("bookList", searchPage.getContent());
+                model.addAttribute("currentPage", page);
+                model.addAttribute("totalPages", searchPage.getTotalPages());
+                ShoppingCartController.addShoppingCartAttributes(model, session);
+                model.addAttribute("genres", genres());
+                model.addAttribute("series",seriesRepo.findAll());
+
+                return "user-browse";
 
             case "refresh":
                 bookList = bookRepo.findAll();
@@ -150,6 +160,7 @@ public class BookController {
     @GetMapping("/sortFragment/{attribute}/{ascending}")
     public String sortByAttribute(@PathVariable String attribute, @PathVariable Boolean ascending, Model model){
         model.addAttribute("bookList", ascending ? bookRepo.findAll(Sort.by(attribute).ascending()) : bookRepo.findAll(Sort.by(attribute).descending()));
+        model.addAttribute("book", new Book());
         return "fragments/book-table";
     }
 
@@ -201,7 +212,21 @@ public class BookController {
         if (user == null || !user.getIsOwner()){
             throw new RuntimeException("Invalid permissions");
         }
-        bookRepo.deleteById(ISBN);
+        Book book =  bookRepo.findByISBN(ISBN);
+        if(!book.isDeleted()){
+            book.setDeleted(true);
+            bookRepo.save(book);
+        }
+        List<User> users = userRepo.findAll();
+
+        for(User u : users){
+            u.removeBookFromWishlist(book);
+        }
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        if(cart != null){
+            cart.removeBook(book);
+        }
+
         return "redirect:/get-book-list";
     }
 
@@ -255,6 +280,8 @@ public class BookController {
             // Book not found, show a dedicated error page
             return "error/book-not-found";
         }
+
+        session.setAttribute("redirectAfterRegister", "/book/"+id);
         model.addAttribute("book", book);
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book";
@@ -284,21 +311,31 @@ public class BookController {
     @PostMapping("/book/{ISBN}/review")
     public String reviewBook(@PathVariable long ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
         Book book = bookRepo.findByISBN(ISBN);
-        List<Rating> ratings = book.getRatings();
-        Rating rating = null;
-        for(int i = 0; i < ratings.size(); i++){
-            if(reviewLevel == ratings.get(i).getRatingLevel()){
-                rating = ratings.get(i);
-            }
-        }
-        if(rating != null){
-            rating.addReview(review);
-            model.addAttribute("book", book);
-            ShoppingCartController.addShoppingCartAttributes(model, session);
-            return "book";
-        }
-        return  "error/book-not-found";
+        User user = (User) session.getAttribute("currentUser");
 
+        if (book == null || user == null) {
+            return "error/book-not-found";
+        }
+
+        Rating.Level level = Rating.Level.fromInt(reviewLevel);
+
+        // check if user already reviewed this book
+        Optional<Rating> existing = book.getRatings().stream()
+                .filter(r -> r.getUser().getId() == user.getId())
+                .findFirst();
+
+        if (existing.isPresent()) {
+            existing.get().setRatingLevel(level);
+            existing.get().setReview(review);
+        } else {
+            Rating r = new Rating(book, user, level, review, LocalDateTime.now());
+            book.getRatings().add(r);
+        }
+
+        bookRepo.save(book);
+        model.addAttribute("book", book);
+        ShoppingCartController.addShoppingCartAttributes(model, session);
+        return "book";
     }
 
 

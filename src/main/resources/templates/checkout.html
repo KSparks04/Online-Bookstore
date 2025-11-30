@@ -9,11 +9,12 @@
 </head>
 <body>
     <div th:insert="~{fragments/navigation-bar}"></div>
+
     <div class="m-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/static">Home</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/get-book-list}">Book List</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/get-browse-view}">Browse Books</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Checkout</li>
             </ol>
         </nav>
@@ -24,6 +25,7 @@
             <div class="w-50 m-3 d-flex flex-columns align-items-end" th:insert="~{fragments/checkout-table}"></div>
         </div>
     </div>
+
+    <script th:src="@{/js/checkout.js}"></script>
 </body>
-<script th:src="@{/js/checkout.js}"></script>
 </html>
