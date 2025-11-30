@@ -30,7 +30,7 @@ public class JaccardController {
 
     @GetMapping("/similar/{ISBN}")
     @ResponseBody
-    public List<JaccardEntry> getSimilarBooks(@PathVariable("ISBN") int ISBN){
+    public List<JaccardEntry> getSimilarBooks(@PathVariable("ISBN") Long ISBN){
         if(!jaccardRepository.existsByreferenceBookISBN(ISBN)){
             calculateEntries(bookRepository.findByISBN(ISBN));
         }
@@ -39,7 +39,7 @@ public class JaccardController {
 
     @PostMapping("/similar/add/{ISBN}")
     @ResponseBody
-    public void addBook(@PathVariable("ISBN")int ISBN){
+    public void addBook(@PathVariable("ISBN")Long ISBN){
         Book refBook = bookRepository.findByISBN(ISBN);
         if(refBook == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         calculateEntries(refBook);

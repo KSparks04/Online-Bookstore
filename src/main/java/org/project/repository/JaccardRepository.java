@@ -19,8 +19,8 @@ public interface JaccardRepository extends JpaRepository<JaccardEntry, Long> {
         WHERE j.referenceBookISBN = :ISBN
         ORDER BY j.similarityScore DESC
         """)
-    public List<JaccardEntry> findTopSimilarBooks(@Param("ISBN") int ISBN, Pageable pageable);
+    public List<JaccardEntry> findTopSimilarBooks(@Param("ISBN") Long iSBN, Pageable pageable);
 
-    public boolean existsByreferenceBookISBN(int ReferenceBookISBN);
+    public boolean existsByreferenceBookISBN(Long iSBN);
 
 }
