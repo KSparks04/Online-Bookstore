@@ -9,6 +9,7 @@
 </head>
 <body>
     <div th:insert="~{fragments/navigation-bar}"></div>
+
     <div class="m-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -24,6 +25,7 @@
             <div class="w-50 m-3 d-flex flex-columns align-items-end" th:insert="~{fragments/checkout-table}"></div>
         </div>
     </div>
+
+    <script th:src="@{/js/checkout.js}"></script>
 </body>
-<script th:src="@{/js/checkout.js}"></script>
 </html>

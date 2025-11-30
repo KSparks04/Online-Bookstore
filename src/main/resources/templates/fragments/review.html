@@ -1,26 +1,100 @@
 <link  th:href="@{/css/starRating.css}" rel="stylesheet">
 
 <div class="border border-warning border-3 p-3">
-    <h2 class="m-0">Leave a Review</h2>
+    <div th:if="${session.currentUser != null }">
+        <h2 class="m-0">Leave a Review</h2>
+        <div th:fragment = "review">
+            <form class="d-flex flex-column" th:action="@{'/book/' + ${book.ISBN} + '/review'}"  method="post">
+                <div class="star-rating p-0">
+                    <span class="star" data-value = "1">&#9733;</span>
+                    <span class="star" data-value = "2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
+                </div>
 
-    <div th:fragment = "review">
-        <form class="d-flex flex-column" th:action="@{'/book/' + ${book.ISBN} + '/review'}"  method="post">
-            <div class="star-rating p-0">
-                <span class="star" data-value = "1">&#9733;</span>
-                <span class="star" data-value = "2">&#9733;</span>
-                <span class="star" data-value="3">&#9733;</span>
-                <span class="star" data-value="4">&#9733;</span>
-                <span class="star" data-value="5">&#9733;</span>
-            </div>
+                <input type="hidden" id="ratingValue" value="" name="reviewLevel">
+                <textarea class="w-100" id="reviewArea" name="review" placeholder="Write Your Review Here"></textarea>
 
-            <input type="hidden" id="ratingValue" value="" name="reviewLevel">
-            <textarea class="w-100" id="reviewArea" name="review" placeholder="Write Your Review Here"></textarea>
-
-            <div class="py-2">
-                <input class="btn btn-warning" type="submit" value="Submit">
-            </div>
+                <div class="py-2">
+                    <input class="btn btn-warning" type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div th:if="${session.currentUser == null}">
+        <h2 class="m-0">What do you think?</h2>
+        <form th:action = "@{/register}" method="get">
+            <button type="submit"  class="btn btn-primary btn-lg btn-reg" >Write a Review</button>
         </form>
     </div>
 </div>
 
+<div class="border border-warning border-3 p-3">
+    <h2 class="m-0">Reviews</h2>
+
+    <div class="star-rating-readonly-wrapper">
+        <div class="star-rating-readonly" th:with="avg=${book.averageRating}">
+            <!-- empty stars -->
+            <div class="stars-empty">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+            </div>
+            <!-- filled stars -->
+            <div class="stars-filled"
+                 th:style="'width:' + (${avg} / 5.0 * 100) + '%'">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+            </div>
+        </div>
+
+        <span class="avg-number" th:text="${#numbers.formatDecimal(book.averageRating, 1, 2)}"></span>
+    </div>
+
+    <div th:if="${book.ratings.isEmpty()}">
+        <p>No reviews yet. Be the first to leave one!</p>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <label for="sortReviews" class="form-label me-2">Sort by:</label>
+            <select id="sortReviews" class="form-select d-inline-block w-auto">
+                <option value="mostRecent">Most Recent</option>
+                <option value="oldest">Oldest</option>
+                <option value="highestRating">Highest Rating</option>
+                <option value="lowestRating">Lowest Rating</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="filterRating" class="form-label me-2">Filter by Rating:</label>
+            <select id="filterRating" class="form-select d-inline-block w-auto">
+                <option value="">All</option>
+                <option value="1">1 stars</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="reviewsContainer">
+        <div th:each="rating : ${book.ratings}" class="review-item border-bottom py-2" th:data-rating="${rating.ratingValue}" th:data-date="${rating.timestamp}">
+            <p>
+                <strong th:text="${rating.user.username}">Username</strong>
+                <span th:text="' - ' + ${rating.ratingValue} + '/5'"></span>
+            </p>
+            <p th:text="${rating.review}">Review text</p>
+        </div>
+    </div>
+</div>
+
 <script th:src="@{/js/star-rating.js}"></script>
+<script th:src="@{/js/reviews.js}"></script>
