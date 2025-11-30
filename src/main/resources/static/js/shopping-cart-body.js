@@ -1,8 +1,10 @@
-$(document).ready(function (event) {
-    $(".shopping-cart-remove-book").submit(function () {
-        event.preventDefault();
-        removeBook(this);
-    })
+$(document).on("submit", ".shopping-cart-remove-book", function (e) {
+    e.preventDefault();
+
+    if ($(this).data("submitted")) return;
+    $(this).data("submitted", true);
+
+    removeBook(this);
 });
 
 function removeBook (element){
@@ -15,7 +17,6 @@ function removeBook (element){
 }
 
 function getShoppingCart(){
-    event.preventDefault();
     $.ajax({
         type: "GET",
         url: "/shopping-cart",

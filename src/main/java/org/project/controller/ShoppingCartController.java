@@ -233,7 +233,14 @@ public class ShoppingCartController {
     @ResponseBody
     public Map<String, Integer> getCount(HttpSession session){
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
-        int count = cart != null ? cart.getBookList().size() : 0;
+        int count = 0;
+        if (cart != null && cart.getBookCounts() != null){
+            count = cart.getBookCounts()
+                    .values()
+                    .stream()
+                    .mapToInt(Integer::intValue)
+                    .sum();
+        }
         return Collections.singletonMap("count", count);
     }
 }
