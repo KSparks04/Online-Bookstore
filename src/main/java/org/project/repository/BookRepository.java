@@ -2,9 +2,12 @@ package org.project.repository;
 
 import org.project.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -23,6 +26,16 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "OR LOWER(b.description) LIKE %:str% " +
             "OR CONCAT('', b.ISBN) LIKE %:str%")
     public Iterable<Book> findByAllColumns(@Param("str") String str);
+
+    @Modifying
+    @Transactional
+    @Query(     
+                "UPDATE Book b " +
+                "SET b.inventory = b.inventory - :x " +
+                "WHERE b.ISBN = :isbn " +
+                "AND b.inventory > 0 "          
+        )
+    public void decreaseInventoryByISBN(@Param("isbn") long ISBN, @Param("x") int x);
 
     public List<Book> findByISBNNot(long isbn);
 }

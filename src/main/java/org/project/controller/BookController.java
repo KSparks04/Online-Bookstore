@@ -5,9 +5,13 @@ import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
 import org.project.model.Rating;
 import org.project.model.Series;
+import org.project.model.User;
 import org.project.repository.BookRepository;
 import org.project.repository.SeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,7 +24,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 @Controller
@@ -53,6 +62,11 @@ public class BookController {
             @RequestParam(required = false) String variable,
             Model model, HttpSession session) {
 
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            return "redirect:/";
+        }
+
         Iterable<Book> bookList = null;
 
         switch (function) {
@@ -84,10 +98,13 @@ public class BookController {
     @GetMapping("/get-browse-view")
     public String getBrowseList(
             @RequestParam(required = false, defaultValue = "") String function,
-            @RequestParam(required = false) String variable,
+            @RequestParam(required = false) String variable,@RequestParam(defaultValue = "1")int page,
             Model model, HttpSession session) {
 
         Iterable<Book> bookList = null;
+        int pageSize = 12;
+        Pageable pageable = PageRequest.of(page-1,pageSize);
+        Page<Book> bookPage = bookRepo.findAll(pageable);
 
         switch (function) {
             case "search":
@@ -97,7 +114,7 @@ public class BookController {
 
             case "refresh":
                 bookList = bookRepo.findAll();
-                model.addAttribute("bookList", bookList);
+                model.addAttribute("bookList", bookPage.getContent());
                 model.addAttribute("book", new Book());
                 model.addAttribute("genres", genres());
                 model.addAttribute("series",seriesRepo.findAll());
@@ -108,10 +125,12 @@ public class BookController {
                 break;
         }
 
-        model.addAttribute("bookList", bookList);
+        model.addAttribute("bookList", bookPage.getContent());
         model.addAttribute("book", new Book());
         model.addAttribute("genres", genres());
         model.addAttribute("series",seriesRepo.findAll());
+        model.addAttribute("currentPage",page);
+        model.addAttribute("totalPages",bookPage.getTotalPages());
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "user-browse";
     }
@@ -135,7 +154,12 @@ public class BookController {
     }
 
     @PostMapping("/add-book")
-    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
+    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
@@ -172,13 +196,22 @@ public class BookController {
     }
 
     @PostMapping("/delete-book/{ISBN}")
-    public String deleteBook(@PathVariable long ISBN){
+    public String deleteBook(@PathVariable long ISBN, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
         bookRepo.deleteById(ISBN);
         return "redirect:/get-book-list";
     }
 
     @GetMapping("/edit-book/{ISBN}")
-    public String editBook(@PathVariable long ISBN, Model model){
+    public String editBook(@PathVariable long ISBN, Model model, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+
         Book book = bookRepo.findByISBN(ISBN);
         model.addAttribute("series", seriesRepo.findAll());
         model.addAttribute("book", book);
@@ -187,7 +220,12 @@ public class BookController {
     }
 
     @PostMapping("/update-book")
-    public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
+    public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
@@ -225,12 +263,23 @@ public class BookController {
     public ResponseEntity<byte[]> getBookImage(@PathVariable long ISBN){
         Book book =bookRepo.findByISBN(ISBN);
         byte[] imageBytes = book.getPictureFile();
-        if(imageBytes == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         HttpHeaders headers = new HttpHeaders();
+        if(imageBytes == null) {
+            try (InputStream is = getClass().getResourceAsStream("/static/images/default_image.jpg")) {
+                if (is == null) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+
+
+                imageBytes = is.readAllBytes();
+                return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+            } catch (IOException e) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+
     }
     @PostMapping("/book/{ISBN}/review")
     public String reviewBook(@PathVariable long ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
