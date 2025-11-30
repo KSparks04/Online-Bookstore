@@ -4,6 +4,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import jakarta.servlet.http.HttpSession;
 import org.project.model.Book;
+import org.project.model.Rating;
 import org.project.model.Series;
 import org.project.model.User;
 import org.project.repository.BookRepository;
@@ -17,10 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Controller
@@ -39,6 +38,8 @@ public class HomeController {
 
     public void setup() {
         readCSV();
+        readUsersCSV();
+        readReviewCSV();
         Series series1 = new Series("Harry Potter");
         Series series2 = new Series("Divergent");
         Series series3 = new Series("James Bond");
@@ -114,8 +115,6 @@ public class HomeController {
 
 
                 bookRepository.save(book);
-
-
             }
 //ISBN	Title	Author	Publisher	Genres	Series	Price	Inventory	Page Count	Description	Cover type
         } catch (IOException e) {
@@ -124,6 +123,67 @@ public class HomeController {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void readReviewCSV() {
+        try (InputStream is = getClass().getResourceAsStream("/static/Database/reviews.csv")) {
+            if (is == null) {
+                System.out.println("reviews.csv not found");
+                return;
+            }
+
+            CSVReader br = new CSVReader(new InputStreamReader(is));
+            String[] lineArr = br.readNext(); // skip first line
+            while ((lineArr = br.readNext()) != null) {
+
+                long isbn = Long.parseLong(lineArr[0].trim());
+                Book book = bookRepository.findByISBN(isbn);
+
+                String username = lineArr[1].trim();
+                User user = userRepository.findByUsername(username);
+
+                int ratingInt;
+                ratingInt = Integer.parseInt(lineArr[2].trim());
+
+                Rating.Level level = Rating.Level.fromInt(ratingInt);
+
+                String review = lineArr[3].trim();
+
+                Rating rating = new Rating(book, user, level, review, LocalDateTime.now());
+                book.getRatings().add(rating);
+            }
+        } catch (IOException | CsvValidationException e) {
+            throw new RuntimeException("Error reading reviews CSV", e);
+        }
+    }
+
+    public void readUsersCSV() {
+        try (InputStream is = getClass().getResourceAsStream("/static/Database/users.csv")) {
+            if (is == null) {
+                System.out.println("users.csv not found in resources");
+                return;
+            }
+
+            CSVReader br = new CSVReader(new InputStreamReader(is));
+            String[] lineArr = br.readNext(); // skip first line
+            while ((lineArr = br.readNext()) != null) {
+                String username = lineArr[0].trim().toLowerCase();
+                String password = lineArr[1].trim();
+                boolean isOwner = Boolean.parseBoolean(lineArr[2].trim());
+
+                // Check if user already exists
+                User user = userRepository.findByUsername(username);
+                if (user == null) {
+                    user = new User();
+                    user.setUsername(username);
+                    user.setPassword(password);
+                    user.setIsOwner(isOwner);
+                    userRepository.save(user);
+                }
+            }
+        } catch (IOException | CsvValidationException e) {
+            throw new RuntimeException("Error reading users CSV", e);
+        }
     }
 
     @GetMapping("/")

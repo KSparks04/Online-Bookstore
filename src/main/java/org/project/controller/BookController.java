@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -263,6 +265,8 @@ public class BookController {
             // Book not found, show a dedicated error page
             return "error/book-not-found";
         }
+
+        session.setAttribute("redirectAfterRegister", "/book/"+id);
         model.addAttribute("book", book);
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book";
@@ -292,21 +296,31 @@ public class BookController {
     @PostMapping("/book/{ISBN}/review")
     public String reviewBook(@PathVariable long ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
         Book book = bookRepo.findByISBN(ISBN);
-        List<Rating> ratings = book.getRatings();
-        Rating rating = null;
-        for(int i = 0; i < ratings.size(); i++){
-            if(reviewLevel == ratings.get(i).getRatingLevel()){
-                rating = ratings.get(i);
-            }
-        }
-        if(rating != null){
-            rating.addReview(review);
-            model.addAttribute("book", book);
-            ShoppingCartController.addShoppingCartAttributes(model, session);
-            return "book";
-        }
-        return  "error/book-not-found";
+        User user = (User) session.getAttribute("currentUser");
 
+        if (book == null || user == null) {
+            return "error/book-not-found";
+        }
+
+        Rating.Level level = Rating.Level.fromInt(reviewLevel);
+
+        // check if user already reviewed this book
+        Optional<Rating> existing = book.getRatings().stream()
+                .filter(r -> r.getUser().getId() == user.getId())
+                .findFirst();
+
+        if (existing.isPresent()) {
+            existing.get().setRatingLevel(level);
+            existing.get().setReview(review);
+        } else {
+            Rating r = new Rating(book, user, level, review, LocalDateTime.now());
+            book.getRatings().add(r);
+        }
+
+        bookRepo.save(book);
+        model.addAttribute("book", book);
+        ShoppingCartController.addShoppingCartAttributes(model, session);
+        return "book";
     }
 
 

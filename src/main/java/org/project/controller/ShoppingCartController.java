@@ -190,7 +190,7 @@ public class ShoppingCartController {
 
         for (Map.Entry<Long, Integer> entry : quantities.entrySet()) {
 
-            int isbn = Math.toIntExact(entry.getKey());
+            long isbn = entry.getKey();
             int qty = entry.getValue();
 
             Book book = bookRepository.findByISBN(isbn);
