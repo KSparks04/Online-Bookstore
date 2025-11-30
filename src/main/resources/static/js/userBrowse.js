@@ -24,22 +24,33 @@ $(document).ready(function () {
             url: "/wishlist/edit/add/" + $(this).data("isbn"),
             timeout: 5000,
             success: function () {
-                $("#wishlist-alert").append(`
+                const alert = $(`
                     <div class="alert alert-success alert-dismissible" role="alert">
                         Book add to wishlist!
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                `)
+                `);
+                $("#wishlist-alert").append(alert);
+                setTimeout(() => {fadeOutElement(alert);}, 2000);
             },
             error: function () {
-                $("#wishlist-alert").append(`
+                const alert = $(`
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         Please login to add books to wishlist!
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 `)
+                $("#wishlist-alert").append(alert);
+                setTimeout(()=> {fadeOutElement(alert);}, 2000);
             }
         });
     })
 });
 
+function fadeOutElement(element){
+    element.addClass('fade-out');
+
+    setTimeout(() => {
+        element.remove();
+    }, 500);
+}
