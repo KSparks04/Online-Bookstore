@@ -35,8 +35,10 @@ function getCartCount(){
     $.ajax({
         type: "GET",
         url: "/shopping-cart/count",
+        dataType: "json",
         timeout: 5000,
         success: function(data){
+            console.log(data.count);
             updateCartCount(data.count);
         }
     });
