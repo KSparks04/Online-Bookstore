@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.servlet.http.HttpSession;
+
+
 @Controller
 public class ShoppingCartController {
 
@@ -119,7 +122,12 @@ public class ShoppingCartController {
             return "fragments/shopping-cart/shopping-cart-body";
         }
 
-        model.addAttribute("total", cart.getTotalPrice());
+        double hst = cart.getTotalPrice() * 0.13;
+        double totalAfterTax = hst + cart.getTotalPrice();
+
+        model.addAttribute("subtotal", cart.getTotalPrice());
+        model.addAttribute("hst", hst);
+        model.addAttribute("totalAfterTax", totalAfterTax);
 
         return "checkout";
     }
@@ -130,7 +138,12 @@ public class ShoppingCartController {
 
         addShoppingCartAttributes(model, session);
 
-        model.addAttribute("total", cart.getTotalPrice());
+        double hst = cart.getTotalPrice() * 0.13;
+        double totalAfterTax = hst + cart.getTotalPrice();
+
+        model.addAttribute("subtotal", cart.getTotalPrice());
+        model.addAttribute("hst", hst);
+        model.addAttribute("totalAfterTax", totalAfterTax);
 
         return "fragments/checkout-table";
     }
