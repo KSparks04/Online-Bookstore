@@ -46,4 +46,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                 "AND b.inventory > 0 "          
         )
     public void decreaseInventoryByISBN(@Param("isbn") long ISBN, @Param("x") int x);
+
+    public List<Book> findByISBNNot(long isbn);
 }
