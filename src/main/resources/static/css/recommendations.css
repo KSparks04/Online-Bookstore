@@ -1,12 +1,58 @@
-#bookSlider::-webkit-scrollbar {
-    height: 8px;
+
+.recommends-wrapper{
+    display: flex;
+    padding: 20px 20px;
+    border-radius: 20px;
+    margin: 30px;
+    width: 100%;
+    background-color: #f7f4f8;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgb(251, 236, 238);
+    justify-content: center;
+
+}
+.recommends-slider{
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 20px;
+    margin: 10px;
+    height: auto;
+    box-sizing: border-box;
+    border-radius: 15px;
+    background-color: #ffff;
+    box-shadow: 0 4px 8px rgba(239, 239, 239, 0.1);
 }
 
-#bookSlider::-webkit-scrollbar-thumb {
-    background-color: rgba(0,0,0,0.2);
-    border-radius: 4px;
+.recommends-slider::-webkit-scrollbar-track {
+    background-color: #d5a6d3;
 }
+.recommends-slider::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #d1d1d1;
+    border: 1px solid #d1d1d1;
+}
+.card{
+    width: 180px;
+    scroll-snap-align: start;
+    flex: 0 0 auto;
 
-#bookSlider::-webkit-scrollbar-track {
-    background-color: rgba(0,0,0,0.05);
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+.card:hover{
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+.card img{
+    width: 100%;
+    object-fit: cover;
 }
