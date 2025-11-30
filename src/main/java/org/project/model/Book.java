@@ -41,6 +41,7 @@ import java.util.*;
         @OneToMany( cascade = CascadeType.ALL)
         private List<Rating> ratings = new ArrayList<>();
         private String bookType;
+        private boolean deleted = false;
 
 
         public  Book() {}
@@ -95,7 +96,8 @@ import java.util.*;
         public void setRatings(List<Rating> ratings) {this.ratings = ratings;}
         public String  getBookType() {return bookType;}
         public void setBookType(String bookType) {this.bookType = bookType;}
-
+        public void setDeleted(boolean deleted) {this.deleted = deleted;}
+        public boolean isDeleted() {return deleted;}
         @Override
         public boolean equals(Object o){
             if(this == o) return true;

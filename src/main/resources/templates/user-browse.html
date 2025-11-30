@@ -28,7 +28,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div>
-                                <img class="mx-auto w-100 p-4" style="display:block;" th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}">
+                                <a th:href="@{'/book/' + ${book.ISBN}}">
+                                    <img class="mx-auto w-100 p-4" style="display:block;" th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}">
+                                </a>
+
                             </div>
                             <p><strong><a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a></strong></p>
                             <p id ="description-wrap"><span th:text="${book.description}"></span></p>
@@ -44,13 +47,18 @@
                                         </button>
                                     </form>
                                     <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                                        <button th:class="${book.inventory == 0} ? 'purchase-btn px-3 py-2 w-100 btn btn-danger' : 'purchase-btn  px-3 py-2 w-100 btn btn-warning'" type="submit"
-                                                th:disabled="${book.inventory == 0}"
+                                        <button th:class="${book.inventory == 0} ? 'purchase-btn px-3 py-2 w-100 btn btn-danger' : 'purchase-btn  px-3 py-2 w-100 btn btn-warning'"  type="submit"
+                                                th:disabled="${book.inventory == 0 or book.deleted}"
                                                 onclick="toggleCart(this)">
-                                            <i class="bi bi-cart-plus main-icon" th:if="${book.inventory > 0}"></i>
-                                            <i class="bi bi-cart-plus-fill hover-icon" ></i>
+                                            <span class="cart-icons" th:if="${book.inventory > 0 and !book.deleted}">
+                                                <i class="bi bi-cart-plus main-icon"  ></i>
+                                            <i class="bi bi-cart-plus-fill hover-icon"  ></i>
+                                            </span>
+                                            <span th:if="${book.inventory == 0 or book.deleted}">
+                                              <i class="bi bi-cart-x"  ></i>
+                                            </span>
 
-                                            <i class="bi bi-cart-x" th:if="${book.inventory == 0}"></i>
+
                                         </button>
                                     </form>
                                 </div>
@@ -64,13 +72,35 @@
             </div>
 
         </div>
-        <div class="d-flex justify-content-center mt-3 page-browse">
-            <a th:href="@{/get-browse-view(page=${currentPage -1})}"
-               th:if="${currentPage >1}" class="btn btn-outline-primary me-2">Previous</a>
-            <span class="btn btn-outline-secondary disabled">Page <span th:text="${currentPage}"></span> of <span th:text="${totalPages}"></span></span>
-            <a th:href="@{/get-browse-view(page=${currentPage +1})}"
-               th:if="${currentPage <= totalPages}" class="btn btn-outline-primary ms-2">Next</a>
+        <div clas="pages">
+            <div class="d-flex justify-content-center mt-3 page-browse">
+                <a th:href="@{/get-browse-view(page=${currentPage -1})}"
+                   th:classappend="${currentPage == 1}? 'disabled'" class="btn btn-outline-primary me-2">
+                    Previous
+                </a>
+                <div>
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                    <a th:href="@{/get-browse-view(page=${i})}" th:text="${i}" th:class="'btn btn-outline-primary mx-1' + (${currentPage == i} ? 'active':'')">
+
+                    </a>
+                </span>
+                </div>
+                <a th:href="@{/get-browse-view(page=${currentPage +1})}"
+                   th:classappend="${currentPage == totalPages}? 'disabled'"  class="btn btn-outline-primary ms-2">Next</a>
+            </div>
+            <div class="pagenumber text-center mt-2">
+            <span class="btn btn-outline-secondary disabled">Page
+                <span th:text="${currentPage}">
+
+            </span> of
+                <span th:text="${totalPages}">
+
+            </span>
+            </span>
+            </div>
         </div>
+
+
     </div>
 
 </body>

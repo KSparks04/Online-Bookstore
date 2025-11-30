@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.project.model.Book;
 import org.project.model.User;
+import org.project.repository.BookRepository;
 import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,10 +15,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,6 +30,8 @@ class BookControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BookRepository bookRepository;
 
     /**
      * Tests the get book list function of the book list
@@ -188,11 +192,15 @@ class BookControllerTest {
                 .param("publisher", "Publisher 7").param("description", "Description 7").param("inventory", "13").param("price", "26.99").param("pageCount", "3").param("seriesName","Divergent").session(session)).andExpect(status().is3xxRedirection());
         //this.mockMvc.perform(post("/add-book").flashAttr("book", book));
         this.mockMvc.perform(post("/delete-book/7").session(session)).andDo(print()).andExpect(status().is3xxRedirection());
+        Book deletedBook = bookRepository.findByISBN(7);
+        assertNotNull(deletedBook);
+        assertTrue(deletedBook.isDeleted());
         //Might have to change but a 7 can appear for something else in the html so .andExpect(content().string(not(containString("7"))) won't work for checking ISBN
         this.mockMvc.perform(get("/get-book-list").session(session)).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(not(containsString("Title 7"))))
-                .andExpect(content().string(not(containsString("Author 7")))).andExpect(content().string(not(containsString("Publisher 7"))))
-                .andExpect(content().string(not(containsString("Description 7"))));//removed checks for price and inventory as other books could have these values
+                .andExpect(content().string((containsString("Title 7"))))
+                .andExpect(content().string((containsString("Author 7"))))
+                .andExpect(content().string((containsString("Publisher 7"))))
+                .andExpect(content().string((containsString("Description 7"))));//removed checks for price and inventory as other books could have these values
 
     }
 

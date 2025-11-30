@@ -7,32 +7,49 @@
 <head>
     <title>Not Just Any Bookstore</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/home.css}" rel="stylesheet" />
 </head>
 
 <body>
     <div th:insert="~{fragments/navigation-bar}"></div>
 
     <div class="m-3">
-        <div class="d-flex flex-row justify-content-center text-center">
-            <div style="width:10%"></div>
+        <div class="d-flex flex-column align-items-center text-center">
+
             <div class="w-100 d-flex flex-column justify-content-center m-5 p-5">
 
-                <h1 th:text="|Not Just Any Bookstore|" />
+                <h1 class="container rounded title " th:text="|Not Just Any Bookstore|"/>
+                <div class ="container rounded home">
+                    <h3>Welcome to the Ultimate Book Shopping Experience!</h3>
+                    <p>Find Your Next Read</p>
+                </div>
 
-                <p>Welcome to the Not Just Any Bookstore</p>
+
 
                 <br>
                 <br>
 
-                <div th:if="${session.currentUser != null and session.currentUser.isOwner}">
+                <div class="view-buttons" th:if="${session.currentUser != null and session.currentUser.isOwner}">
                     <a class="btn btn-primary " th:href="@{/get-book-list}" th:text="|Owner View|"/>
                 </div>
                 <div style="width:10%"></div>
-                <div>
+                <div class="view-buttons">
                     <a class="btn btn-primary " th:href="@{/get-browse-view}" th:text="|Browse Books|"/>
                 </div>
             </div>
-            <div style="width:10%"></div>
+
+            <div class="scroll-container-wrapper">
+                <h3 class="scroll-title">Highly Rated</h3>
+                <div class="book-scroll">
+                    <div class="book-card" th:each="book : ${popularBooks}">
+                        <a th:href="@{'/book/' + ${book.ISBN}}">
+                            <img class="mx-auto w-100 p-4" style="display:block;" th:src = "@{'/book-image/' + ${book.ISBN}}" th:alt="${book.title}">
+                        </a>
+                        <p><strong><a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a></strong></p>
+                        <p><strong>Price: $<span class="price" th:text="${book.price}"></span></strong></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
