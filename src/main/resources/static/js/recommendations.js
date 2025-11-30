@@ -14,10 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             data.forEach(entry => {
                 const card = document.createElement('div');
-                card.className = 'card me-3';
+                card.className = 'card';
                 card.style.minWidth = '150px';
                 card.style.flex = '0 0 auto';
-
+                const imgRef = document.createElement('a');
+                imgRef.href =`/book/${entry.similarBookIsbn}`;
                 const img = document.createElement('img');
                 img.className = 'card-img-top';
                 img.src = `/book-image/${entry.similarBookIsbn}`;
@@ -26,12 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const body = document.createElement('div');
                 body.className = 'card-body p-2';
 
-                const title = document.createElement('h6');
-                title.className = 'card-title';
+                const title = document.createElement('a');
+                title.className = 'card-title text-decoration-none';
+                title.href = `/book/${entry.similarBookIsbn}`;
                 title.textContent = entry.similarBookTitle;
-
+                imgRef.appendChild(img);
                 body.appendChild(title);
-                card.appendChild(img);
+                card.appendChild(imgRef);
                 card.appendChild(body);
 
                 card.addEventListener("click", ()=>{

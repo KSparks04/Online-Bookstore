@@ -4,6 +4,7 @@ package org.project.controller;
 import jakarta.servlet.http.HttpSession;
 import org.project.model.*;
 import org.project.repository.BookRepository;
+import org.project.repository.JaccardRepository;
 import org.project.repository.SeriesRepository;
 import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ public class BookController {
     private SeriesRepository seriesRepo;
     @Autowired
     private UserRepository userRepo;
+    @Autowired
+    private JaccardRepository jaccardRepository;
     @ModelAttribute("genres")
     public List<String> genres() {
         List<String> genres = new ArrayList<>();
@@ -280,9 +283,13 @@ public class BookController {
             // Book not found, show a dedicated error page
             return "error/book-not-found";
         }
-
+        if(!jaccardRepository.existsByreferenceBookISBN(id)){
+            calculateEntries(bookRepo.findByISBN(id));
+        }
+        List<JaccardEntry> entries = jaccardRepository.findTopSimilarBooks(id, Pageable.ofSize(10));
         session.setAttribute("redirectAfterRegister", "/book/"+id);
         model.addAttribute("book", book);
+        model.addAttribute("similarBooks", entries);
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book";
     }
@@ -337,6 +344,34 @@ public class BookController {
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book";
     }
+    private List<JaccardEntry> calculateEntries(Book referenceBook){
+        List<Book> otherBooks = bookRepo.findByISBNNot(referenceBook.getISBN());
 
+        Set<String> refTags = referenceBook.getTagSet();
+
+        List<JaccardEntry> results = new ArrayList<>();
+
+        for(Book other: otherBooks){
+            Set<String> otherTags = other.getTagSet();
+            double similarity = jaccard(refTags, otherTags);
+            results.add(new JaccardEntry(referenceBook.getISBN(), other.getISBN(), other.getTitle(), similarity));
+        }
+        jaccardRepository.saveAll(results);
+        return results;
+
+    }
+
+    private double jaccard(Set<String> a, Set<String> b){
+        Set<String> intersection = new HashSet<>(a);
+        intersection.retainAll(b);
+
+        Set<String> union = new HashSet<>(a);
+        union.addAll(b);
+
+        if(union.isEmpty()) return 0.0;
+
+        return (double) intersection.size()/union.size();
+
+    }
 
 }
