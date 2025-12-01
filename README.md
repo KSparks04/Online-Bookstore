@@ -51,9 +51,15 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
 **What Was Accomplished**
 - User Roles to discern views between bookstore owner and customer
 - Added a simulated repository of preloaded books with covers, prices and inventory
-- Added styling to the bookstore to make it more themed
+- Added styling to the bookstore to have a cohesive colour palatte
 - Added Recommendations Feature
 - Added a Wishlist Feature to allow customers to favourite books they may wish to purchase
+- Added a Highly rated feature
+- Finished Ratings and Reviews Feature
+- Added a Browsing page for books
+- Added a Recently Viewed feature
+  
+  
 # Planned Application
 ## Bookstore Web App
 Gives Bookstore owners an intuitive way to sell books online while maximizing user experience.
@@ -62,6 +68,9 @@ Bookstore owner looking to set up an online bookstore to sell books ranging vari
 ### Things an owner can do
 - Can upload and edit Book information (ISBN, Title, Author, Description, Picture, Publisher, ...),
 - Add and adjust price and inventory of books
+- Login to a specific account to access owner permissions
+  `Username: bookstoreowner`
+  `Password: Password123`
   
 ## Users
 People looking to browse and purchase books from the bookstore.
