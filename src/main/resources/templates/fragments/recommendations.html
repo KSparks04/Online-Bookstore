@@ -1,0 +1,21 @@
+<link th:href="@{/css/recommendations.css}" rel="stylesheet" />
+<div class="container recommends-wrapper" id="recommendations" th:attr="data-isbn=${book.ISBN}">
+    <h5>Recommended Books</h5>
+    <!--<div class="position-relative recommends-container">-->
+        <!-- Scrollable Row -->
+        <!--<div id="bookSlider" class="d-flex overflow-auto recommends-slider" style="scroll-behavior: smooth;">-->
+            <!-- Dynamic content will be inserted here by JS -->
+      <!--  </div>
+    </div>-->
+
+        <div class="recommends-slider">
+            <div class="card" th:each="book : ${similarBooks}">
+                <a th:href="@{'/book/' + ${book.similarBookIsbn}}">
+                    <img class="mx-auto w-100 p-4" style="display:block;" th:src = "@{'/book-image/' + ${book.similarBookIsbn}}" th:alt="${book.similarBookTitle}">
+                </a>
+                <p><strong><a class="text-wrap" th:href="@{'/book/' + ${book.similarBookIsbn}}" th:text="${book.similarBookTitle}"></a></strong></p>
+
+            </div>
+        </div>
+
+</div>

@@ -1,0 +1,81 @@
+#description-wrap{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 3.6em;
+
+}
+.purchase-btn{
+    background-color: #b248ff;
+    border-color: black;
+    border-width: 1px;
+    color: white;
+    width: 50px;
+    align-content: center;
+
+}
+
+.wishlist-btn{
+    background-color: #f182e2;
+    border-color: black;
+    border-width: 1px;
+    color: white;
+    width: 50px;
+    align-content: center;
+}
+
+.purchase-btn .hover-icon,
+.wishlist-btn .hover-icon
+{
+    display: none;
+}
+.purchase-btn:not(.clicked):hover .hover-icon,
+.wishlist-btn:not(.clicked):hover .hover-icon{
+    display: inline;
+    color: white;
+}
+.purchase-btn:hover i.bi-cart-plus,
+.wishlist-btn:hover i.bi-bookmark-check{
+    display: none;
+}
+
+
+.purchase-btn:active,
+.wishlist-btn:active
+{
+    background-color: #b248ff;
+    color: white;
+}
+
+.purchase-button,
+.wishlist-button{
+    width: 100%;
+}
+
+#purchase-price{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+.page-browse{
+    padding: 15px 20px;
+
+}
+.pagenumber{
+    padding: 15px;
+    align-content: center;
+}
+.pages{
+    align-content: center;
+    text-align: center;
+
+}
+.bi-cart-x:hover{
+    pointer-events: none;
+}
+
+.fade-out{
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}

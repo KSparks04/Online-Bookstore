@@ -1,6 +1,12 @@
 package org.project.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
+
+import java.util.HashMap;
+import java.util.Collections;
+import java.util.Map;
+
 import org.project.model.Book;
 import org.project.model.Purchase;
 import org.project.model.ShoppingCart;
@@ -11,9 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 public class ShoppingCartController {
@@ -50,7 +59,7 @@ public class ShoppingCartController {
      */
     @PostMapping("/shopping-cart/edit/{function}/{ISBN}")
     public String editShoppingCart(@PathVariable("function") String function,
-                                   @PathVariable("ISBN") int ISBN,
+                                   @PathVariable("ISBN") long ISBN,
                                    Model model, HttpSession session) {
 
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
@@ -59,8 +68,15 @@ public class ShoppingCartController {
         }
 
         Book book = bookRepository.findByISBN(ISBN);
+        for(Book entry: cart.getBookList()){
+            if(entry.getISBN() == book.getISBN()){
+
+            }
+        }
         if (function.equalsIgnoreCase("add")) {
-            cart.addBook(book);
+            if(book.getInventory() > 0){
+                cart.addBook(book);
+            }
         } else if (function.equalsIgnoreCase("remove")) {
             cart.removeBook(book);
         }
@@ -106,28 +122,125 @@ public class ShoppingCartController {
             return "fragments/shopping-cart/shopping-cart-body";
         }
 
-        model.addAttribute("total", cart.getTotalPrice());
+        double hst = cart.getTotalPrice() * 0.13;
+        double totalAfterTax = hst + cart.getTotalPrice();
+
+        model.addAttribute("subtotal", cart.getTotalPrice());
+        model.addAttribute("hst", hst);
+        model.addAttribute("totalAfterTax", totalAfterTax);
 
         return "checkout";
+    }
+
+    @GetMapping("/shopping-cart/checkout-table")
+    public String getCheckoutBody(Model model, HttpSession session){
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+
+        addShoppingCartAttributes(model, session);
+
+        double hst = cart.getTotalPrice() * 0.13;
+        double totalAfterTax = hst + cart.getTotalPrice();
+
+        model.addAttribute("subtotal", cart.getTotalPrice());
+        model.addAttribute("hst", hst);
+        model.addAttribute("totalAfterTax", totalAfterTax);
+
+        return "fragments/checkout-table";
     }
 
     /**
      * Checkout endpoint – processes the purchase and saves to history
      */
-    @PostMapping("/shopping-cart/checkout-success")
-    public String checkoutSuccess(Model model, HttpSession session) {
+    @PostMapping("/shopping-cart/attempt-purchase")
+    @Transactional
+    @ResponseBody
+    public Map<String, Object> checkoutSuccess(HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         User currentUser = (User) session.getAttribute("currentUser");
 
-        // Save each purchased book
-        for (Book book : cart.getBookList()) {
-            purchaseRepository.save(new Purchase(currentUser, book));
+        if (currentUser == null) {
+            response.put("success", false);
+            response.put("message", "You must log in first");
+            return response;
         }
 
-        // Clear cart after purchase
-        cart.getBookList().clear();
+        if (cart == null || cart.getBookList().isEmpty()) {
+            response.put("success", false);
+            response.put("message", "Your cart is empty");
+            return response;
+        }
+
+
+        // Save each purchased book
+        for (Book cartBook : cart.getBookList()) {
+            //pull repo version of book
+            Book repoBook = bookRepository.findByISBN(cartBook.getISBN());
+
+            int quantityPurchased = cartBook.getInventory();
+            //check if book exists
+            if(repoBook == null){
+                response.put("success", false);
+                response.put("message", cartBook.getTitle() + " does not exist in repo");
+                return response;
+            }
+            //check if purchase inventory is larger than actual inventory
+            if(quantityPurchased > repoBook.getInventory()){
+                response.put("success", false);
+                response.put("message", "Cannot order more than whats in stock");
+                return response;
+            }
+            //decrease inventory in book repo by purchase number
+            bookRepository.decreaseInventoryByISBN(cartBook.getISBN(), quantityPurchased);
+            //Save purchase
+            purchaseRepository.save(new Purchase(currentUser, cartBook, quantityPurchased));
+        
+        }
+
+        // Get book quantities (ISBN → count)
+        Map<Long, Integer> quantities = cart.getBookCounts();
+
+        for (Map.Entry<Long, Integer> entry : quantities.entrySet()) {
+
+            long isbn = entry.getKey();
+            int qty = entry.getValue();
+
+            Book book = bookRepository.findByISBN(isbn);
+            if (book == null) continue;
+
+            // Update inventory
+            int newInventory = book.getInventory() - qty;
+            if (newInventory < 0) newInventory = 0;
+
+            book.setInventory(newInventory);
+            bookRepository.save(book);
+
+            // Save purchase entries
+            purchaseRepository.save(new Purchase(currentUser, book, qty));
+        }
+
+        // Clear cart
+        cart.clearBooks();
         session.setAttribute("shoppingCart", cart);
 
-        return "purchase-success";
+        response.put("success", true);
+        response.put("message", "Purchase completed successfully");
+        return response;
+    }
+
+    @GetMapping("/shopping-cart/count")
+    @ResponseBody
+    public Map<String, Integer> getCount(HttpSession session){
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        int count = 0;
+        if (cart != null && cart.getBookCounts() != null){
+            count = cart.getBookCounts()
+                    .values()
+                    .stream()
+                    .mapToInt(Integer::intValue)
+                    .sum();
+        }
+        return Collections.singletonMap("count", count);
     }
 }

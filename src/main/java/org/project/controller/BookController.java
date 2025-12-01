@@ -2,12 +2,15 @@ package org.project.controller;
 
 
 import jakarta.servlet.http.HttpSession;
-import org.project.model.Book;
-import org.project.model.Rating;
-import org.project.model.Series;
+import org.project.model.*;
 import org.project.repository.BookRepository;
+import org.project.repository.JaccardRepository;
 import org.project.repository.SeriesRepository;
+import org.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,8 +22,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -30,6 +40,10 @@ public class BookController {
     private BookRepository bookRepo;
     @Autowired
     private SeriesRepository seriesRepo;
+    @Autowired
+    private UserRepository userRepo;
+    @Autowired
+    private JaccardRepository jaccardRepository;
     @ModelAttribute("genres")
     public List<String> genres() {
         List<String> genres = new ArrayList<>();
@@ -52,6 +66,11 @@ public class BookController {
             @RequestParam(required = false, defaultValue = "") String function,
             @RequestParam(required = false) String variable,
             Model model, HttpSession session) {
+
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            return "redirect:/";
+        }
 
         Iterable<Book> bookList = null;
 
@@ -81,6 +100,53 @@ public class BookController {
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book-list";
     }
+    @GetMapping("/get-browse-view")
+    public String getBrowseList(
+            @RequestParam(required = false, defaultValue = "") String function,
+            @RequestParam(required = false) String variable,@RequestParam(defaultValue = "1")int page,
+            Model model, HttpSession session) {
+
+        Iterable<Book> bookList = null;
+        int pageSize = 12;
+        Pageable pageable = PageRequest.of(page-1,pageSize);
+        Page<Book> bookPage = bookRepo.findAll(pageable);
+
+        switch (function) {
+            case "search":
+                variable = variable.toLowerCase();
+                model.addAttribute("searchQuery", variable);
+                Page<Book> searchPage = bookRepo.findByAllColumns(variable,pageable);
+                model.addAttribute("bookList", searchPage.getContent());
+                model.addAttribute("currentPage", page);
+                model.addAttribute("totalPages", searchPage.getTotalPages());
+                ShoppingCartController.addShoppingCartAttributes(model, session);
+                model.addAttribute("genres", genres());
+                model.addAttribute("series",seriesRepo.findAll());
+
+                return "user-browse";
+
+            case "refresh":
+                bookList = bookRepo.findAll();
+                model.addAttribute("bookList", bookPage.getContent());
+                model.addAttribute("book", new Book());
+                model.addAttribute("genres", genres());
+                model.addAttribute("series",seriesRepo.findAll());
+                return "fragments/book-table";
+
+            default:
+                bookList = bookRepo.findAll();
+                break;
+        }
+
+        model.addAttribute("bookList", bookPage.getContent());
+        model.addAttribute("book", new Book());
+        model.addAttribute("genres", genres());
+        model.addAttribute("series",seriesRepo.findAll());
+        model.addAttribute("currentPage",page);
+        model.addAttribute("totalPages",bookPage.getTotalPages());
+        ShoppingCartController.addShoppingCartAttributes(model, session);
+        return "user-browse";
+    }
     //Potentially shrink getBookList
     /**@GetMapping("/book-table")
     public String getBookTable(Model model){
@@ -97,11 +163,17 @@ public class BookController {
     @GetMapping("/sortFragment/{attribute}/{ascending}")
     public String sortByAttribute(@PathVariable String attribute, @PathVariable Boolean ascending, Model model){
         model.addAttribute("bookList", ascending ? bookRepo.findAll(Sort.by(attribute).ascending()) : bookRepo.findAll(Sort.by(attribute).descending()));
+        model.addAttribute("book", new Book());
         return "fragments/book-table";
     }
 
     @PostMapping("/add-book")
-    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
+    public String createBook(@Valid @ModelAttribute Book book, BindingResult bindingResult, Model model, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
@@ -138,13 +210,36 @@ public class BookController {
     }
 
     @PostMapping("/delete-book/{ISBN}")
-    public String deleteBook(@PathVariable long ISBN){
-        bookRepo.deleteById(ISBN);
+    public String deleteBook(@PathVariable long ISBN, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+        Book book =  bookRepo.findByISBN(ISBN);
+        if(!book.isDeleted()){
+            book.setDeleted(true);
+            bookRepo.save(book);
+        }
+        List<User> users = userRepo.findAll();
+
+        for(User u : users){
+            u.removeBookFromWishlist(book);
+        }
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
+        if(cart != null){
+            cart.removeBook(book);
+        }
+
         return "redirect:/get-book-list";
     }
 
     @GetMapping("/edit-book/{ISBN}")
-    public String editBook(@PathVariable long ISBN, Model model){
+    public String editBook(@PathVariable long ISBN, Model model, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+
         Book book = bookRepo.findByISBN(ISBN);
         model.addAttribute("series", seriesRepo.findAll());
         model.addAttribute("book", book);
@@ -153,7 +248,12 @@ public class BookController {
     }
 
     @PostMapping("/update-book")
-    public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName){
+    public String updateBook(@ModelAttribute Book book, @RequestParam ("pictureUpload") MultipartFile file, @RequestParam("seriesName")String seriesName, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null || !user.getIsOwner()){
+            throw new RuntimeException("Invalid permissions");
+        }
+
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
@@ -183,20 +283,13 @@ public class BookController {
             // Book not found, show a dedicated error page
             return "error/book-not-found";
         }
-        //Recently Viewed Books
-        List<Long> viewed = (List<Long>) session.getAttribute("recentlyViewed");
-        if (viewed == null) viewed = new ArrayList<>();
-
-        viewed.remove(id);       // avoid duplicates
-        viewed.add(0, id);       // add newest at top
-
-        if (viewed.size() > 5) { // cap size
-            viewed = viewed.subList(0, 5);
+        if(!jaccardRepository.existsByreferenceBookISBN(id)){
+            calculateEntries(bookRepo.findByISBN(id));
         }
-
-        session.setAttribute("recentlyViewed", viewed);
-
+        List<JaccardEntry> entries = jaccardRepository.findTopSimilarBooks(id, Pageable.ofSize(10));
+        session.setAttribute("redirectAfterRegister", "/book/"+id);
         model.addAttribute("book", book);
+        model.addAttribute("similarBooks", entries);
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book";
     }
@@ -204,32 +297,81 @@ public class BookController {
     public ResponseEntity<byte[]> getBookImage(@PathVariable long ISBN){
         Book book =bookRepo.findByISBN(ISBN);
         byte[] imageBytes = book.getPictureFile();
-        if(imageBytes == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         HttpHeaders headers = new HttpHeaders();
+        if(imageBytes == null) {
+            try (InputStream is = getClass().getResourceAsStream("/static/images/default_image.jpg")) {
+                if (is == null) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+
+
+                imageBytes = is.readAllBytes();
+                return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+            } catch (IOException e) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+
     }
     @PostMapping("/book/{ISBN}/review")
     public String reviewBook(@PathVariable long ISBN, @RequestParam("reviewLevel") int reviewLevel, @RequestParam("review") String review, Model model,HttpSession session){
         Book book = bookRepo.findByISBN(ISBN);
-        List<Rating> ratings = book.getRatings();
-        Rating rating = null;
-        for(int i = 0; i < ratings.size(); i++){
-            if(reviewLevel == ratings.get(i).getRatingLevel()){
-                rating = ratings.get(i);
-            }
+        User user = (User) session.getAttribute("currentUser");
+
+        if (book == null || user == null) {
+            return "error/book-not-found";
         }
-        if(rating != null){
-            rating.addReview(review);
-            model.addAttribute("book", book);
-            ShoppingCartController.addShoppingCartAttributes(model, session);
-            return "book";
+
+        Rating.Level level = Rating.Level.fromInt(reviewLevel);
+
+        // check if user already reviewed this book
+        Optional<Rating> existing = book.getRatings().stream()
+                .filter(r -> r.getUser().getId() == user.getId())
+                .findFirst();
+
+        if (existing.isPresent()) {
+            existing.get().setRatingLevel(level);
+            existing.get().setReview(review);
+        } else {
+            Rating r = new Rating(book, user, level, review, LocalDateTime.now());
+            book.getRatings().add(r);
         }
-        return  "error/book-not-found";
+
+        bookRepo.save(book);
+        model.addAttribute("book", book);
+        ShoppingCartController.addShoppingCartAttributes(model, session);
+        return "book";
+    }
+    private List<JaccardEntry> calculateEntries(Book referenceBook){
+        List<Book> otherBooks = bookRepo.findByISBNNot(referenceBook.getISBN());
+
+        Set<String> refTags = referenceBook.getTagSet();
+
+        List<JaccardEntry> results = new ArrayList<>();
+
+        for(Book other: otherBooks){
+            Set<String> otherTags = other.getTagSet();
+            double similarity = jaccard(refTags, otherTags);
+            results.add(new JaccardEntry(referenceBook.getISBN(), other.getISBN(), other.getTitle(), similarity));
+        }
+        jaccardRepository.saveAll(results);
+        return results;
 
     }
 
+    private double jaccard(Set<String> a, Set<String> b){
+        Set<String> intersection = new HashSet<>(a);
+        intersection.retainAll(b);
+
+        Set<String> union = new HashSet<>(a);
+        union.addAll(b);
+
+        if(union.isEmpty()) return 0.0;
+
+        return (double) intersection.size()/union.size();
+
+    }
 
 }

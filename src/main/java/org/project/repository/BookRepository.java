@@ -1,10 +1,15 @@
 package org.project.repository;
 
 import org.project.model.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -16,6 +21,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     public List<Book> findByPublisher(String publisher);
     public List<Book> findByDescription(String description);
 
+
     @Query("SELECT b FROM Book b " +
             "WHERE LOWER(b.title) LIKE %:str% " +
             "OR LOWER(b.author) LIKE %:str% " +
@@ -23,4 +29,23 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "OR LOWER(b.description) LIKE %:str% " +
             "OR CONCAT('', b.ISBN) LIKE %:str%")
     public Iterable<Book> findByAllColumns(@Param("str") String str);
+    @Query("SELECT b FROM Book b " +
+            "WHERE LOWER(b.title) LIKE %:keyword% " +
+            "OR LOWER(b.author) LIKE %:keyword% " +
+            "OR LOWER(b.publisher) LIKE %:keyword% " +
+            "OR LOWER(b.description) LIKE %:keyword% " +
+            "OR CONCAT('', b.ISBN) LIKE %:keyword%")
+    public Page<Book> findByAllColumns(@Param("keyword") String keyword, Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query(     
+                "UPDATE Book b " +
+                "SET b.inventory = b.inventory - :x " +
+                "WHERE b.ISBN = :isbn " +
+                "AND b.inventory > 0 "          
+        )
+    public void decreaseInventoryByISBN(@Param("isbn") long ISBN, @Param("x") int x);
+
+    public List<Book> findByISBNNot(long isbn);
 }

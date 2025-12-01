@@ -8,6 +8,8 @@
 
 <head>
     <title th:text="'Book Details - ' + ${book.title}">Book Details</title>
+    <link th:href="@{/css/bookPage}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" th:href="@{/images/icon/favicon.ico}" />
 </head>
 
 <body>
@@ -17,7 +19,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/get-book-list}">Book List</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/get-browse-view}">Browse Books</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Book</li>
             </ol>
         </nav>
@@ -44,8 +46,8 @@
                                 <div class="col p-0"></div>
                             </div>
                             <div>
-                                <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                                    <button th:class="${book.inventory == 0} ? 'purchase-btn p-0 w-100 btn btn-danger' : 'purchase-btn  p-0 w-100 btn btn-warning'" type="submit" th:disabled="${book.inventory == 0}"
+                                <form class="purchase-button"  th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                                    <button th:class="${book.inventory == 0} ? 'purchase-btn p-0 w-100 btn btn-danger' : 'purchase-btn  p-0 w-100 btn btn-warning'" type="submit" th:disabled="${book.inventory == 0 or book.deleted}"
                                             th:text="${book.inventory == 0} ? 'Out of Stock' : 'Add to Cart'"></button>
                                 </form>
                             </div>
@@ -58,10 +60,13 @@
                     <h2>About</h2>
                     <br>
                     <p><strong>ISBN:</strong> <span th:text="${book.ISBN}"></span></p>
-                    <p><strong>Page Count: <span th:text="${book.pageCount}"></span></strong></p>
-                    <p><strong>Description:</strong> <span th:text="${book.description}"></span></p>
+                    <p><strong>Page Count: </strong><span th:text="${book.pageCount}"></span></p>
+                    <p><strong>Description: </strong> <span th:text="${book.description}"></span></p>
+                    <p><strong>Cover Type: </strong><span th:text="${book.bookType}"></span></p>
                 </div>
+                <div th:insert="~{fragments/recommendations}"></div>
                 <div>
+                <div th:disabled="${book.deleted}">
                     <div class="review-button" th:data-isbn="${book.ISBN}" th:replace="~{fragments/review}"></div>
                 </div>
             </div>

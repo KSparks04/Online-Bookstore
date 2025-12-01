@@ -10,6 +10,7 @@
     </td>
 </tr>
 <tr class="align-middle" th:if="${not bookList.isEmpty()}" th:each="book: ${bookList}" >
+
     <td th:text="${book.ISBN}"></td>
     <td>
         <a class="text-wrap" th:href="@{'/book/' + ${book.ISBN}}" th:text="${book.title}"></a>
@@ -24,16 +25,16 @@
     <td th:text="'$' + ${book.price}"></td>
     <td>
         <!-- Edit Book Form-->
-        <button class="open-edit-book-modal btn btn-outline-secondary p-0 w-100" th:data-isbn="${book.ISBN}" th:href="@{'/edit-book/' + ${book.ISBN}}">Edit</button>
+        <button class="open-edit-book-modal btn btn-outline-secondary p-0 w-100" th:disabled="${book.deleted}" th:data-isbn="${book.ISBN}" th:href="@{'/edit-book/' + ${book.ISBN}}">Edit</button>
         <div th:insert="~{fragments/book-form/edit-book-modal}"></div>
         <!-- Delete Book Form -->
-        <form class="book-update-button" th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
-            <button class="btn btn-outline-danger p-0 w-100" type="submit">Delete</button>
+        <form class="book-update-button" th:classappend="${book.deleted} ?' btn-disabled'"  th:action="@{/delete-book/{ISBN}(ISBN=${book.ISBN})}" method="post">
+            <button class="btn btn-outline-danger p-0 w-100" type="submit" th:disabled="${book.deleted}">Delete</button>
         </form>
         <!-- Purchase Book Form-->
         <div>
-            <form class="purchase-button" th:data-isbn="${book.ISBN}" th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
-                <button th:class="${book.inventory == 0} ? 'purchase-btn p-0 w-100 btn btn-outline-danger' : 'purchase-btn  p-0 w-100 btn btn-outline-warning'" type="submit" th:disabled="${book.inventory == 0}"
+            <form class="purchase-button" th:data-isbn="${book.ISBN}"  th:action="@{/shopping-cart/edit/add/{ISBN}(ISBN=${book.ISBN})}" method="post">
+                <button th:class="${book.inventory == 0} ? 'purchase-btn p-0 w-100 btn btn-outline-danger' : 'purchase-btn  p-0 w-100 btn btn-outline-warning'" type="submit" th:disabled="${book.inventory == 0 or book.deleted}"
                         th:text="${book.inventory == 0} ? 'Out of Stock' : 'Add to Cart'"></button>
             </form>
         </div>

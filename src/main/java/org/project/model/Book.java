@@ -19,6 +19,8 @@ import java.util.*;
         private String author;
         @NotBlank(message = "Publisher is required")
         private String publisher;
+
+        @Column(length = 2000)
         @NotBlank(message = "Description is required")
         private String description;
         @Min(value = 0, message = "Inventory must be equal to or greater than 0")
@@ -29,20 +31,20 @@ import java.util.*;
         @NotNull(message="Page count is required")
         @Min(value = 1, message = "Page count must be equal to or greater than 1")
         private int pageCount;
-        //Eventually picture
+
         @Lob
         private byte[] pictureFile;
 
-        private List<String> genres;
+        private List<String> genres = new ArrayList<>();
         @ManyToOne
         private Series series;
         @OneToMany( cascade = CascadeType.ALL)
         private List<Rating> ratings = new ArrayList<>();
+        private String bookType;
+        private boolean deleted = false;
 
 
-        public  Book() {
-            populateRatings();
-        }
+        public  Book() {}
 
         public Book(long ISBN, String title, String author, String publisher, String description, int inventory, double price, int pageCount) {
 
@@ -54,7 +56,6 @@ import java.util.*;
             this.inventory = inventory;
             this.price = price;
             this.pageCount = pageCount;
-            populateRatings();
 
         }
 
@@ -84,6 +85,8 @@ import java.util.*;
 
         public List<String> getGenres() {return genres;}
         public void setGenres(List<String> genres) {this.genres = genres;}
+        public void addGenre(String genre){this.genres.add(genre);}
+
 
         public int getPageCount() {return pageCount;}
         public void setPageCount(int pageCount) {this.pageCount = pageCount;}
@@ -91,16 +94,10 @@ import java.util.*;
         public void setSeries(Series series) {this.series = series;}
         public List<Rating> getRatings() {return ratings;}
         public void setRatings(List<Rating> ratings) {this.ratings = ratings;}
-        private void  populateRatings(){
-            this.ratings = new ArrayList<>();
-            ratings.add(new Rating(Rating.Level.ONE));
-            ratings.add(new Rating(Rating.Level.TWO));
-            ratings.add(new Rating(Rating.Level.THREE));
-            ratings.add(new Rating(Rating.Level.FOUR));
-            ratings.add(new Rating(Rating.Level.FIVE));
-
-
-        }
+        public String  getBookType() {return bookType;}
+        public void setBookType(String bookType) {this.bookType = bookType;}
+        public void setDeleted(boolean deleted) {this.deleted = deleted;}
+        public boolean isDeleted() {return deleted;}
         @Override
         public boolean equals(Object o){
             if(this == o) return true;
@@ -108,5 +105,82 @@ import java.util.*;
             Book book = (Book) o;
             return this.ISBN == book.ISBN && Objects.equals(this.title, book.title) && Objects.equals(this.author, book.author)
                     && Objects.equals(this.publisher, book.publisher) && this.price == book.price;
+        }
+
+        public Set<String> getTagSet(){
+            Set<String> tags = new HashSet<>();
+
+            if(genres != null){
+                tags.addAll(genres.stream()
+                    .map(String::toLowerCase)
+                    .toList());
+            }
+
+            if(author != null){
+                tags.add("author:" + author.toLowerCase());
+            }
+
+
+            if (series != null && series.getSeriesName() != null) {
+                tags.add("series:" + series.getSeriesName().toLowerCase());
+            }
+
+            if (description != null) {
+                tags.addAll(extractDescriptionKeywords(description));
+            }
+
+            tags.add("pageCount:" + pageCountBucket(pageCount));
+
+            tags.add("price:" + priceBucket(price));
+
+            return tags;
+        }
+
+        private Set<String> extractDescriptionKeywords(String text){
+            String[] words = text
+                .toLowerCase()
+                .replaceAll("[^a-z ]", "")
+                .split("\\s+");
+            
+                Set<String> keywords = new HashSet<>();
+
+                Set<String> stopwords = Set.of("the", "and", "of", "a", "to", "in","is","on","for","with","that","this");
+
+                for(String w: words){
+                    if(!stopwords.contains(w) && w.length() > 2){
+                        keywords.add(w);
+                    }
+                }
+                return keywords;
+        }
+
+        private String pageCountBucket(int pages){
+            if (pages <= 150) return "short";
+            if (pages <= 350) return "medium";
+            if (pages <= 600) return "long";
+            return "epic";
+        }
+
+        private String priceBucket(double price){
+            if (price <= 10) return "cheap";
+            if (price <= 20) return "mid";
+            return "premium";
+        }
+        @Override
+        public int hashCode() {
+            return Long.hashCode(ISBN);
+        }
+
+        public double averageRating() {
+            if (ratings.isEmpty()) return 0;
+
+            double sum = 0;
+            for (Rating r : ratings) {
+                sum += r.getRatingValue();
+            }
+            return sum / ratings.size();
+        }
+        public double getAverageRating() {
+            return averageRating();
         }
     }

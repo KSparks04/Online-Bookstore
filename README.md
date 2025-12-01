@@ -48,6 +48,12 @@ https://notjustanybook-h3eugehua3h9dmcv.canadacentral-01.azurewebsites.net/
 - Implement recommendations feature
 - Add displaying review lists and sorting
 
+**What Was Accomplished**
+- User Roles to discern views between bookstore owner and customer
+- Added a simulated repository of preloaded books with covers, prices and inventory
+- Added styling to the bookstore to make it more themed
+- Added Recommendations Feature
+- Added a Wishlist Feature to allow customers to favourite books they may wish to purchase
 # Planned Application
 ## Bookstore Web App
 Gives Bookstore owners an intuitive way to sell books online while maximizing user experience.
@@ -66,6 +72,7 @@ People looking to browse and purchase books from the bookstore.
 - add books to checkout, 
 - purchase books in checkout, 
 - receive recommendations based on past purchases
+- add books to a wishlist for future purchase
 ## Book
 Printed work of fiction or non-fiction.
 For this application, the simulated books is paperback or hardback.
@@ -78,9 +85,10 @@ For this application, the simulated books is paperback or hardback.
   - Description
   - Inventory
   - Price
-  - Reviews
+  - Ratings and Reviews
   - Genre
   - Page count
+  - Book Type(Paperback or Hardcover)
 
 ## Diagrams
 UML class diagram (updated for milestone 2): 
@@ -88,6 +96,7 @@ UML class diagram (updated for milestone 2):
 
 ORM diagram:
 
-<img width="555" height="626" alt="image" src="https://github.com/user-attachments/assets/29780621-5cbc-4c22-955e-233b2d4fbe82" />
+<img width="863" height="637" alt="image" src="https://github.com/user-attachments/assets/e826453f-09f9-4b66-b9d3-8ff4030b882c" />
+
 
 
