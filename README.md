@@ -96,6 +96,7 @@ UML class diagram (updated for milestone 2):
 
 ORM diagram:
 
-<img width="555" height="626" alt="image" src="https://github.com/user-attachments/assets/29780621-5cbc-4c22-955e-233b2d4fbe82" />
+<img width="863" height="637" alt="image" src="https://github.com/user-attachments/assets/e826453f-09f9-4b66-b9d3-8ff4030b882c" />
+
 
 
