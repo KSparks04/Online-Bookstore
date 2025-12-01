@@ -1,4 +1,5 @@
 username,password,isOwner
+bookstoreowner, Password123, true
 alice123,pass123,false
 bob456,qwerty,false
 charlie789,letmein,false
