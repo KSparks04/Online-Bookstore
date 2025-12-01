@@ -54,5 +54,17 @@
     <br>
 
     <div th:insert="~{fragments/book-form/add-book-modal}"></div>
+    <th:block th:with="bookRepository=${@bookRepository}">
+    <div class="m-3" th:if="${session.recentlyViewed != null}">
+        <h4>Recently Viewed</h4>
+        <ul>
+            <li th:each="id : ${session.recentlyViewed}">
+                <a th:href="@{'/book/' + ${id}}"
+                   th:text="${@bookRepository.findByISBN(id).title}"></a>
+            </li>
+        </ul>
+    </div>
+    </th:block>
+
 </body>
 </html>

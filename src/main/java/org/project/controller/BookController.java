@@ -183,6 +183,19 @@ public class BookController {
             // Book not found, show a dedicated error page
             return "error/book-not-found";
         }
+        //Recently Viewed Books
+        List<Long> viewed = (List<Long>) session.getAttribute("recentlyViewed");
+        if (viewed == null) viewed = new ArrayList<>();
+
+        viewed.remove(id);       // avoid duplicates
+        viewed.add(0, id);       // add newest at top
+
+        if (viewed.size() > 5) { // cap size
+            viewed = viewed.subList(0, 5);
+        }
+
+        session.setAttribute("recentlyViewed", viewed);
+
         model.addAttribute("book", book);
         ShoppingCartController.addShoppingCartAttributes(model, session);
         return "book";
