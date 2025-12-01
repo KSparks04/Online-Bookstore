@@ -95,12 +95,9 @@
             </div>
             <div class="pagenumber text-center mt-2">
             <span class="btn btn-outline-secondary disabled">Page
-                <span  th:text="${currentPage != 0}? ${currentPage} : '0'">
+                <span  th:text="${currentPage != 0}? ${currentPage} : '0'"> </span>
                     of
-                <span th:text="${totalPages != 0} ? ${totalPages} : ''">
-
-            </span>
-            </span>
+                <span th:text="${totalPages != 0} ? ${totalPages} : ''"> </span>
             </span>
             </div>
         </div>
